@@ -1,0 +1,17 @@
+svg {
+    margin: 10px !important;
+}
+
+.min-vh-100 {
+    min-height: 100vh; /* 100% от височината на прозореца */
+}
+
+#delete-form {
+    display: inline;
+}
+
+.post {
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
