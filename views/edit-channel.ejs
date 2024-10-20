@@ -1,0 +1,14 @@
+<%- include("partials/header.ejs") %>
+
+<div class="form-container">
+    <h1>Редактиране на канал</h1>
+    <form action="/<%= channel.name %>/edit?_method=PATCH" method="POST">
+        <div class="mb-3">
+            <label for="channelName" class="form-label">Име на канала</label>
+            <input type="text" class="form-control" id="channelName" name="name" value="<%= channel.name %>" required>
+        </div>
+        <button type="submit" class="btn btn-submit">Запази промени</button>
+    </form>
+</div>
+
+<%- include("partials/footer.ejs") %>

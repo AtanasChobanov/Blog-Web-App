@@ -1,0 +1,13 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container">
+    <h2>Изтриване на поста</h2>
+    <p>Сигурни ли сте, че искате да изтриете този пост?"<%= post.title %>"?</p>
+    
+    <form action="/<%= channelName %>/delete-post/<%= id %>?_method=DELETE" method="POST">
+        <button class="btn btn-danger" type="submit">Delete</button>
+        <a href="/view/<%= channelName %>" class="btn btn-secondary">Назад</a>
+    </form>
+</div>
+
+<%- include("partials/footer.ejs") %>

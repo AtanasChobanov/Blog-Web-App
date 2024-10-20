@@ -1,0 +1,145 @@
+<%- include("partials/header.ejs") %>
+
+<div id="search-form">
+    <input type="text" id="search-input" placeholder="Search posts">
+    <button type="submit">Search</button>
+</div>
+
+<div id="post-list">
+    <!-- Добави линк към страницата за създаване на нов пост в канала -->
+    <a href="/<%= channel.name %>/new-post" class="btn btn-primary mb-3">Създай нов пост</a>
+    
+    <!-- Проверяваме дали има постове -->
+    <% if (channel.posts && channel.posts.length > 0) { %>
+        <% for (let index = 0; index < channel.posts.length; index++) { %>
+            <div class="post mb-4" data-title="<%= channel.posts[index].title %>">
+                <h2 class="pb-2"><%= channel.posts[index].title %></h2>
+                <p><%= channel.posts[index].content %></p>
+                <p><%= channel.posts[index].author %></p>
+                <% if (channel.posts[index].dateOfLastEdit) { %>
+                    <small>Редактиран на: <%= channel.posts[index].dateOfLastEdit %></small>
+                <% } else { %>
+                    <small>Създаден на: <%= channel.posts[index].dateOfCreation %></small>
+                <% } %>
+                <!-- Линкове за редактиране и изтриване на пост -->
+                <a href="/<%= channel.name %>/edit/<%= index %>" class="btn btn-warning btn-sm">Редактиране</a>
+                <a href="/<%= channel.name %>/delete-post/<%= index %>" class="btn btn-danger btn-sm">Изтриване</a>
+                
+                <!-- Добави методите за JavaScript -->
+                <button class="btn btn-primary" onclick="toggleReplyForm(this)">Отговори</button>
+                <div class="reply-form hidden">
+                    <textarea class="form-control" rows="2" placeholder="Write your reply here..."></textarea>
+                    <button class="btn btn-success mt-2" onclick="submitReply(this)">Публикувай отговора</button>
+                </div>
+                <div class="replies"></div>
+            </div>
+        <% }; %>
+    <% } else { %>
+        <p>Няма постове в този канал.</p>
+    <% } %>
+</div>
+
+<div id="new-post-form" style="display: none;">
+    <input type="text" id="post-title" placeholder="Post Title">
+    <textarea id="post-content" placeholder="Post Content"></textarea>
+    <button onclick="createPost()">Създаване на пост</button>
+</div>
+
+<script>
+    function toggleReplyForm(button) {
+        const replyForm = button.nextElementSibling;
+        replyForm.classList.toggle('hidden');
+    }
+
+    function submitReply(button) {
+        const replyText = button.previousElementSibling.value;
+        const repliesDiv = button.parentElement.nextElementSibling;
+
+        if (replyText.trim()) {
+            const replyDiv = document.createElement('div');
+            replyDiv.classList.add('reply');
+            replyDiv.innerHTML = `
+                <p>${replyText}</p>
+                <span class="thumbs" onclick="markHelpful(this, true)">👍</span>
+                <span class="thumbs" onclick="markHelpful(this, false)">👎</span>
+                <span class="helpful-count">Helpful: 0</span>
+                <span class="not-helpful-count">Not Helpful: 0</span>
+            `;
+            repliesDiv.appendChild(replyDiv);
+            button.parentElement.classList.add('hidden');
+            button.previousElementSibling.value = '';
+        } else {
+            alert('Reply cannot be empty.');
+        }
+    }
+
+    function markHelpful(thumb, isHelpful) {
+        const replyDiv = thumb.parentElement;
+        const thumbs = replyDiv.querySelectorAll('.thumbs');
+        const helpfulCountSpan = replyDiv.querySelector('.helpful-count');
+        const notHelpfulCountSpan = replyDiv.querySelector('.not-helpful-count');
+
+        if (thumb.classList.contains('disabled')) return;
+
+        if (isHelpful) {
+            let currentHelpfulCount = parseInt(helpfulCountSpan.textContent.split(': ')[1]);
+            helpfulCountSpan.textContent = `Helpful: ${currentHelpfulCount + 1}`;
+        } else {
+            let currentNotHelpfulCount = parseInt(notHelpfulCountSpan.textContent.split(': ')[1]);
+            notHelpfulCountSpan.textContent = `Not Helpful: ${currentNotHelpfulCount + 1}`;
+        }
+
+        thumbs.forEach(t => t.classList.add('disabled'));
+    }
+
+    function toggleNewPostForm() {
+        const newPostForm = document.getElementById('new-post-form');
+        newPostForm.style.display = newPostForm.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function createPost() {
+        const title = document.getElementById('post-title').value;
+        const content = document.getElementById('post-content').value;
+        const postList = document.getElementById('post-list');
+
+        if (title && content) {
+            const postDiv = document.createElement('div');
+            postDiv.classList.add('post');
+            postDiv.setAttribute('data-title', title);
+            postDiv.innerHTML = `
+                <h2>${title}</h2>
+                <p>${content}</p>
+                <button onclick="toggleReplyForm(this)">Reply</button>
+                <div class="reply-form hidden">
+                    <textarea placeholder="Write your reply"></textarea>
+                    <button onclick="submitReply(this)">Submit Reply</button>
+                </div>
+                <div class="replies"></div>
+            `;
+            postList.appendChild(postDiv);
+            document.getElementById('new-post-form').style.display = 'none'; // Hide form
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-content').value = '';
+        } else {
+            alert('Please fill out both fields.');
+        }
+    }
+
+    function searchPosts(event) {
+        event.preventDefault();
+        const searchText = document.getElementById('search-input').value.toLowerCase();
+        const posts = document.querySelectorAll('#post-list .post');
+        posts.forEach(post => {
+            const postTitle = post.getAttribute('data-title').toLowerCase();
+            if (postTitle.includes(searchText)) {
+                post.style.display = '';
+            } else {
+                post.style.display = 'none';
+            }
+        });
+    }
+
+    document.getElementById('search-form').addEventListener('submit', searchPosts);
+</script>
+
+<%- include("partials/footer.ejs") %>

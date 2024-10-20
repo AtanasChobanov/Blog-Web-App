@@ -1,0 +1,12 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container">
+    <h2>Редактиране на пост</h2>
+    <form action="/<%= channel.name %>/edit-post/<%= id %>?_method=PATCH" method="POST">
+        <input name="title" class="form-control mb-2" type="text" value="<%= channel.posts[id].title %>" required>
+        <textarea name="content" class="form-control mb-2" rows="4" required><%= channel.posts[id].content %></textarea>
+        <button class="btn btn-primary" type="submit">Обновяване на поста</button>
+    </form>
+</div>
+
+<%- include("partials/footer.ejs") %>
