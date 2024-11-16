@@ -7,23 +7,23 @@
 
 <div id="post-list">
     <!-- Добави линк към страницата за създаване на нов пост в канала -->
-    <a href="/<%= channel.name %>/new-post" class="btn btn-primary mb-3">Създай нов пост</a>
+    <a href="/<%= channel_id %>/new-post" class="btn btn-primary mb-3">Създай нов пост</a>
     
     <!-- Проверяваме дали има постове -->
-    <% if (channel.posts && channel.posts.length > 0) { %>
-        <% for (let index = 0; index < channel.posts.length; index++) { %>
-            <div class="post mb-4" data-title="<%= channel.posts[index].title %>">
-                <h2 class="pb-2"><%= channel.posts[index].title %></h2>
-                <p><%= channel.posts[index].content %></p>
-                <p><%= channel.posts[index].author %></p>
-                <% if (channel.posts[index].dateOfLastEdit) { %>
-                    <small>Редактиран на: <%= channel.posts[index].dateOfLastEdit %></small>
+    <% if (posts && posts.length > 0) { %>
+        <% posts.forEach((post) => { %>
+            <div class="post mb-4" data-title="<%= post.title %>">
+                <h2 class="pb-2"><%= post.title %></h2>
+                <p><%= post.content %></p>
+                <p><%= post.author %></p>
+                <% if (post.date_of_last_edit) { %>
+                    <small>Редактиран на: <%= post.date_of_last_edit %></small>
                 <% } else { %>
-                    <small>Създаден на: <%= channel.posts[index].dateOfCreation %></small>
+                    <small>Създаден на: <%= post.date_of_creation %></small>
                 <% } %>
                 <!-- Линкове за редактиране и изтриване на пост -->
-                <a href="/<%= channel.name %>/edit/<%= index %>" class="btn btn-warning btn-sm">Редактиране</a>
-                <a href="/<%= channel.name %>/delete-post/<%= index %>" class="btn btn-danger btn-sm">Изтриване</a>
+                <a href="/<%= channel_id %>/edit/<%= post.post_id %>" class="btn btn-warning btn-sm">Редактиране</a>
+                <a href="/<%= channel_id %>/delete-post/<%= post.post_id %>" class="btn btn-danger btn-sm">Изтриване</a>
                 
                 <!-- Добави методите за JavaScript -->
                 <button class="btn btn-primary" onclick="toggleReplyForm(this)">Отговори</button>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="replies"></div>
             </div>
-        <% }; %>
+        <% }); %>
     <% } else { %>
         <p>Няма постове в този канал.</p>
     <% } %>

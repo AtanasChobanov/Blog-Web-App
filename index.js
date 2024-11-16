@@ -1,235 +1,305 @@
 import express from "express";
 import bodyParser from "body-parser";
 import methodOverride from "method-override";
+import pg from "pg";
 
 const app = express();
-const port = 3000;
-var channels = [{
-  name: "Biology",
-  admin: "Atanas",
-  dateOfCreation: '19-10-2024',
-  posts: [{
-    title: "Test",
-    content: "smth",
-    dateOfCreation: "20-10-2024, 00:00",
-    author: "Atanas Chobanov",
-  }],
-}];
+const port = process.env.PORT || 3000;
+
+// Connecting to PostgreSQL server
+const db = new pg.Client({
+  user: "postgres",
+  host: "localhost",
+  database: "knowspacedb",
+  password: "Database1023",
+  port: 5432,
+});
+db.connect();
+
+// READING info from DB
+async function readChannels() {
+  const result = await db.query(
+    "SELECT channel_id, channels.name, date_of_creation, admin_id, users.name AS admin FROM channels JOIN users ON channels.admin_id = users.user_id;"
+  );
+
+  let channels = [];
+  result.rows.forEach((channel) => {
+    channel.date_of_creation = new Date(
+      channel.date_of_creation
+    ).toDateString();
+    channels.push(channel);
+  });
+
+  console.log(channels);
+  return channels;
+}
+
+// READING a specific channel from DB
+async function readChannel(id) {
+  const result = await db.query(
+    "SELECT * FROM channels WHERE channel_id = $1;",
+    [id]
+  );
+
+  console.log(result.rows);
+  let channel = result.rows[0];
+  return channel;
+}
+
+// READING posts from a channel
+async function readPosts(channel_id) {
+  const result = await db.query(
+    "SELECT ch.name, post_id, title, content, u.name AS author, p.date_of_creation, date_of_last_edit " +
+      "FROM posts p " +
+      "JOIN channels ch " +
+      "ON ch.channel_id = p.channel_id " +
+      "JOIN users u " +
+      "ON p.author_id = u.user_id " +
+      "WHERE ch.channel_id = $1 " +
+      "ORDER BY date_of_creation DESC;",
+    [channel_id]
+  );
+
+  let posts = [];
+  result.rows.forEach((post) => {
+    posts.push(post);
+  });
+
+  return posts;
+}
+
+async function findPost(post_id) {
+  const result = await db.query("SELECT * FROM posts WHERE post_id = $1;;", [
+    post_id,
+  ]);
+
+  let post = result.rows[0];
+  return post;
+}
 
 // Middlewares
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 
-app.get("/", (req, res) => {
+// Home route - veiws all channels
+app.get("/", async (req, res) => {
+  let channels = await readChannels();
   res.render("view-channels.ejs", { channels });
 });
 
-app.get('/view/:channel', (req, res) => {
-  var searchChannelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  if (searchChannelIndex === -1) {
-    res.status(404).render("error-message.ejs", { errorMessage: "Channel not found" });
-  } else {
-    res.render("view-posts.ejs", { channel: channels[searchChannelIndex] });
+// READ all posts in a channel
+app.get("/view/:channel_id", async (req, res) => {
+  try {
+    const posts = await readPosts(req.params.channel_id);
+    console.log(posts);
+    if (posts == []) {
+      throw "Каналът не е намерен";
+    }
+    res.render("view-posts.ejs", {
+      posts: posts,
+      channel_id: req.params.channel_id,
+    });
+  } catch (err) {
+    console.log("Error executing query: " + err);
+    res.status(404).render("error-message.ejs", { errorMessage: err });
   }
 });
 
+// READ form for creating new channel
 app.get("/new-channel", (req, res) => {
   res.render("new-channel.ejs");
 });
 
-app.get("/:channel/new-post", (req, res) => {
-  var searchChannelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  if (searchChannelIndex === -1) {
-    res.status(404).render("error-message.ejs", { errorMessage: "Channel not found" });
-  } else {
+// READ form for creating new post in a channel
+app.get("/:channel_id/new-post", async (req, res) => {
+  try {
+    const channel = await readChannel(req.params.channel_id);
     res.render("new-post.ejs", {
-      channelName: channels[searchChannelIndex].name,
+      channel_id: channel.channel_id,
+    });
+  } catch (err) {
+    res
+      .status(404)
+      .render("error-message.ejs", { errorMessage: "Channel not found" });
+  }
+});
+
+// READ searched channel
+app.post("/search-channel", async (req, res) => {
+  const result = await db.query(
+    "SELECT channel_id, channels.name, date_of_creation, admin_id, " +
+      "users.name AS admin FROM channels JOIN users " +
+      "ON channels.admin_id = users.user_id WHERE LOWER(channels.name) LIKE '%' || $1 || '%';",
+    [req.body.searchedName]
+  );
+  
+  console.log(result.rows);
+  let channels = result.rows;
+  res.render("search-channels-result.ejs", { channels });
+});
+
+// CREATE new channel
+app.post("/create-channel", async (req, res) => {
+  try {
+    await db.query("INSERT INTO channels (name, admin_id) VALUES ($1, 1);", [
+      req.body.name,
+    ]);
+    console.log(`New channel created.`);
+    res.redirect("/");
+  } catch (err) {
+    console.log("Error executing query: " + err);
+    res.render("new-channel.ejs", {
+      name: req.body.name,
+      errorMessage: "Това име на канал вече съществува!",
     });
   }
 });
 
-app.post("/create-channel", (req, res) => {
-  const currentDate = new Date();
-  let fullDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
-  const newChannel = {
-    name: req.body.name,
-    admin: req.body.username,
-    dateOfCreation: fullDate,
-    posts: [],
-  };
-  channels.push(newChannel);
-  console.log(channels);
-  console.log(
-    `Channel ${newChannel.name} created. Channels count: ${channels.length}`
-  );
-  // res.json(newChannel);
-  res.redirect('/');
-});
-
-app.post("/:channel/create-post", (req, res) => {
-  var searchIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  if (searchIndex === -1) {
-    res.status(404).render("error-message.ejs", { errorMessage: "Channel not found" });
-  } else {
-    const currentDate = new Date();
-
-    // Помощна функция за добавяне на водеща нула при необходимост
-    const pad = (number) => number.toString().padStart(2, "0");
-
-    let fullDateAndTime = `${pad(currentDate.getDate())}-${pad(currentDate.getMonth() + 1)}-${currentDate.getFullYear()}, 
-    ${pad(currentDate.getHours())}:${pad(currentDate.getMinutes())}`;
-
-    const newPost = {
-      title: req.body.title,
-      content: req.body.content,
-      dateOfCreation: fullDateAndTime,
-      author: req.body.username,
-    };
-    channels[searchIndex].posts.push(newPost);
-    console.log(
-      `Post created. Posts count in channel ${channels[searchIndex].name}: ${channels[searchIndex].posts.length}`
+// CREATE new post in a channel
+app.post("/:channel_id/create-post", async (req, res) => {
+  try {
+    await db.query(
+      "INSERT INTO posts (title, content, author_id, channel_id) VALUES ($1, $2, 1, $3);",
+      [req.body.title, req.body.content, req.params.channel_id]
     );
-    // res.json(newPost);
-    res.redirect("/view/" + channels[searchIndex].name);
+    console.log(`New post published.`);
+    res.redirect("/view/" + req.params.channel_id);
+  } catch (err) {
+    console.log("Error executing query: " + err);
+    res
+      .status(500)
+      .render("error-message.ejs", { errorMessage: "Error publishing post" });
   }
 });
 
-app.get("/:channel/edit", (req, res) => {
-  var searchIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  if (searchIndex === -1) {
-    res.status(404).render("error-message.ejs", { errorMessage: "Channel not found" });
-  } else {
-    // res.json({
-    //   channel: channels[searchIndex],
-    //   id: req.params.channel,
-    // });
+// READ form for upating a channel
+app.get("/:channel_id/edit", async (req, res) => {
+  try {
+    const channel = await readChannel(req.params.channel_id);
     res.render("edit-channel.ejs", {
-      channel: channels[searchIndex],
+      channel: channel,
+    });
+  } catch (err) {
+    res
+      .status(404)
+      .render("error-message.ejs", { errorMessage: "Channel not found" });
+  }
+});
+
+// READ form for updating a post in a channel
+app.get("/:channel_id/edit/:post_id", async (req, res) => {
+  try {
+    const post = await findPost(req.params.post_id);
+    res.render("edit-post.ejs", {
+      post: post,
+      channel_id: req.params.channel_id,
+    });
+  } catch (err) {
+    console.log("Error executing query: " + err.stack);
+    res.status(404).render("error-message.ejs", {
+      errorMessage: `Post in channel ${post.name} not found`,
     });
   }
 });
 
-app.get("/:channel/edit/:id", (req, res) => {
-  var searchChanelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  if (searchChanelIndex === -1) {
-    res.status(404).render("error-message.ejs", { errorMessage: "Channel not found" });
-  } else {
-    var searchedPost = channels[searchChanelIndex].posts[req.params.id];
-    if (typeof searchedPost !== "undefined") {
-      // res.json({ post: searchedPost, id: req.params.id });
-      res.render("edit-post.ejs", { channel: channels[searchChanelIndex], id: req.params.id });
-    } else {
-      res.status(404).render("error-message.ejs", {
-        errorMessage: `Post in channel ${channels[searchChanelIndex].name} not found`,
-      });
-    }
+// UPDATE a channel
+app.patch("/:channel_id/edit", async (req, res) => {
+  try {
+    await db.query("UPDATE channels SET name = $1 WHERE channel_id = $2;", [
+      req.body.name,
+      req.params.channel_id,
+    ]);
+    console.log(`Updated channel with id: ${req.params.channel_id}.`);
+    res.redirect("/");
+  } catch (err) {
+    console.log("Error executing query: " + err.stack);
+    res
+      .status(500)
+      .render("error-message.ejs", { errorMessage: "Error updating channel" });
   }
 });
 
-app.patch("/:channel/edit", (req, res) => {
-  var searchChannelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  var editChannel = {
-    name: req.body.name || channels[searchChannelIndex].name,
-    admin: channels[searchChannelIndex].admin,
-    dateOfCreation: channels[searchChannelIndex].dateOfCreation,
-    posts: channels[searchChannelIndex].posts,
-  };
-  channels[searchChannelIndex] = editChannel;
-  console.log(
-    `Channel "${req.params.channel}" edited to "${editChannel.name}".`
-  );
-  // res.json(editChannel);
-  res.redirect("/");
+// UPDATE a post in a channel
+app.patch("/:channel_id/edit-post/:post_id", async (req, res) => {
+  try {
+    await db.query(
+      "UPDATE posts SET title = $1, content = $2, date_of_last_edit = CURRENT_TIMESTAMP WHERE post_id = $3;",
+      [req.body.title, req.body.content, req.params.post_id]
+    );
+    console.log(`Updated post with id: ${req.params.post_id}.`);
+    res.redirect("/view/" + req.params.channel_id);
+  } catch (err) {
+    console.log("Error executing query: " + err.stack);
+    res
+      .status(500)
+      .render("error-message.ejs", { errorMessage: "Error updating post" });
+  }
 });
 
-app.patch("/:channel/edit-post/:id", (req, res) => {
-  var searchChannelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  var searchPost = channels[searchChannelIndex].posts[req.params.id];
-  var date = new Date();
-  let fullDateAndTime = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`;
-  var editPost = {
-    title: req.body.title || searchPost.title,
-    content: req.body.content || searchPost.content,
-    author: searchPost.author,
-    dateOfCreation: searchPost.dateOfCreation,
-    dateOfLastEdit: fullDateAndTime,
-  };
-  channels[searchChannelIndex].posts[req.params.id] = editPost;
-  console.log(
-    `Post #${req.params.id} in channel ${channels[searchChannelIndex].name} edited.`
-  );
-  // res.json(editPost);
-  res.redirect("/view/" + channels[searchChannelIndex].name);
-});
-
-app.get("/:channel/delete", (req, res) => {
-  var searchChannelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  if (searchChannelIndex === -1) {
-    res.status(404).render("error-message.ejs", { errorMessage: "Channel not found" });
-  } else {
+// READ form for deleting a channel
+app.get("/:channel_id/delete", async (req, res) => {
+  try {
+    const channel = await readChannel(req.params.channel_id);
     res.render("delete-channel.ejs", {
-      channel: channels[searchChannelIndex],
+      channel: channel,
+    });
+  } catch (err) {
+    res
+      .status(404)
+      .render("error-message.ejs", { errorMessage: "Channel not found" });
+  }
+});
+
+// READ form for deleting a post in a channel
+app.get("/:channel_id/delete-post/:post_id", async (req, res) => {
+  try {
+    const post = await findPost(req.params.post_id);
+    res.render("delete-post.ejs", {
+      post: post,
+      channel_id: req.params.channel_id,
+    });
+  } catch (err) {
+    console.log("Error executing query: " + err.stack);
+    res.status(404).render("error-message.ejs", {
+      errorMessage: `Post in channel ${post.name} not found`,
     });
   }
 });
 
-app.get("/:channel/delete-post/:id", (req, res) => {
-  var searchChannelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  if (searchChannelIndex === -1) {
-    res.status(404).render("error-message.ejs", { errorMessage: "Channel not found" });
-  } else {
-    var searchedPost = channels[searchChannelIndex].posts[req.params.id];
-    if (typeof searchedPost !== "undefined") {
-      // res.json({ post: searchedPost, id: req.params.id });
-      res.render("delete-post.ejs", { post: searchedPost, channelName:channels[searchChannelIndex].name, id: req.params.id });
-    } else {
-      res.status(404).render("error-message.ejs", {
-        errorMessage: `Post in channel ${channels[searchChannelIndex].name} not found`,
-      });
-    }
+// DELETE a channel
+app.delete("/:channel_id/delete", async (req, res) => {
+  try {
+    await db.query("DELETE FROM channels WHERE channel_id = $1;", [
+      req.params.channel_id,
+    ]);
+    console.log(`Deleted channel with id: ${req.params.channel_id}.`);
+    res.redirect("/");
+  } catch (err) {
+    console.log("Error executing query: " + err.stack);
+    res
+      .status(500)
+      .render("error-message.ejs", { errorMessage: "Error deleting channel" });
   }
 });
 
-app.delete("/:channel/delete", (req, res) => {
-  var searchChannelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  channels.splice(searchChannelIndex, 1);
-  console.log("Deleted channel.");
-  // res.json(channels[searchChannelIndex].posts);
-  res.redirect("/");
-});
-
-app.delete("/:channel/delete-post/:id", (req, res) => {
-  var searchChannelIndex = channels.findIndex(
-    (channel) => channel.name == req.params.channel
-  );
-  channels[searchChannelIndex].posts.splice(req.params.id, 1);
-  console.log("Deleted post.");
-  // res.json(channels[searchChannelIndex].posts);
-  res.redirect("/view/" + channels[searchChannelIndex].name);
+// DELETE a post in a channel
+app.delete("/:channel_id/delete-post/:post_id", async (req, res) => {
+  try {
+    await db.query("DELETE FROM posts WHERE post_id = $1;", [
+      req.params.post_id,
+    ]);
+    console.log(`Deleted post with id: ${req.params.post_id}.`);
+    res.redirect("/view/" + req.params.channel_id);
+  } catch (err) {
+    console.log("Error executing query: " + err.stack);
+    res
+      .status(500)
+      .render("error-message.ejs", { errorMessage: "Error deleting post" });
+  }
 });
 
 app.listen(port, () => {
-  console.log(`Listening on port ${port}...`);
+  console.log(`Listening on port http://localhost:${port}...`);
 });
