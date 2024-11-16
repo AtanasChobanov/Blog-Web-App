@@ -39,8 +39,8 @@ CREATE TABLE posts(
 	title VARCHAR(100) NOT NULL,
 	content VARCHAR(500) NOT NULL,
 	author_id INTEGER NOT NULL,
-	date_of_creation DATETIME DEFAULT GETDATE(),
-	date_of_last_edit DATETIME,
+	date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	date_of_last_edit TIMESTAMP,
 	channel_id INTEGER NOT NULL,
 	CONSTRAINT fk_posts_users
 	FOREIGN KEY (author_id)
