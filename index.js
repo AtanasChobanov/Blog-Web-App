@@ -4,78 +4,18 @@ import methodOverride from "method-override";
 import pg from "pg";
 
 const app = express();
-const port = process.env.PORT || 3000;
-
-// Connecting to PostgreSQL server
-const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "knowspacedb",
-  password: "Database1023",
-  port: 5432,
-});
-db.connect();
-
-// READING info from DB
-async function readChannels() {
-  const result = await db.query(
-    "SELECT channel_id, channels.name, date_of_creation, admin_id, users.name AS admin FROM channels JOIN users ON channels.admin_id = users.user_id;"
-  );
-
-  let channels = [];
-  result.rows.forEach((channel) => {
-    channel.date_of_creation = new Date(
-      channel.date_of_creation
-    ).toDateString();
-    channels.push(channel);
-  });
-
-  console.log(channels);
-  return channels;
-}
-
-// READING a specific channel from DB
-async function readChannel(id) {
-  const result = await db.query(
-    "SELECT * FROM channels WHERE channel_id = $1;",
-    [id]
-  );
-
-  console.log(result.rows);
-  let channel = result.rows[0];
-  return channel;
-}
-
-// READING posts from a channel
-async function readPosts(channel_id) {
-  const result = await db.query(
-    "SELECT ch.name, post_id, title, content, u.name AS author, p.date_of_creation, date_of_last_edit " +
-      "FROM posts p " +
-      "JOIN channels ch " +
-      "ON ch.channel_id = p.channel_id " +
-      "JOIN users u " +
-      "ON p.author_id = u.user_id " +
-      "WHERE ch.channel_id = $1 " +
-      "ORDER BY date_of_creation DESC;",
-    [channel_id]
-  );
-
-  let posts = [];
-  result.rows.forEach((post) => {
-    posts.push(post);
-  });
-
-  return posts;
-}
-
-async function findPost(post_id) {
-  const result = await db.query("SELECT * FROM posts WHERE post_id = $1;;", [
-    post_id,
-  ]);
-
-  let post = result.rows[0];
-  return post;
-}
+const port = 3000;
+var channels = [{
+  name: "Biology",
+  admin: "Atanas",
+  dateOfCreation: '19-10-2024',
+  posts: [{
+    title: "Test",
+    content: "smth",
+    dateOfCreation: "20-10-2024, 00:00",
+    author: "Atanas Chobanov",
+  }],
+}];
 
 // Middlewares
 app.use(express.static("public"));
