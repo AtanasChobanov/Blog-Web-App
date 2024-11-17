@@ -7,12 +7,10 @@
         <div class="channel-grid">
             <% channels.forEach(function(channel) { %>
                 <div class="channel-card">
-                    <!-- Линк на h3, който да изпраща до страницата на канала -->
-                    <h3><a href="/view/<%= channel.channel_id %>"><%= channel.name %></a></h3>
+                    <p class="channel-name"><a href="/view/<%= channel.channel_id %>"><%= channel.name %></a></p>
                     <p><%= channel.admin %></p>
                     <small>Създаден на: <%= channel.date_of_creation %></small>
                     
-                    <!-- Линкове-бутони за редактиране и изтриване на канал -->
                     <div class="mt-2">
                         <a href="/<%= channel.channel_id %>/edit" class="edit-button">Редактиране</a>
                         <a href="/<%= channel.channel_id %>/delete" class="delete-button">Изтриване</a>
