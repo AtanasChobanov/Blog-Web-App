@@ -4,9 +4,9 @@
     <h1>Списък на каналите</h1>
 
     <% if (channels.length > 0) { %>
-        <ul class="list-group">
+        <div class="channel-grid">
             <% channels.forEach(function(channel) { %>
-                <li class="list-group-item">
+                <div class="channel-card">
                     <!-- Линк на h3, който да изпраща до страницата на канала -->
                     <h3><a href="/view/<%= channel.channel_id %>"><%= channel.name %></a></h3>
                     <p><%= channel.admin %></p>
@@ -14,12 +14,12 @@
                     
                     <!-- Линкове-бутони за редактиране и изтриване на канал -->
                     <div class="mt-2">
-                        <a href="/<%= channel.channel_id %>/edit" class="btn btn-warning btn-sm">Редактиране</a>
-                        <a href="/<%= channel.channel_id %>/delete" class="btn btn-danger btn-sm">Изтриване</a>
+                        <a href="/<%= channel.channel_id %>/edit" class="edit-button">Редактиране</a>
+                        <a href="/<%= channel.channel_id %>/delete" class="delete-button">Изтриване</a>
                     </div>
-                </li>
+                </div>
             <% }); %>
-        </ul>
+        </div>
     <% } else { %>
         <p>Няма налични канали.</p>
     <% } %>
