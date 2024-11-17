@@ -135,33 +135,34 @@ footer {
     transform: scale(0.9);
 }
 
-        .edit-button {
+        .header-button {
     position: relative;
     display: inline-block;
-    margin: 15px;
+    margin: 10px 5px;
     padding: 10px 20px;
     text-align: center;
     font-size: 16px;
     letter-spacing: 1px;
     text-decoration: none;
-    color: #007bff;
+    color: white;
     background: transparent;
     cursor: pointer;
-    border: 2px solid #007bff;
+    transition: ease-out 0.3s;
+    border: 2px solid white;
     border-radius: 5px;
-    box-shadow: inset 0 0 0 0 #007bff;
-    transition: background-color 0.3s, box-shadow 0.5s;
+    box-shadow: inset 0 0 0 0 transparent;
 }
 
-.edit-button:hover {
-    color: #fff;
-    background-color: #007bff;
-    box-shadow: inset 0 -100px 0 0 #007bff;
+.header-button:hover {
+    color: #444cf7;
+    background: white;
+    box-shadow: inset 0 -100px 0 0 transparent;
 }
 
-.edit-button:active {
+.header-button:active {
     transform: scale(0.9);
 }
+
 
         /* Стил за съобщението за грешка */
         .error-message {
