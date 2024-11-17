@@ -13,20 +13,23 @@
     <% if (posts && posts.length > 0) { %>
         <% posts.forEach((post) => { %>
             <div class="post mb-4" data-title="<%= post.title %>">
-                <h2 class="pb-2"><%= post.title %></h2>
-                <p><%= post.content %></p>
-                <p><%= post.author %></p>
-                <% if (post.date_of_last_edit) { %>
+               <h2 class="pb-2 text-right"><%= post.title %></h2>
+<p class="text-right"><%= post.content %></p>
+<p class="text-right"><%= post.author %></p>
+<% if (post.date_of_last_edit) { %>
+  <p class="text-right">Редактирано на: <%= post.date_of_last_edit %></p>
+<% } %>
+
                     <small>Редактиран на: <%= post.date_of_last_edit %></small>
                 <% } else { %>
                     <small>Създаден на: <%= post.date_of_creation %></small>
                 <% } %>
                 <!-- Линкове за редактиране и изтриване на пост -->
-                <a href="/<%= channel_id %>/edit/<%= post.post_id %>" class="btn btn-warning btn-sm">Редактиране</a>
-                <a href="/<%= channel_id %>/delete-post/<%= post.post_id %>" class="btn btn-danger btn-sm">Изтриване</a>
+                <a href="/<%= channel_id %>/edit/<%= post.post_id %>" class="edit-button">Редактиране</a>
+                <a href="/<%= channel_id %>/delete-post/<%= post.post_id %>" class="delete-button">Изтриване</a>
                 
                 <!-- Добави методите за JavaScript -->
-                <button class="btn btn-primary" onclick="toggleReplyForm(this)">Отговори</button>
+                <button class="button" onclick="toggleReplyForm(this)">Отговори</button>
                 <div class="reply-form hidden">
                     <textarea class="form-control" rows="2" placeholder="Write your reply here..."></textarea>
                     <button class="btn btn-success mt-2" onclick="submitReply(this)">Публикувай отговора</button>
