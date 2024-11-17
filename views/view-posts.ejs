@@ -1,9 +1,5 @@
 <%- include("partials/header.ejs") %>
 
-<div id="search-form">
-    <input type="text" id="search-input" placeholder="Search posts">
-    <button type="submit">Search</button>
-</div>
 
 <div id="post-list">
     <a href="/<%= channel_id %>/new-post" class="btn btn-primary mb-3">Създай нов пост</a>
@@ -11,14 +7,14 @@
     <% if (posts && posts.length > 0) { %>
         <% posts.forEach((post) => { %>
             <div class="post mb-4" data-title="<%= post.title %>">
-                <h2 class="pb-2 text-right"><%= post.title %></h2>
-                <p class="text-right"><%= post.content %></p>
-                <p class="text-right"><%= post.author %></p>
+                <h2 class="pb-2 text-center"><%= post.title %></h2>
+                <p class="text-center"><%= post.content %></p>
+                <p class="text-center"><%= post.author %></p>
                 
                 <% if (post.date_of_last_edit) { %>
-                    <p class="text-right">Редактирано на: <%= post.date_of_last_edit %></p>
+                    <p class="text-center">Редактирано на: <%= post.date_of_last_edit %></p>
                 <% } else { %>
-                    <p class="text-right">Създадено на: <%= post.date_of_creation %></p>
+                    <p class="text-center">Създадено на: <%= post.date_of_creation %></p>
                 <% } %>
 
                 <a href="/<%= channel_id %>/edit/<%= post.post_id %>" class="edit-button">Редактиране</a>
@@ -41,7 +37,7 @@
 <div id="new-post-form" style="display: none;">
     <input type="text" id="post-title" placeholder="Post Title">
     <textarea id="post-content" placeholder="Post Content"></textarea>
-    <button onclick="createPost()">Създаване на пост</button>
+    <button  class="edit-button" onclick="createPost()">Създаване на пост</button>
 </div>
 
 <script>
