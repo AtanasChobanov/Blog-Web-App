@@ -91,32 +91,34 @@ footer {
         .delete-button:active {
             transform: scale(0.9);
         }
-        .edit button {
-            position: relative;
-            display: inline-block;
-            margin: 15px;
-            padding: 10px 20px;
-            text-align: center;
-            font-size: 18px;
-            letter-spacing: 1px;
-            text-decoration: none;
-            color: #444cf7;
-            background: transparent;
-            cursor: pointer;
-            transition: ease-out 0.5s;
-            border: 2px solid #444cf7;
-            border-radius: 10px;
-            box-shadow: inset 0 0 0 0 #444cf7;
-        }
-        
-        .edit button:hover {
-            color: white;
-            box-shadow: inset 0 -100px 0 0 #444cf7;
-        }
-        
-        .edit button:active {
-            transform: scale(0.9);
-        }
+        .edit-button {
+    position: relative;
+    display: inline-block;
+    margin: 15px;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 0 #007bff;
+    transition: background-color 0.3s, box-shadow 0.5s;
+}
+
+.edit-button:hover {
+    color: #fff;
+    background-color: #007bff;
+    box-shadow: inset 0 -100px 0 0 #007bff;
+}
+
+.edit-button:active {
+    transform: scale(0.9);
+}
+
         /* Стил за съобщението за грешка */
         .error-message {
             background-color: #f8d7da;
