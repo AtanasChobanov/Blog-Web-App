@@ -6,33 +6,28 @@
 </div>
 
 <div id="post-list">
-    <!-- Добави линк към страницата за създаване на нов пост в канала -->
     <a href="/<%= channel_id %>/new-post" class="btn btn-primary mb-3">Създай нов пост</a>
     
-    <!-- Проверяваме дали има постове -->
     <% if (posts && posts.length > 0) { %>
         <% posts.forEach((post) => { %>
             <div class="post mb-4" data-title="<%= post.title %>">
-               <h2 class="pb-2 text-right"><%= post.title %></h2>
-<p class="text-right"><%= post.content %></p>
-<p class="text-right"><%= post.author %></p>
-<% if (post.date_of_last_edit) { %>
-  <p class="text-right">Редактирано на: <%= post.date_of_last_edit %></p>
-<% } %>
-
-                    <small>Редактиран на: <%= post.date_of_last_edit %></small>
+                <h2 class="pb-2 text-right"><%= post.title %></h2>
+                <p class="text-right"><%= post.content %></p>
+                <p class="text-right"><%= post.author %></p>
+                
+                <% if (post.date_of_last_edit) { %>
+                    <p class="text-right">Редактирано на: <%= post.date_of_last_edit %></p>
                 <% } else { %>
-                    <small>Създаден на: <%= post.date_of_creation %></small>
+                    <p class="text-right">Създадено на: <%= post.date_of_creation %></p>
                 <% } %>
-                <!-- Линкове за редактиране и изтриване на пост -->
+
                 <a href="/<%= channel_id %>/edit/<%= post.post_id %>" class="edit-button">Редактиране</a>
                 <a href="/<%= channel_id %>/delete-post/<%= post.post_id %>" class="delete-button">Изтриване</a>
-                
-                <!-- Добави методите за JavaScript -->
+
                 <button class="button" onclick="toggleReplyForm(this)">Отговори</button>
                 <div class="reply-form hidden">
                     <textarea class="form-control" rows="2" placeholder="Write your reply here..."></textarea>
-                    <button class="btn btn-success mt-2" onclick="submitReply(this)">Публикувай отговора</button>
+                    <button class="edit-button" onclick="submitReply(this)">Публикувай отговора</button>
                 </div>
                 <div class="replies"></div>
             </div>
@@ -41,6 +36,7 @@
         <p>Няма постове в този канал.</p>
     <% } %>
 </div>
+
 
 <div id="new-post-form" style="display: none;">
     <input type="text" id="post-title" placeholder="Post Title">
