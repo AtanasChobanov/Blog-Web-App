@@ -269,35 +269,23 @@
 </head>
 <body>
     <!-- Хедър с класове от Bootstrap -->
-    <header class="header p-2 mb-3 border-bottom">
-    <div class="container">
-        <div class="d-flex flex-wrap justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                <h1 style="color: #fff;">KnowSpace</h1>
-            </a>
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li>
-                    <button onclick="window.location.href='/'" class="header-button">Начало</button>
-                </li>
-                <li>
-                    <button onclick="window.location.href='/new-channel'" class="header-button">Създай нов канал</button>
-                </li>
-            </ul>
-            <!-- Търсачка като бутон в хедъра -->
-            <div class="search-container">
-                <button type="button" class="header-button" onclick="toggleSearch()">
-                  Търси
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                  </svg>
-                </button>
-                <form action="/search" method="GET" class="d-flex search-input">
-                  <input type="text" name="query" class="form-control me-2" placeholder="Търсене..." required>
-                </form>
+   <header class="header p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <h1>KnowSpace</h1>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li>
+                        <button onclick="window.location.href='/'" class="nav-link px-2 link-secondary">Home</button>
+                    </li>
+                    <li>
+                        <button onclick="window.location.href='/new-channel'" class="nav-link px-2 link-dark">Създай нов канал</button>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
-</header>
 
 
     <main>
