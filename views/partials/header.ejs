@@ -74,23 +74,33 @@ footer {
             transform: scale(0.9);
           }
 .delete-button {
-            background-color: #cc0000;
-            color: white;
-            border-color: #ff0000; 
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        
-        .delete-button:hover {
-            background-color: #ff0000;
-        }
-        
-        .delete-button:active {
-            transform: scale(0.9);
-        }
+    position: relative;
+    display: inline-block;
+    margin: 15px;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #cc0000; /* Червен текст */
+    background: transparent;
+    cursor: pointer;
+    border: 2px solid #cc0000; /* Червена граница */
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 0 #cc0000;
+    transition: background-color 0.3s, box-shadow 0.5s;
+}
+
+.delete-button:hover {
+    color: #fff;
+    background-color: #cc0000; /* Червен фон при hover */
+    box-shadow: inset 0 -100px 0 0 #cc0000; /* Червено подчертаване */
+}
+
+.delete-button:active {
+    transform: scale(0.9);
+}
+
         .edit-button {
     position: relative;
     display: inline-block;
@@ -100,7 +110,7 @@ footer {
     font-size: 16px;
     letter-spacing: 1px;
     text-decoration: none;
-    color: #fff;
+    color: #007bff;
     background: transparent;
     cursor: pointer;
     border: 2px solid #007bff;
