@@ -39,43 +39,76 @@
             color: #007bff;
         }
         
-        button {
-            padding: 0.8em 1.8em;
-            border: 2px solid #17C3B2;
+        .button {
             position: relative;
-            overflow: hidden;
-            background-color: transparent;
+            display: inline-block;
+            margin: 15px;
+            padding: 15px 30px;
             text-align: center;
-            text-transform: uppercase;
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: #444cf7;
+            background: transparent;
+            cursor: pointer;
+            transition: ease-out 0.5s;
+            border: 2px solid #444cf7;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 0 #444cf7;
+          }
+          
+          .button:hover {
+            color: white;
+            box-shadow: inset 0 -100px 0 0 #444cf7;
+          }
+          
+          .button:active {
+            transform: scale(0.9);
+          }
+.delete-button {
+            background-color: #cc0000;
+            color: white;
+            border-color: #ff0000; 
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
             font-size: 16px;
-            transition: .3s;
-            z-index: 1;
-            font-family: inherit;
-            color: #17C3B2;
+            transition: background-color 0.3s;
         }
-
-        button::before {
-            content: '';
-            width: 0;
-            height: 300%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-            background: #17C3B2;
-            transition: .5s ease;
-            display: block;
-            z-index: -1;
+        
+        .delete-button:hover {
+            background-color: #ff0000;
         }
-
-        button:hover::before {
-            width: 105%;
+        
+        .delete-button:active {
+            transform: scale(0.9);
         }
-
-        button:hover {
-            color: #111;
+        .edit button {
+            position: relative;
+            display: inline-block;
+            margin: 15px;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: #444cf7;
+            background: transparent;
+            cursor: pointer;
+            transition: ease-out 0.5s;
+            border: 2px solid #444cf7;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 0 #444cf7;
         }
-
+        
+        .edit button:hover {
+            color: white;
+            box-shadow: inset 0 -100px 0 0 #444cf7;
+        }
+        
+        .edit button:active {
+            transform: scale(0.9);
+        }
         /* Стил за съобщението за грешка */
         .error-message {
             background-color: #f8d7da;
@@ -84,6 +117,58 @@
             padding: 15px;
             border-radius: 5px;
             margin-bottom: 20px;
+        } 
+.search-button {
+            position: relative;
+            display: inline-block;
+            margin: 15px;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 16px;
+            letter-spacing: 1px;
+            color: #fff;
+            background-color: #444cf7;
+            cursor: pointer;
+            transition: background-color 0.3s, ease-out 0.5s, box-shadow 0.3s;
+            border: none;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 0 #444cf7;
+        }
+        
+        .search-button:hover {
+            color: #fff;
+            box-shadow: inset 0 -100px 0 0 #444cf7;
+        }
+        
+        .search-button:active {
+            transform: scale(0.9);
+        }
+        .header-button {
+            position: relative;
+            display: inline-block;
+            margin: 15px;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: white;
+            background: #444cf7;
+            cursor: pointer;
+            transition: ease-out 0.5s;
+            border: 2px solid #444cf7;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 0 transparent;
+        }
+        
+        .header-button:hover {
+            color: #444cf7;
+            background: transparent;
+            box-shadow: inset 0 -100px 0 0 transparent;
+        }
+        
+        .header-button:active {
+            transform: scale(0.9);
         }
 
         .error-message strong {
@@ -172,31 +257,32 @@
         <div class="container">
             <div class="d-flex flex-wrap justify-content-center justify-content-lg-start">
                 <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                    <h1>KnowSpace</h1>
+                    <h1 style="color: #fff;">KnowSpace</h1>
                 </a>
-
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
-                        <button onclick="window.location.href='/'" class="nav-link px-2 link-secondary">Начало</button>
+                        <button onclick="window.location.href='/'" class="header-button">Начало</button>
                     </li>
                     <li>
-                        <button onclick="window.location.href='/new-channel'" class="nav-link px-2 link-dark">Създай нов канал</button>
+                        <button onclick="window.location.href='/new-channel'" class="header-button">Създай нов канал</button>
                     </li>
+                    
                 </ul>
+                <!-- Търсачка като бутон в хедъра -->
+                <div class="search-container">
+                    <button type="button" class="header-button" onclick="toggleSearch()">
+                      Търси
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                      </svg>
+                    </button>
+                    <form action="/search" method="GET" class="d-flex search-input">
+                      <input type="text" name="query" class="form-control me-2" placeholder="Търсене..." required>
+                      <button type="submit" class="header-button">Търси</button>
+                    </form>
+                  </div>
             </div>
         </div>
-        <!-- Анимация, добавена тук, за да се визуализира на футъра -->
-    <div class="banter-loader">
-        <div class="banter-loader__box"></div>
-        <div class="banter-loader__box"></div>
-        <div class="banter-loader__box"></div>
-        <div class="banter-loader__box"></div>
-        <div class="banter-loader__box"></div>
-        <div class="banter-loader__box"></div>
-        <div class="banter-loader__box"></div>
-        <div class="banter-loader__box"></div>
-        <div class="banter-loader__box"></div>
-    </div>
     </header>
 
     <main>
