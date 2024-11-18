@@ -5,8 +5,8 @@
     <p>Сигурни ли сте, че искате да изтриете този пост?"<%= post.title %>"?</p>
     
     <form action="/<%= channel_id %>/delete-post/<%= post.post_id %>?_method=DELETE" method="POST">
-        <button class="btn btn-danger" type="submit">Delete</button>
-        <a href="/view/<%= channel_id %>" class="btn btn-secondary">Назад</a>
+        <button class="button delete-button" type="submit">Delete</button>
+        <a href="/view/<%= channel_id %>" class="button">Назад</a>
     </form>
 </div>
 
