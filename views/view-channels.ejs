@@ -3,17 +3,29 @@
 <div class="form-container">
     <h1>Списък на каналите</h1>
 
+    <!-- Търсачка -->
+    <div class="search-container">
+        <input 
+            type="text" 
+            id="search-input" 
+            class="form-control search-box" 
+            placeholder="Търсене на канали..." 
+            oninput="filterChannels()" 
+            autocomplete="off"
+        >
+    </div>
+
     <% if (channels.length > 0) { %>
-        <div class="channel-grid">
+        <div class="channel-grid" id="channel-list">
             <% channels.forEach(function(channel) { %>
-                <div class="channel-card">
-                    <p class="channel-name"><a href="/view/<%= channel.channel_id %>"><%= channel.name %></a></p>
+                <div class="channel-card" data-channel-name="<%= channel.name.toLowerCase() %>">
+                    <h2 class="channel-name"><a href="/view/<%= channel.channel_id %>"><%= channel.name %></a></h2>
                     <p><%= channel.admin %></p>
                     <small>Създаден на: <%= channel.date_of_creation %></small>
                     
-                    <div class="mt-2">
-                        <a href="/<%= channel.channel_id %>/edit" class="edit-button">Редактиране</a>
-                        <a href="/<%= channel.channel_id %>/delete" class="delete-button">Изтриване</a>
+                    <div class="mt-2 btn-group">
+                        <a href="/<%= channel.channel_id %>/edit" class="button">Редактиране</a>
+                        <a href="/<%= channel.channel_id %>/delete" class="button delete-button">Изтриване</a>
                     </div>
                 </div>
             <% }); %>
@@ -24,3 +36,19 @@
 </div>
 
 <%- include("partials/footer.ejs") %>
+
+<script>
+    function filterChannels() {
+        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        const channelCards = document.querySelectorAll('.channel-card');
+        
+        channelCards.forEach(card => {
+            const channelName = card.getAttribute('data-channel-name');
+            if (channelName.includes(searchInput)) {
+                card.style.display = ''; // Показва картата
+            } else {
+                card.style.display = 'none'; // Скрива картата
+            }
+        });
+    }
+</script>
