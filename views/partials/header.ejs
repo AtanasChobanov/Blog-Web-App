@@ -236,6 +236,10 @@ footer p {
 .header-button:active {
     transform: scale(0.9);
 }
+.login-button {
+    transform: rotate(-15deg);
+    margin-left: 20px;
+}
 
 
 
@@ -266,7 +270,7 @@ footer p {
         width: 200px;
         border: 1px solid #ddd;
         padding: 5px;
-/* From Uiverse.io by OnlyCodeChannel */ 
+
 .searchBox {
   display: flex;
   max-width: 230px;
@@ -343,12 +347,14 @@ button:active {
               </button>
             </li>
             <li>
-              <button
-                onclick="window.location.href='/new-channel'"
-                class="header-button"
-              >
-                Създай нов канал
-              </button>
+             <button onclick="window.location.href='/new-channel'" class="header-button">
+    Създай нов канал
+</button>
+<button onclick="" class="header-button login-button">
+    Логин
+</button>
+
+
             </li>
           </ul>
         </div>
