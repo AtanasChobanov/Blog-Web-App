@@ -1,15 +1,16 @@
 <%- include("partials/header") %>
 
-<h1>Създаване на нов канал</h1>
+<div class="form-container">
+    <h1>Създаване на нов канал</h1>
 
-<form action="/create-channel" method="POST">
-    <div class="mb-3">
-        <label for="name" class="form-label">Име на канала:</label>
-        <input type="text" name="name" id="name" class="form-control" required>
-    </div>
-   
-    
-    <button type="submit" class="button">Създай канал</button>
-</form>
+    <form action="/create-channel" method="POST">
+        <div class="mb-3">
+            <label for="name" class="form-label">Име на канала:</label>
+            <input type="text" name="name" id="name" class="form-control" required>
+        </div>
+
+        <button type="submit" class="button">Създай канал</button>
+    </form>
+</div>
 
 <%- include("partials/footer") %>
