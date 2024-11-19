@@ -21,10 +21,6 @@
         flex-grow: 1;
       }
 
-      footer {
-        flex-shrink: 0;
-      }
-
       .header {
         background-color: #007bff;
         padding: 10px 0;
@@ -38,12 +34,25 @@
         font-size: 1.5em;
       }
     footer {
+    flex-shrink: 0;
     background-color: #007bff;
-    color: #fff; 
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
 }
 
-footer p { 
+footer p {
+    margin: 0;
     margin-left: 10px;
+    font-size: 16px;
+}
+
+footer img {
+    max-width: 149px;
+    height: auto;
+    margin-left: 20px;
 }
 
 
@@ -316,45 +325,56 @@ button:active {
 
 
       }
+.header-image {
+        width: 149px;
+        height: auto;
+        margin: 0 10px;
+    }
 
     </style>
     <title>KnowSpace</title>
   </head>
   <body>
     <!-- Хедър с класове от Bootstrap -->
-    <header class="header p-3 mb-3 border-bottom">
-      <div class="container">
+   <header class="header p-3 mb-3 border-bottom">
+    <div class="container">
         <div
-          class="d-flex flex-wrap justify-content-center justify-content-lg-start"
+            class="d-flex flex-wrap justify-content-center justify-content-lg-start"
         >
-          <a
-            href="/"
-            class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
-          >
-            <h1 class="header-title">KnowSpace</h1>
-          </a>
+            <a
+                href="/"
+                class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+            >
+                <img 
+                        src="/images/KnowSpaceHeader.png"
+                        alt="Image description" 
+                        class="header-image"
+                />
+            </a>
 
-          <ul
-            class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
-          >
-            <li>
-              <button onclick="window.location.href='/'" class="header-button">
-                Home
-              </button>
-            </li>
-            <li>
-             <button onclick="window.location.href='/new-channel'" class="header-button">
-    Създай нов канал
-</button>
-<button onclick="" class="header-button login-button">
-    Логин
-</button>
+            <ul
+                class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+            >
+                <li>
+                    <button onclick="window.location.href='/'" class="header-button">
+                       Начално
+                    </button>
+                </li>
+                <li>
+                    <button onclick="window.location.href='/new-channel'" class="header-button">
+                        Създай нов канал
+                    </button>
+                    
+                    
 
-
-            </li>
-          </ul>
+                    <button onclick="" class="header-button login-button">
+                        Логин
+                    </button>
+                </li>
+            </ul>
         </div>
-      </div>
-    </header>
+    </div>
+</header>
+
 
     <main>
