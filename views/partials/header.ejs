@@ -275,41 +275,40 @@ footer img {
         border: 1px solid #ddd;
         padding: 5px;
 
+/* From Uiverse.io by OnlyCodeChannel */ 
 .searchBox {
   display: flex;
   max-width: 230px;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  background: #fff; /* Цветът около изображението */
+  background: #fff;
   border-radius: 50px;
+  border: 2px solid #000;
   position: relative;
-  border: 1px solid black;
 }
 
 .searchIconButton {
-  color: black;
+  color: white;
   position: absolute;
   right: 8px;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #007bff; /* Бял фон */
-  border: 0px solid black; /* Черен outline */
+  background: #444cf7;
+  border: 0;
   display: inline-block;
   transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
 }
 
-/* Hover ефект */
-button:hover {
-  color: #000; /* Черен текст при hover */
-  background-color: #e6e6e6; /* Леко сив фон */
+.searchButton:hover {
+  color: #fff;
+  background-color: #1A1A1A;
   box-shadow: rgba(0, 0, 0, 0.5) 0 10px 20px;
   transform: translateY(-3px);
 }
 
-/* Натискане на бутона */
-button:active {
+.searchButton:active {
   box-shadow: none;
   transform: translateY(0);
 }
@@ -318,10 +317,12 @@ button:active {
   border: none;
   background: none;
   outline: none;
-  color: white;
+  color: black;
   font-size: 15px;
   padding: 24px 46px 24px 26px;
 }
+
+
 
 
       }
