@@ -52,7 +52,7 @@
 
                 <button class="button" onclick="toggleReplyForm(this)">Отговори</button>
                 <div class="reply-form hidden">
-                    <textarea class="form-control" rows="2" placeholder="Write your reply here..."></textarea>
+                    <textarea class="form-control" rows="2" placeholder="Отговори тук"></textarea>
                     <button class="button" onclick="submitReply(this)">Публикувай отговора</button>
                 </div>
                 <div class="replies"></div>
@@ -80,7 +80,7 @@
                 <span class="thumbs" onclick="markHelpful(this, true)">👍</span>
                 <span class="thumbs" onclick="markHelpful(this, false)">👎</span>
                 <span class="helpful-count">Помгна ми: 0</span>
-                <span class="not-helpful-count">Не ме помогна: 0</span>
+                <span class="not-helpful-count">Не ми помогна: 0</span>
             `;
             repliesDiv.appendChild(replyDiv);
             button.parentElement.classList.add('hidden');
@@ -100,10 +100,10 @@
 
         if (isHelpful) {
             let currentHelpfulCount = parseInt(helpfulCountSpan.textContent.split(': ')[1]);
-            helpfulCountSpan.textContent = `Helpful: ${currentHelpfulCount + 1}`;
+            helpfulCountSpan.textContent = `Помгна ми: ${currentHelpfulCount + 1}`;
         } else {
             let currentNotHelpfulCount = parseInt(notHelpfulCountSpan.textContent.split(': ')[1]);
-            notHelpfulCountSpan.textContent = `Not Helpful: ${currentNotHelpfulCount + 1}`;
+            notHelpfulCountSpan.textContent = `Не ми помогна: ${currentNotHelpfulCount + 1}`;
         }
 
         thumbs.forEach(t => t.classList.add('disabled'));
