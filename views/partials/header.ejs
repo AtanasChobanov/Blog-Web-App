@@ -21,10 +21,6 @@
         flex-grow: 1;
       }
 
-      footer {
-        flex-shrink: 0;
-      }
-
       .header {
         background-color: #007bff;
         padding: 10px 0;
@@ -38,12 +34,25 @@
         font-size: 1.5em;
       }
     footer {
+    flex-shrink: 0;
     background-color: #007bff;
-    color: #fff; 
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
 }
 
-footer p { 
+footer p {
+    margin: 0;
     margin-left: 10px;
+    font-size: 16px;
+}
+
+footer img {
+    max-width: 100px;
+    height: auto;
+    margin-left: 20px;
 }
 
 
