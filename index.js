@@ -8,11 +8,11 @@ const port = process.env.PORT || 3000;
 
 // Connecting to PostgreSQL server
 const db = new pg.Client({
-  user: "postgres.gshlpbzzmievwatrnqom",
-  host: "aws-0-eu-central-1.pooler.supabase.com",
-  database: "postgres",
-  password: "RemoteDatabase1023",
-  port: 6543,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 db.connect();
 
