@@ -1,6 +1,6 @@
 <%- include("partials/header.ejs") %>
 
-<div class="form-container">
+<div class="container">
     <h2>Редактиране на пост</h2>
     <form action="/<%= channel_id %>/edit-post/<%= post.post_id %>?_method=PATCH" method="POST">
         <input name="title" class="form-control mb-2" type="text" value="<%= post.title %>" required>

@@ -8,15 +8,15 @@ const port = process.env.PORT || 3000;
 
 // Connecting to PostgreSQL server
 const db = new pg.Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: "postgres.gshlpbzzmievwatrnqom",
+  host: "aws-0-eu-central-1.pooler.supabase.com",
+  database: "postgres",
+  password: "RemoteDatabase1023",
+  port: 6543,
 });
 db.connect();
 
-// READING info from DB
+// READING channels to display
 async function readChannels() {
   const result = await db.query(
     "SELECT channel_id, channels.name, date_of_creation, admin_id, users.name AS admin FROM channels JOIN users ON channels.admin_id = users.user_id;"
@@ -34,7 +34,7 @@ async function readChannels() {
   return channels;
 }
 
-// READING a specific channel from DB
+// READING a specific channel to modify
 async function readChannel(id) {
   const result = await db.query(
     "SELECT * FROM channels WHERE channel_id = $1;",
@@ -46,7 +46,7 @@ async function readChannel(id) {
   return channel;
 }
 
-// READING posts from a channel
+// READING posts from a channel to display
 async function readPosts(channel_id) {
   const result = await db.query(
     "SELECT ch.name, post_id, title, content, u.name AS author, p.date_of_creation, date_of_last_edit " +
@@ -68,6 +68,7 @@ async function readPosts(channel_id) {
   return posts;
 }
 
+// READING a specific post to modify
 async function findPost(post_id) {
   const result = await db.query("SELECT * FROM posts WHERE post_id = $1;", [
     post_id,
@@ -75,6 +76,47 @@ async function findPost(post_id) {
 
   let post = result.rows[0];
   return post;
+}
+
+// READING search result to display channels
+async function searchChannels(searchedItem) {
+  const result = await db.query(
+    "SELECT channel_id, ch.name, date_of_creation, admin_id, " +
+      "u.name AS admin FROM channels ch " +
+      "JOIN users u " +
+      "ON ch.admin_id = u.user_id WHERE LOWER(ch.name) LIKE '%' || $1 || '%';",
+    [searchedItem.toLowerCase()]
+  );
+
+  let channels = [];
+  result.rows.forEach((channel) => {
+    channel.date_of_creation = new Date(
+      channel.date_of_creation
+    ).toDateString();
+    channels.push(channel);
+  });
+  
+  console.log("Searched channels result count: " + channels.length);
+  return channels;
+}
+
+// READING search result to display channels
+async function searchPosts(searchedItem) {
+  const result = await db.query(
+    "SELECT post_id, p.title, date_of_creation, date_of_last_edit, author_id, channel_id, " +
+      "u.name AS author FROM posts p " +
+      "JOIN users u " +
+      "ON p.author_id = u.user_id WHERE LOWER(p.title) LIKE '%' || $1 || '%';",
+    [searchedItem.toLowerCase()]
+  );
+
+  let posts = [];
+  result.rows.forEach((post) => {
+    posts.push(post);
+  });
+  
+  console.log("Searched posts result count: " + posts.length);
+  return posts;
 }
 
 // Middlewares
@@ -85,7 +127,7 @@ app.use(methodOverride("_method"));
 
 // Home route - veiws all channels
 app.get("/", async (req, res) => {
-  let channels = await readChannels();
+  const channels = await readChannels();
   res.render("view-channels.ejs", { channels });
 });
 
@@ -120,6 +162,7 @@ app.get("/:channel_id/new-post", async (req, res) => {
       channel_id: channel.channel_id,
     });
   } catch (err) {
+    console.log("Error executing query: " + err);
     res
       .status(404)
       .render("error-message.ejs", { errorMessage: "Channel not found" });
@@ -128,16 +171,28 @@ app.get("/:channel_id/new-post", async (req, res) => {
 
 // READ searched channel
 app.post("/search-channel", async (req, res) => {
-  const result = await db.query(
-    "SELECT channel_id, channels.name, date_of_creation, admin_id, " +
-      "users.name AS admin FROM channels JOIN users " +
-      "ON channels.admin_id = users.user_id WHERE LOWER(channels.name) LIKE '%' || $1 || '%';",
-    [req.body.searchedName]
-  );
-  
-  console.log(result.rows);
-  let channels = result.rows;
-  res.render("search-channels-result.ejs", { channels });
+  try {
+    const channels = await searchChannels(req.body.searchedItem);
+    res.render("search-channel-result.ejs", { channels });
+  } catch (err) {
+    console.log("Error executing query: " + err);
+    res
+      .status(500)
+      .render("error-message.ejs", { errorMessage: "Error executing query" });
+  }
+});
+
+// READ searched post
+app.post("/search-post", async (req, res) => {
+  try {
+    const posts = await searchPosts(req.body.searchedItem);
+    res.render("search-post-result.ejs", { posts });
+  } catch (err) {
+    console.log("Error executing query: " + err);
+    res
+      .status(500)
+      .render("error-message.ejs", { errorMessage: "Error executing query" });
+  }
 });
 
 // CREATE new channel

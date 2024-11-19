@@ -1,11 +1,11 @@
 <%- include("partials/header.ejs") %>
 
-<div class="form-container">
+<div class="container">
     <div class="button-container">
         <a href="/<%= channel_id %>/new-post" class="button">Създай нов пост</a>
-        <form action="/search-channel" method="POST">
+        <form action="/search-post" method="POST">
             <div class="searchBox">
-                <input class="searchInput" type="text" name="searchedName" placeholder="Търсене...">
+                <input class="searchInput" type="text" name="searchedItem" placeholder="Търсене на публикация...">
                 <button class="searchIconButton" type="submit">
                     <!-- Примерен SVG за иконата на търсачка -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
