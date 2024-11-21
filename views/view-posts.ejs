@@ -1,20 +1,20 @@
 <%- include("partials/header.ejs") %>
 
-<div class="container">
+<div class="content-container">
 
     <% if (posts && posts.length > 0) { %>
-        <div class="channel-name">
+        <div class="channel-header">
             <h1><%= posts[0].name %></h1>
         </div>
 
-        <div class="button-container">
+        <div class="button-wrapper">
             <a href="/<%= channel_id %>/new-post" class="button">Създай нов пост</a>
         </div>
 
-        <form action="/search-post" method="POST" class="search-form">
-            <div class="searchBox">
-                <input class="searchInput" type="text" name="searchedItem" placeholder="Търсене на публикация...">
-                <button class="searchIconButton" type="submit">
+        <form action="/search-post" method="POST" class="search-form-container">
+            <div class="search-container">
+                <input class="search-input" type="text" name="searchedItem" placeholder="Търсене на публикация...">
+                <button class="search-btn" type="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
                         <g clip-path="url(#clip0_2_17)">
                             <g filter="url(#filter0_d_2_17)">
@@ -44,8 +44,6 @@
         </form>
     <% } %>
 </div>
-
-
         <% posts.forEach((post) => { %>
             <div class="channel-card mb-4 text-center" data-title="<%= post.title %>">
                 <h2 class="pb-2 text-center"><%= post.title %></h2>
