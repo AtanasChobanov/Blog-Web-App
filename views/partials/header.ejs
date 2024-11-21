@@ -167,35 +167,45 @@
         flex-direction: column;
       }
 
-      .header-button {
-        position: relative;
-        display: inline-block;
-        margin: 10px 5px;
-        padding: 10px 20px;
-        text-align: center;
-        font-size: 16px;
-        letter-spacing: 1px;
-        text-decoration: none;
-        color: white;
-        background: transparent;
-        cursor: pointer;
-        transition: ease-out 0.3s;
-        border: 2px solid white;
-        border-radius: 5px;
-        box-shadow: inset 0 0 0 0 transparent;
-      }
+     .header {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 100px;
+    background: #444cf7;
+    padding: 10px;
+}
 
-      .header-button:hover {
-        color: #444cf7;
-        background: white;
-        box-shadow: inset 0 -100px 0 0 transparent;
-      }
+.header-button {
+    position: relative;
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: white;
+    background: transparent;
+    cursor: pointer;
+    transition: ease-out 0.3s;
+    border: 2px solid white;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 0 transparent;
+}
 
-      .header-button:active {
-        transform: scale(0.9);
-      }
+.header-button:hover {
+    color: #444cf7;
+    background: white;
+    box-shadow: inset 0 -100px 0 0 transparent;
+}
 
-      /* Стил за съобщението за грешка */
+.header-button:active {
+    transform: scale(0.9);
+}
+
+
       .error-message {
         background-color: #f8d7da;
         color: #721c24;
