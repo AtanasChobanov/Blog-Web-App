@@ -212,34 +212,7 @@
       .search-button:active {
         transform: scale(0.9);
       }
-      .header-button {
-        position: relative;
-        display: inline-block;
-        margin: 15px;
-        padding: 15px 30px;
-        text-align: center;
-        font-size: 18px;
-        letter-spacing: 1px;
-        text-decoration: none;
-        color: white;
-        background: #007bff;
-        cursor: pointer;
-        transition: ease-out 0.5s;
-        border: 2px solid white;
-        border-radius: 10px;
-        box-shadow: inset 0 0 0 0 transparent;
-      }
-
-      .header-button:hover {
-        color: #fff;
-        background: transparent;
-        border: 2px solid #007bff;
-        box-shadow: inset 0 -100px 0 0 #007bff;
-      }
-
-      .header-button:active {
-        transform: scale(0.9);
-      }
+     
       .login-button {
     position: absolute;
     right: 10px;
@@ -282,7 +255,8 @@
 
      .searchBox {
     display: flex;
-    max-width: 230px;
+    max-width: 345px; /* Увеличаваме ширината с 50% (230px * 1.5) */
+    margin: 0 auto; /* Центриране на търсачката */
     align-items: center;
     justify-content: space-between;
     gap: 8px;
@@ -300,10 +274,12 @@
     transform: translateY(-50%);
     width: 50px;
     height: 50px;
+    display: flex; /* За центриране на SVG */
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
     background: #444cf7;
     border: 0;
-    display: inline-block;
     transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -319,16 +295,15 @@
     transform: translateY(-50%);
 }
 
-
-
-      .searchInput {
-        border: none;
-        background: none;
-        outline: none;
-        color: black;
-        font-size: 15px;
-        padding: 24px 46px 24px 26px;
-      }
+.searchInput {
+    flex-grow: 1; /* Позволява на полето за търсене да заема повече място */
+    border: none;
+    background: none;
+    outline: none;
+    color: black;
+    font-size: 15px;
+    padding: 12px 16px; /* Регулиране на вътрешния отстъп */
+}
       .header-image {
         width: 149px;
         height: auto;
