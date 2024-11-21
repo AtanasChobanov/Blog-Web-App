@@ -243,9 +243,57 @@
     transform: scale(0.9);
 }
 
+.login-button {
+    position: absolute;
+    right: 10px;
+}
 
+.create-channel-button {
+    position: absolute;
+    right: 140px;
+}
 
+/* Media Queries for smaller screens */
+@media (max-width: 768px) {
+    .header-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
 
+    .login-button,
+    .create-channel-button {
+        position: relative;
+        right: auto;
+        display: inline-block;
+        margin: 10px;
+    }
+
+    .create-channel-button {
+        margin-left: 10px;
+    }
+
+    .header-button {
+        margin: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .login-button,
+    .create-channel-button {
+        width: 100%; 
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .create-channel-button {
+        margin-left: 0;
+    }
+}
       .error-message {
         background-color: #f8d7da;
         color: #721c24;
@@ -280,16 +328,6 @@
         transform: scale(0.9);
       }
      
-      .login-button {
-    position: absolute;
-    right: 10px;
-
-}
-
-.create-channel-button {
-    position: absolute;
-    right: 140px;
-}
 
       .error-message strong {
         font-weight: bold;
