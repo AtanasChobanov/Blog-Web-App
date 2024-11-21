@@ -1,9 +1,9 @@
 <%- include("partials/header.ejs") %>
 
 <div class="container">
-    <div class="container">
-        <h1>Списък на каналите</h1>
+    <h1>Списък на каналите</h1>
 
+    <div class="container">
         <form action="/search-channel" method="POST">
             <div class="searchBox">
                 <input class="searchInput" type="text" name="searchedItem" placeholder="Търсене на канал..." required autocomplete="off">
@@ -34,6 +34,8 @@
             </div>
         </form>
     </div>
+</div>
+
 
     <% if (channels.length > 0) { %>
         <div class="channel-grid">
