@@ -1,6 +1,8 @@
 <%- include("partials/header.ejs") %>
 
 <div class="container">
+  <div class="channel-name">
+        <h1><%= channel_name %></h1>
     <div class="button-container">
         <a href="/<%= channel_id %>/new-post" class="button">Създай нов пост</a>
         <form action="/search-post" method="POST">
