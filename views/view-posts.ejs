@@ -47,9 +47,6 @@
                 </div>
             </form>
         </div>
-    <% } %>
-</div>
-
         <% posts.forEach((post) => { %>
             <div class="channel-card mb-4 text-center" data-title="<%= post.title %>">
                 <h2 class="pb-2 text-center"><%= post.title %></h2>
@@ -75,8 +72,9 @@
         <% }); %>
     <% } else { %>
         <p>Няма постове в този канал.</p>
-    <% } %>
+    <% } %>%>
 </div>
+
 
 <script>
     // JS функции за формите за отговор
