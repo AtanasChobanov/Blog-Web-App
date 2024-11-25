@@ -481,7 +481,6 @@ button:active {
     border: 2px solid rgba(var(--cardBase), 1);
     box-shadow: 0 0 5em rgba(var(--cardBase), .25);
     border-radius: 10px;
-    background: rgba(var(--cardbg), 1);
     position: relative;
     width: 320px;
     max-height: 400px;
@@ -503,7 +502,6 @@ button:active {
     padding: 1em;
     margin: 0 1em;
     color: rgba(var(--cardText), 1);
-    background-color: rgba(250, 246, 246, 1);
   }
 
   .card-info span {
