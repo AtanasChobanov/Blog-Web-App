@@ -2,8 +2,6 @@
 
 <div class="container">
     <h1>Списък на каналите</h1>
-
-    <div class="container">
         <form action="/search-channel" method="POST">
             <div class="searchBox">
                 <input class="searchInput" type="text" name="searchedItem" placeholder="Търсене на канал..." required autocomplete="off">
@@ -33,27 +31,38 @@
                 </button>
             </div>
         </form>
-    </div>
-    <% if( channels && channels.length > 0) { %>
-        <div class="channel-grid">
-            <% channels.forEach(function(channel) { %>
-                <div class="channel-card">
-                    <h2 class="channel-name">
-                        <a href="/view/<%= channel.channel_id %>"><%= channel.name %></a>
-                    </h2>
-                    <p><%= channel.admin %></p>
-                    <small>Създаден на: <%= channel.date_of_creation %></small>
-                    
-                    <div class="mt-2 btn-grop">
-                        <a href="/<%= channel.channel_id %>/edit" class="button">Редактиране</a>
-                        <a href="/<%= channel.channel_id %>/delete" class="button delete-button">Изтриване</a>
+        <% if( channels && channels.length > 0) { %>
+            <div class="channel-grid">
+                <% channels.forEach(function(channel) { %>
+                    <div class="channel-card">
+                        <h2 class="channel-name">
+                            <a href="/view/<%= channel.channel_id %>"><%= channel.name %></a>
+                        </h2>
+                        <p>Администратор: <a href="/account/<%= channel.admin_id %>"><%= channel.admin %></a></p>
+                        <p>Членове: <%= channel.members_count %></p>
+                        <small>Създаден на: <%= channel.date_of_creation %></small>
+
+                        <% if (!(user.user_id === channel.admin_id)) { %>
+                            <!-- Показваме бутон "Излез от канала", ако потребителят е член -->
+                            <form action="/leave-channel/<%= channel.channel_id %>" method="POST">
+                                <div class="mt-2 btn-grop leave-channel">
+                                <button type="submit" class="button">Излез от канала</button>
+                                </div>
+                            </form>
+                        <% } %>
+
+                        <% if(user.user_id === channel.admin_id) { %>
+                            <div class="mt-2 btn-grop">
+                                <a href="/<%= channel.channel_id %>/edit" class="button">Редактиране</a>
+                                <a href="/<%= channel.channel_id %>/delete" class="button delete-button">Изтриване</a>
+                            </div>
+                        <% } %>
                     </div>
-                </div>
-            <% }); %>
-        </div>
-    <% } else { %>
-        <p>Няма налични канали.</p>
-    <% } %>
+                <% }); %>
+        <% } else { %>
+            <p>Няма налични канали.</p>
+        <% } %>
+    
 </div>
 
 <%- include("partials/footer.ejs") %>

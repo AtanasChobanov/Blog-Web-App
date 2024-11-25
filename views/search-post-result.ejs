@@ -5,7 +5,7 @@
 
     <form action="/search-post" method="POST">
         <div class="searchBox">
-            <input class="searchInput" type="text" name="searchedItem" placeholder="Търсене на публикация...">
+            <input class="searchInput" type="text" name="searchedItem" placeholder="Търсене на публикация..." required autocomplete="off">
             <button class="searchIconButton" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
                     <g clip-path="url(#clip0_2_17)">
@@ -40,9 +40,9 @@
                 <p><%= post.author %></p>
 
                 <% if (post.date_of_last_edit) { %>
-                    <p>Редактирано на: <%= post.date_of_last_edit %></p>
+                    <small>Редактиран на: <%= post.date_of_last_edit %></small>
                 <% } else { %>
-                    <p>Създадено на: <%= post.date_of_creation %></p>
+                    <small>Създаден на: <%= post.date_of_creation %></small>
                 <% } %>
 
                 <a href="/view/<%= post.channel_id %>" class="button">Преглед</a>

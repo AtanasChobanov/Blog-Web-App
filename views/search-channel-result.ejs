@@ -5,7 +5,7 @@
 
     <form action="/search-channel" method="POST">
         <div class="searchBox">
-            <input class="searchInput" type="text" name="searchedItem" placeholder="Търсене на канал...">
+            <input class="searchInput" type="text" name="searchedItem" placeholder="Търсене на канал..." required autocomplete="off">
             <button class="searchIconButton" type="submit">
                 <!-- Примерен SVG за иконата на търсачка -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
@@ -40,7 +40,23 @@
                 <h2 class="pb-2"><%= channel.name %></h2>
                 <p><%= channel.admin %></p>
                 <p>Създадено на: <%= channel.date_of_creation %></p>
-                <a href="/view/<%= channel.channel_id %>" class="button">Посети канала</a>
+    
+                <% if (!channel.is_member) { %>
+                    <!-- Показваме бутон "Присъедини се", ако потребителят не е член на канала -->
+                    <form action="/join-channel/<%= channel.channel_id %>" method="POST">
+                        <button type="submit" class="button">Присъедини се</button>
+                    </form>
+                <% } else { %>
+                    <!-- Показваме бутон "Посети канала", ако потребителят е член на канала -->
+                    <a href="/view/<%= channel.channel_id %>" class="button">Посети канала</a>
+
+                    <% if (!(user.user_id === channel.admin_id)) { %>
+                        <!-- Показваме бутон "Излез от канала", ако потребителят е член -->
+                        <form action="/leave-channel/<%= channel.channel_id %>" method="POST">
+                            <button type="submit" class="button">Излез от канала</button>
+                        </form>
+                    <% } %>
+                <% } %>
             </div>
         <% }); %>
     <% } else { %>
