@@ -594,7 +594,7 @@ button:active {
   .posts-container li p {
     color: #555;
   }
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .header {
     flex-direction: column;
     align-items: flex-start;
