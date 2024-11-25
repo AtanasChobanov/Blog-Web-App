@@ -462,7 +462,6 @@ button:active {
     padding: 20px;
   }
 
-  /* Стил за картата */
   .card-container {
     margin-left: 80px;
     margin-top: 70px;
@@ -482,8 +481,10 @@ button:active {
     box-shadow: 0 0 5em rgba(var(--cardBase), .25);
     border-radius: 10px;
     position: relative;
-    width: 320px;
-    max-height: 400px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    width: auto;
+    max-height: auto;
     perspective: 1000px;
     z-index: 0;
     transition: all 1s ease-out;
@@ -503,7 +504,6 @@ button:active {
     margin: 0 1em;
     color: rgba(var(--cardText), 1);
     max-height: 250px;
-    overflow-y: auto;
     text-align: center;
       
   }
@@ -560,7 +560,7 @@ button:active {
 
   /* Постове */
   .posts-container {
-    margin-left: 30px; /* Малък margin отляво */
+    margin-left: 80px;
     margin-top: 20px;
     flex-grow: 1;
   }
