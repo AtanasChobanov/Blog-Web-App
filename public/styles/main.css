@@ -558,12 +558,12 @@ button:active {
     background-color: rgba(var(--cardsquares), .85);
   }
 
-  /* Постове */
   .posts-container {
-    margin-left: 30px;
+    margin-left: 80px;
     margin-top: 20px;
     flex-grow: 1;
-  }
+    }
+
 
   .posts-container h3 {
     font-size: 1.8em;
