@@ -61,7 +61,6 @@
     .button-container {
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
     }
 
     .register-button, .login-button {
@@ -86,8 +85,8 @@
       transform: scale(0.95);
     }
 
-    /* Адаптивен дизайн */
-    @media (min-width: 768px) {
+    /* Адаптивен дизайн за мобилни устройства */
+    @media (max-width: 768px) {
       .container {
         flex-direction: column;
         height: auto;
@@ -97,16 +96,21 @@
         width: 100%;
         height: auto;
         border: none;
-        border-bottom: 1px solid #ddd;
+        margin: 10px 0;
+      }
+
+      .left img, .right img {
+        max-width: 70%;
+        max-height: 70%;
       }
 
       .center {
         width: 100%;
-        padding: 20px;
+        padding: 15px;
       }
 
       .center h1 {
-        font-size: 2em;
+        font-size: 1.8em; /* По-малък текст */
       }
 
       .center p {
@@ -121,6 +125,7 @@
       .register-button, .login-button {
         width: 100%;
         text-align: center;
+        font-size: 1em; /* По-малък текст за бутоните */
       }
     }
   </style>
@@ -152,3 +157,4 @@
   </div>
 </body>
 </html>
+
