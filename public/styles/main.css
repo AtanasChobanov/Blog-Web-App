@@ -594,3 +594,30 @@ button:active {
   .posts-container li p {
     color: #555;
   }
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-container {
+    margin-left: 0; /* Премахва margin за мобилни */
+  }
+
+  .hidden {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .main-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+}
