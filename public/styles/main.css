@@ -503,7 +503,7 @@ button:active {
     padding: 1em;
     margin: 0 1em;
     color: rgba(var(--cardText), 1);
-    max-height: 250px;
+    max-height: auto;
     text-align: center;
       
   }
@@ -560,7 +560,7 @@ button:active {
 
   /* Постове */
   .posts-container {
-    margin-left: 80px;
+    margin-left: 30px;
     margin-top: 20px;
     flex-grow: 1;
   }
@@ -579,7 +579,7 @@ button:active {
   .posts-container li {
     background: #fff;
     padding: 20px;
-    margin: 15px 0;
+    margin: 80px 0;
     border-radius: 8px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   }
