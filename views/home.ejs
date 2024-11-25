@@ -13,6 +13,7 @@
 
     .container {
       display: flex;
+      flex-direction: row;
       height: 100vh;
     }
 
@@ -60,6 +61,7 @@
     .button-container {
       display: flex;
       gap: 20px;
+      flex-wrap: wrap;
     }
 
     .register-button, .login-button {
@@ -82,6 +84,44 @@
 
     .register-button:active, .login-button:active {
       transform: scale(0.95);
+    }
+
+    /* Адаптивен дизайн */
+    @media (min-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .left, .right {
+        width: 100%;
+        height: auto;
+        border: none;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .center {
+        width: 100%;
+        padding: 20px;
+      }
+
+      .center h1 {
+        font-size: 2em;
+      }
+
+      .center p {
+        font-size: 1em;
+      }
+
+      .button-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .register-button, .login-button {
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
