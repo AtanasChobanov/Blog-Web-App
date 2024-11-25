@@ -502,6 +502,10 @@ button:active {
     padding: 1em;
     margin: 0 1em;
     color: rgba(var(--cardText), 1);
+    max-height: 250px;
+    overflow-y: auto;
+    text-align: center;
+      
   }
 
   .card-info span {
@@ -534,6 +538,8 @@ button:active {
     color: rgba(var(--cardText), 0.75);
     text-align: center;
     margin-bottom: 20px;
+    word-wrap: break-word;
+    line-height: 1.5;
   }
 
   .card-info .btn {
