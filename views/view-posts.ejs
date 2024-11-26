@@ -2,13 +2,12 @@
 
 <div class="container">
     <% if (channel) { %>
-        <div class="channel-name">
-            <h1><%= channel.name %></h1>
-        </div>
         <div class="button-container">
             <!-- Link to create a new post -->
             <a href="/<%= channel.channel_id %>/new-post" class="button">Създай нов пост</a>
-
+            <div class="channel-name">
+            <h1><%= channel.name %></h1>
+            </div>
             <!-- Search form for posts -->
             <form action="/search-post" method="POST">
                 <div class="searchBox">
