@@ -1,7 +1,13 @@
 <script>
-document.getElementById('menuToggle').addEventListener('click', function () {
+document.addEventListener('DOMContentLoaded', function () {
+  const menuToggle = document.getElementById('menuToggle');
   const menu = document.getElementById('menu');
-  menu.classList.toggle('hidden');
+
+  menuToggle.addEventListener('click', function () {
+    menu.classList.toggle('hidden');
+  });
+});
+
 });
 </script>
 </main>
