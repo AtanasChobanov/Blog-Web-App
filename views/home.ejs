@@ -6,84 +6,132 @@
   <link rel="icon" href="/images/icon.png" type="image/png">
   <title>KnowSpace</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
 
+  .container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+  }
+
+  .left, .right {
+    width: 25%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+  }
+
+  .left img, .right img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .center {
+    width: 50%;
+    background-color: #007bff;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .center h1 {
+    font-size: 2.5em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .center p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 20px;
+  }
+
+  .register-button, .login-button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .register-button:hover, .login-button:hover {
+    background-color: white;
+    color: #007bff;
+  }
+
+  .register-button:active, .login-button:active {
+    transform: scale(0.95);
+  }
+
+  /* Адаптивен дизайн за мобилни устройства */
+  @media (max-width: 768px) {
     .container {
-      display: flex;
-      height: 100vh;
+      flex-direction: column;
+      height: auto;
     }
 
     .left, .right {
-      width: 25%;
-      background-color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1px solid #ddd;
-      box-sizing: border-box;
+      width: 100%;
+      height: auto;
+      border: none;
+      margin: 10px 0;
     }
 
     .left img, .right img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      max-width: 70%;
+      max-height: 70%;
     }
 
     .center {
-      width: 50%;
-      background-color: #007bff;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      width: 100%;
+      padding: 15px;
       text-align: center;
-      padding: 20px;
     }
 
     .center h1 {
-      font-size: 2.5em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
+      font-size: 1.8em;
     }
 
     .center p {
-      font-size: 1.2em;
-      line-height: 1.6;
-      margin-bottom: 30px;
+      font-size: 0.9em;
+      line-height: 1.4;
+      margin: 10px 0;
     }
 
     .button-container {
-      display: flex;
-      gap: 20px;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
     }
 
     .register-button, .login-button {
-      display: inline-block;
-      padding: 15px 30px;
-      font-size: 1.2em;
-      color: white;
-      text-decoration: none;
-      background-color: transparent;
-      border: 2px solid white;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      width: 80%; /* Центрирани и по-малки бутони */
+      font-size: 1em;
     }
-
-    .register-button:hover, .login-button:hover {
-      background-color: white;
-      color: #007bff;
-    }
-
-    .register-button:active, .login-button:active {
-      transform: scale(0.95);
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <div class="container">
@@ -112,3 +160,4 @@
   </div>
 </body>
 </html>
+
