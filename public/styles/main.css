@@ -35,17 +35,20 @@ main {
 .header h1 {
     font-size: 1.5em;
 }
+
 .menu-icon {
   display: none;
   cursor: pointer;
   padding: 10px;
-  background-color: #f5f5f5;
-  border-radius: 5px;
   width: 40px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1001;
 }
 
 .menu-icon svg {
@@ -56,13 +59,13 @@ main {
 
 #menu {
   display: none;
+  background-color: transparent;
   position: absolute;
   top: 60px;
   right: 10px;
   z-index: 1000;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: none;
+  box-shadow: none;
 }
 
 #menu ul {
@@ -73,11 +76,27 @@ main {
 
 #menu ul li {
   padding: 10px 20px;
-  border-bottom: 1px solid #ddd;
 }
 
 #menu ul li:last-child {
   border-bottom: none;
+}
+
+#menu ul li button,
+#menu ul li a {
+  text-decoration: none;
+  color: #333;
+  background: none;
+  border: none;
+  font-size: 16px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+#menu ul li button:hover,
+#menu ul li a:hover {
+  color: #007bff;
 }
 
 
@@ -88,13 +107,10 @@ main {
   object-fit: cover;
 }
 
+
 @media (max-width: 768px) {
   .menu-icon {
     display: flex;
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1001;
   }
 
   #menu {
@@ -105,35 +121,54 @@ main {
     width: 200px;
   }
 
-  
   .nav {
     display: none;
   }
-}
+
 
 @media (min-width: 769px) {
   #menu {
     display: block;
     position: static;
+    background-color: transparent;
     border: none;
     box-shadow: none;
-    width: auto;
   }
 
-  .menu-icon {
-    display: none;
-  }
-
-  .nav {
-    display: flex;
-    gap: 10px;
-  }
-
-  .nav li {
-    display: inline;
-    margin: 0 10px;
-  }
+ .menu-icon {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+nav {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav ul li {
+  margin: 10px 0;
+}
+    
+.hidden {
+  display: none;
+}
+
 
 footer {
     flex-shrink: 0;
