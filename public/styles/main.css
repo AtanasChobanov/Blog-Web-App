@@ -118,60 +118,60 @@ h1 {
 }
 
 .button {
-    position: relative; /* Оставете другите бутони да се позиционират по нормалния начин */
+    position: relative; /* Оставяме позиционирането относително за всички бутони, освен exit-button */
     display: inline-block;
-    margin: 10px;
+    margin: 15px;
     padding: 10px 20px;
-    font-size: 16px;
     text-align: center;
+    font-size: 16px;
+    letter-spacing: 1px;
     text-decoration: none;
     color: #007bff;
     background: transparent;
-    border: 2px solid #007bff;
-    border-radius: 5px;
     cursor: pointer;
-    transition: color 0.3s ease, box-shadow 0.5s ease, transform 0.2s ease;
+    transition: ease-out 0.5s;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 0 #007bff;
 }
 
 .button:hover {
     color: white;
     box-shadow: inset 0 -100px 0 0 #007bff;
-    transform: scale(1.05);
 }
 
 .button:active {
-    transform: scale(0.95);
-    transition: transform 0.1s ease;
+    transform: scale(0.9);
 }
 
-/* Стилове за .exit-button - само за фиксиране в ъгъла */
+/* Стилове за exit-button с фиксирана позиция в долния десен ъгъл */
 .exit-button {
-    position: fixed; /* Фиксира позицията на бутона */
+    position: fixed; /* Фиксираме позицията */
     bottom: 20px; /* Разстояние от долния ръб на прозореца */
     right: 20px; /* Разстояние от десния ръб на прозореца */
-    display: inline-block;
-    margin: 10px;
+    /* Наследява стиловете от .button */
+    margin: 15px;
     padding: 10px 20px;
     font-size: 16px;
+    letter-spacing: 1px;
     text-align: center;
     text-decoration: none;
     color: #007bff;
     background: transparent;
-    border: 2px solid #007bff;
-    border-radius: 5px;
     cursor: pointer;
-    transition: color 0.3s ease, box-shadow 0.5s ease, transform 0.2s ease;
+    transition: ease-out 0.5s;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 0 #007bff;
 }
 
 .exit-button:hover {
     color: white;
     box-shadow: inset 0 -100px 0 0 #007bff;
-    transform: scale(1.05);
 }
 
 .exit-button:active {
-    transform: scale(0.95);
-    transition: transform 0.1s ease;
+    transform: scale(0.9);
 }
 
 .hidden {
