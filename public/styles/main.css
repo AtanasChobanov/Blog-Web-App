@@ -109,14 +109,6 @@ h1 {
     border-color: #007bff;
 }
 
-.channel-card .btn-grop {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 15px;
-}
-
 .button {
     position: relative; 
     display: inline-block;
@@ -141,6 +133,36 @@ h1 {
 }
 
 .button:active {
+    transform: scale(0.9);
+}
+/* Родителски контейнер, който държи бутоните */
+.exit-button-container {
+    display: flex; /* Използваме flexbox за подравняване на елементите */
+    justify-content: center; /* Подравняваме бутоните по хоризонтала */
+    align-items: center; /* Подравняваме бутоните по вертикала */
+    width: 100%;
+    height: 100%;
+}
+
+/* Бутон за излизане */
+.exit-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #007bff;
+    background: transparent;
+    cursor: pointer;
+    transition: ease-out 0.5s;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 0 #007bff;
+}
+
+.exit-button:hover {
+    color: white;
+    box-shadow: inset 0 -100px 0 0 #007bff;
+}
+
+.exit-button:active {
     transform: scale(0.9);
 }
 
