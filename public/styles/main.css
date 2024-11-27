@@ -135,19 +135,17 @@ h1 {
 .button:active {
     transform: scale(0.9);
 }
-/* Родителски контейнер, който държи бутоните */
-.exit-button-container {
-    display: flex; /* Използваме flexbox за подравняване на елементите */
-    justify-content: center; /* Подравняваме бутоните по хоризонтала */
-    align-items: center; /* Подравняваме бутоните по вертикала */
-    width: 100%;
-    height: 100%;
-}
-
-/* Бутон за излизане */
+/* Стилове, наследени от .button */
 .exit-button {
+    position: absolute; /* Фиксираме позицията в контейнера на канала */
+    bottom: 20px; /* Разстояние от долния ръб на контейнера */
+    right: 20px; /* Разстояние от десния ръб на контейнера */
     padding: 10px 20px;
     font-size: 16px;
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-decoration: none;
     color: #007bff;
     background: transparent;
     cursor: pointer;
@@ -157,11 +155,13 @@ h1 {
     box-shadow: inset 0 0 0 0 #007bff;
 }
 
+/* Ховер ефект за .exit-button */
 .exit-button:hover {
     color: white;
     box-shadow: inset 0 -100px 0 0 #007bff;
 }
 
+/* Ефект при натискане на .exit-button */
 .exit-button:active {
     transform: scale(0.9);
 }
