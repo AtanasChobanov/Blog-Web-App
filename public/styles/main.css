@@ -120,29 +120,30 @@ h1 {
 .button {
     position: relative;
     display: inline-block;
-    margin: 15px;
+    margin: 10px;
     padding: 10px 20px;
-    text-align: center;
     font-size: 16px;
-    letter-spacing: 1px;
+    text-align: center;
     text-decoration: none;
     color: #007bff;
     background: transparent;
-    cursor: pointer;
-    transition: ease-out 0.5s;
     border: 2px solid #007bff;
-    border-radius: 10px;
-    box-shadow: inset 0 0 0 0 #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease, box-shadow 0.5s ease, transform 0.2s ease;
 }
 
 .button:hover {
     color: white;
     box-shadow: inset 0 -100px 0 0 #007bff;
+    transform: scale(1.05);
 }
 
 .button:active {
-    transform: scale(0.9);
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
 }
+
 
 .hidden {
     display: none;
@@ -229,20 +230,19 @@ h1 {
     align-items: center;
 }
 
-/* Media Queries for smaller screens */
 @media (max-width: 768px) {
     .header-button {
         font-size: 14px;
         padding: 8px 16px;
     }
 
-    /* Премахваме абсолютното позициониране */
+    
     .login-button,
     .create-channel-button {
         position: relative;
         display: inline-block;
         margin: 10px;
-        /* Добавяме повече разстояние между бутоните */
+        
     }
 
     .create-channel-button {
