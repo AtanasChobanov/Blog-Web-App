@@ -144,6 +144,12 @@ h1 {
     transition: transform 0.1s ease;
 }
 
+.exit-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
 
 .hidden {
     display: none;
