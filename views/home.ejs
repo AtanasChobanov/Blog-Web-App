@@ -13,14 +13,12 @@
 
     .container {
       display: flex;
-      flex-wrap: wrap;
       height: 100vh;
     }
 
     .left, .right {
       width: 25%;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       background-color: #fff;
@@ -28,9 +26,16 @@
       box-sizing: border-box;
     }
 
-    .left img, .right img {
+    .left img {
       max-width: 90%;
       max-height: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .right img {
+      max-width: 90%;
+      max-height: 45%;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       margin-bottom: 10px;
@@ -93,7 +98,7 @@
         height: auto;
       }
 
-      .left, .right, .center {
+      .left, .right {
         width: 100%;
         border: none;
       }
@@ -101,6 +106,24 @@
       .left img, .right img {
         max-width: 50%;
         margin: 10px 0;
+      }
+
+      .center {
+        width: 100%;
+        padding: 15px;
+      }
+
+      .center h1 {
+        font-size: 2em;
+      }
+
+      .center p {
+        font-size: 1em;
+      }
+
+      .button-container {
+        flex-direction: column;
+        gap: 10px;
       }
     }
   </style>
@@ -113,10 +136,10 @@
 
     <div class="center">
       <h1>KnowSpace</h1>
-      <p style="margin-bottom: 60px;">
+      <p>
         Проектът „KnowSpace” има за цел да създаде виртуална среда, в която хората обменят и обогатяват знанията и уменията си. Използването на такава социална мрежа от ученици, учители и обикновени потребители реализира следните цели:
       </p>
-      <p style="margin-bottom: 60px;">
+      <p>
         •	Стимулиране на успеха на учениците чрез интерактивен и познат начин на комуникация; <br>
         •	Социална мрежа, която се отличава от останалите като цели потребителите си да се учат взаимно.
       </p>
