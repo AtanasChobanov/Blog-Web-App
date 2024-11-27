@@ -118,7 +118,7 @@ h1 {
 }
 
 .button {
-    position: relative;
+    position: relative; /* Оставете другите бутони да се позиционират по нормалния начин */
     display: inline-block;
     margin: 10px;
     padding: 10px 20px;
@@ -144,10 +144,11 @@ h1 {
     transition: transform 0.1s ease;
 }
 
+/* Стилове за .exit-button - само за фиксиране в ъгъла */
 .exit-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+    position: fixed; /* Фиксира позицията на бутона */
+    bottom: 20px; /* Разстояние от долния ръб на прозореца */
+    right: 20px; /* Разстояние от десния ръб на прозореца */
     display: inline-block;
     margin: 10px;
     padding: 10px 20px;
@@ -172,7 +173,6 @@ h1 {
     transform: scale(0.95);
     transition: transform 0.1s ease;
 }
-
 
 .hidden {
     display: none;
