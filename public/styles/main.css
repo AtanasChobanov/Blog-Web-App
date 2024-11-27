@@ -1,5 +1,6 @@
 .min-vh-100 {
     min-height: 100vh;
+    /* 100% от височината на прозореца */
 }
 
 #delete-form {
@@ -35,140 +36,6 @@ main {
 .header h1 {
     font-size: 1.5em;
 }
-
-.menu-icon {
-  display: none;
-  cursor: pointer;
-  padding: 10px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 1001;
-}
-
-.menu-icon svg {
-  width: 24px;
-  height: 24px;
-  color: #333;
-}
-
-#menu {
-  display: none;
-  background-color: transparent;
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  z-index: 1000;
-  border: none;
-  box-shadow: none;
-}
-
-#menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-#menu ul li {
-  padding: 10px 20px;
-}
-
-#menu ul li:last-child {
-  border-bottom: none;
-}
-
-#menu ul li button,
-#menu ul li a {
-  text-decoration: none;
-  color: #333;
-  background: none;
-  border: none;
-  font-size: 16px;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-}
-
-#menu ul li button:hover,
-#menu ul li a:hover {
-  color: #007bff;
-}
-
-
-.profile-link img.profile {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-
-@media (max-width: 768px) {
-  .menu-icon {
-    display: flex;
-  }
-
-  #menu {
-    display: none;
-    position: fixed;
-    top: 50px;
-    right: 10px;
-    width: 200px;
-  }
-
-  .nav {
-    display: none;
-  }
-
-
-@media (min-width: 769px) {
-  #menu {
-    display: block;
-    position: static;
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-  }
-
- .menu-icon {
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-nav {
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  background-color: transparent;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav ul li {
-  margin: 10px 0;
-}
-    
-.hidden {
-  display: none;
-}
-
 
 footer {
     flex-shrink: 0;
@@ -353,20 +220,20 @@ h1 {
     align-items: center;
 }
 
-
+/* Media Queries for smaller screens */
 @media (max-width: 768px) {
     .header-button {
         font-size: 14px;
         padding: 8px 16px;
     }
 
-   
+    /* Премахваме абсолютното позициониране */
     .login-button,
     .create-channel-button {
         position: relative;
         display: inline-block;
         margin: 10px;
-        
+        /* Добавяме повече разстояние между бутоните */
     }
 
     .create-channel-button {
@@ -378,6 +245,7 @@ h1 {
     }
 }
 
+/* За още по-малки екрани */
 @media (max-width: 480px) {
     .header-button {
         font-size: 12px;
@@ -455,8 +323,8 @@ h1 {
 
 .searchBox {
     display: flex;
-    max-width: 700px;
-    margin: 0 auto;
+    max-width: 700px;  
+    margin: 20px auto;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
@@ -588,6 +456,10 @@ button:active {
     height: 156px;
 }
 
+.button-container {
+    text-align: center;
+}
+
 /* Родителски контейнер */
 .main-container {
     display: flex;
@@ -617,7 +489,6 @@ button:active {
     overflow-wrap: anywhere;
     width: auto;
     max-height: auto;
-    min-width: 300px;
     perspective: 1000px;
     z-index: 0;
     transition: all 1s ease-out;
@@ -630,6 +501,7 @@ button:active {
   }
 
   .card .card-info {
+    min-width: 250px;
     display: flex;
     flex-flow: column nowrap;
     place-items: center;
@@ -726,30 +598,3 @@ button:active {
   .posts-container li p {
     color: #555;
   }
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .card-container {
-    margin-left: 0;
-  }
-
-  .hidden {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .main-container {
-    flex-direction: column;
-    padding: 10px;
-  }
-
-  .footer {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-  }
-}
