@@ -33,26 +33,29 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
-    /* Подредба на снимките в дясно (една под друга) при гледане на компютър */
-    .right {
-      flex-direction: column;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      margin-top: 30px; /* Добавяне на разстояние отгоре */
-    }
+   .right {
+  width: 25%;
+  display: flex;
+  flex-direction: column; /* Вертикално подравняване на снимките */
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  margin-top: 100px; /* Изместване с 100px надолу за дясната колона */
+}
 
-    .right img {
-      max-width: 90%;
-      max-height: 45%;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      margin-bottom: 10px; /* Разстояние между снимките */
-    }
+.right img {
+  max-width: 90%;
+  max-height: 45%;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px; /* Разстояние между снимките */
+}
 
-    .right img:last-child {
-      margin-bottom: 0; /* Премахва разстоянието под последната снимка */
-    }
+.right img:last-child {
+  margin-bottom: 0; /* Премахване на разстоянието под последната снимка */
+}
 
     .center {
       width: 50%;
