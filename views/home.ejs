@@ -98,11 +98,12 @@
         height: auto;
       }
 
-     .left, .right {
+    .left {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 10px; /* Разстояние отдясно на лявата част */
 }
 
 .left img {
@@ -114,6 +115,14 @@
   object-fit: cover;
 }
 
+.right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px; /* Разстояние отляво на дясната част */
+}
+
 .right img {
   width: 60%;
   max-width: 60%;
@@ -122,13 +131,6 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   object-fit: cover;
 }
-
-
-.left, .right {
-  margin: 0 10px; 
-}
-
-
 
       .center {
         width: 100%;
