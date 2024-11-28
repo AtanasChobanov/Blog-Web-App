@@ -253,10 +253,11 @@ h1 {
 }
 
 @media (max-width: 768px) {
-    .header-button,
-    .profile {
+    .header-button, .profile-link {
         display: none;
     }
+}
+
 
     .searchIconButton {
         display: flex;
