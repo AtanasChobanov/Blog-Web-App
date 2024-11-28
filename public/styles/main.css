@@ -137,10 +137,9 @@ h1 {
 }
 /* Стилове, наследени от .button */
 .exit-button {
-    margin-bottom: 120px;
-    position: absolute; /* Фиксираме позицията в контейнера на канала */
-    bottom: 20px; /* Разстояние от долния ръб на контейнера */
-    right: 20px; /* Разстояние от десния ръб на контейнера */
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
     padding: 10px 20px;
     font-size: 16px;
     text-align: center;
