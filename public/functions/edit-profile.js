@@ -1,7 +1,13 @@
 function openPopup() {
-    document.getElementById('passwordPopup').style.display = 'flex';
+    const popup = document.getElementById('passwordPopup');
+    if (popup) {
+        popup.style.display = 'flex';
+    }
 }
 
 function closePopup() {
-    document.getElementById('passwordPopup').style.display = 'none';
+    const popup = document.getElementById('passwordPopup');
+    if (popup) {
+        popup.style.display = 'none';
+    }
 }
