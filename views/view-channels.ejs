@@ -39,9 +39,19 @@
                 <% channels.forEach(function(channel) { %>
                     <div class="channel-card">
                         <a href="/account/<%= channel.admin_id %>" class="profile-link"><img src="/uploads/profile-pictures/<%= channel.admin_picture %>" alt="Profile" class="profile"></a>
-                        <h2 class="channel-name">
-                            <a href="/view/<%= channel.channel_id %>"><%= channel.name %></a>
-                        </h2>
+                        <% if (locals.infoMessage) { %>
+    <h2 class="channel-name">
+        <% if (joinedChannels.includes(channel.channel_id)) { %>
+            <%= channel.name %>
+        <% } else { %>
+            <a href="/view/<%= channel.channel_id %>"><%= channel.name %></a>
+        <% } %>
+    </h2>
+<% } else { %>
+    <h2 class="channel-name">
+        <a href="/view/<%= channel.channel_id %>"><%= channel.name %></a>
+    </h2>
+<% } %>
                         <p>Администратор: <a href="/account/<%= channel.admin_id %>"><%= channel.admin %></a></p>
                         <p>Членове: <%= channel.members_count %></p>
                         <small>Създаден на: <%= channel.date_of_creation %></small>
