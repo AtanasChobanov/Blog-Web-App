@@ -135,9 +135,10 @@ h1 {
 .button:active {
     transform: scale(0.9);
 }
-/* Стилове, наследени от .button */
+
 .exit-button {
     position: absolute;
+    display: inline-block;
     bottom: 20px;
     right: 20px;
     padding: 10px 20px;
