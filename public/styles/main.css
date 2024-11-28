@@ -139,8 +139,6 @@ h1 {
 .exit-button {
     position: relative;
     display: inline-block;
-    bottom: 20px;
-    right: 20px;
     padding: 10px 20px;
     font-size: 16px;
     text-align: center;
@@ -251,20 +249,44 @@ h1 {
     display: flex;
     align-items: center;
 }
+    .searchIconButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background: #007bff;
+    border-radius: 50%;
+}
 
-@media (max-width: 768px) {
+.searchIconButton svg {
+    width: 20px;
+    height: 20px;
+}
+
+@media (max-width: 992px) {
     .header-button {
-        font-size: 14px;
+        font-size: 0.9rem;
         padding: 8px 16px;
+        margin: 5px;
     }
 
-    
+    .nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav li {
+        flex: 1 0 100%;
+        text-align: center;
+    }
+
     .login-button,
     .create-channel-button {
         position: relative;
         display: inline-block;
         margin: 10px;
-        
     }
 
     .create-channel-button {
@@ -276,7 +298,6 @@ h1 {
     }
 }
 
-/* За още по-малки екрани */
 @media (max-width: 480px) {
     .header-button {
         font-size: 12px;
@@ -288,7 +309,6 @@ h1 {
         width: 100%;
         text-align: center;
         margin-bottom: 10px;
-        /* Центрираме бутоните и ги правим 100% от ширината */
     }
 
     .create-channel-button {
