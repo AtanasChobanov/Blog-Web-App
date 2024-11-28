@@ -291,7 +291,17 @@ h1 {
         height: 15px;
     }
 }
-    
+
+.svg-icon {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .svg-icon {
+        display: inline-block;
+    }
+}
+
     .login-button,
     .create-channel-button {
         position: relative;
