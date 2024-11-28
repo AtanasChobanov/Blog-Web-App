@@ -17,40 +17,41 @@
     }
 
     .left, .right {
-  width: 25%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
-}
+      width: 25%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
 
-.left img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
+    .left img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
 
-.right {
-  flex-direction: column; /* Подрежда елементите вертикално */
-  display: flex; /* Активиране на Flexbox */
-  justify-content: flex-start; /* Подравняване към началото */
-  align-items: center; /* Центриране по хоризонтала */
-}
+    /* Подредба на снимките в дясно (една под друга) при гледане на компютър */
+    .right {
+      flex-direction: column;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
 
-.right img {
-  max-width: 90%;
-  max-height: 45%;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px; /* Разстояние от 10px между изображенията */
-}
+    .right img {
+      max-width: 90%;
+      max-height: 45%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px; /* Разстояние между снимките */
+    }
 
-.right img:last-child {
-  margin-bottom: 0; /* Премахване на последното разстояние */
-}
+    .right img:last-child {
+      margin-bottom: 0; /* Премахва разстоянието под последната снимка */
+    }
 
     .center {
       width: 50%;
@@ -109,15 +110,28 @@
         height: auto;
       }
 
-       .left, .right {
+      .left, .right {
         width: 100%;
         border: none;
       }
 
-      .left img, .right img {
-        max-width: 50%;
-        margin: 10px 0;
-      } 
+      /* Настройка на дясната част за мобилни устройства */
+      .right {
+        flex-direction: row; /* Подреждаме снимките една до друга */
+        justify-content: space-between; /* Разстояние между снимките */
+        gap: 10px; /* Разстояние между снимките */
+      }
+
+      .right img {
+        max-width: 50%; /* Снимките са 50% от размера на лявото изображение */
+        max-height: 50%; /* За да се поддържа съотношението */
+        margin-bottom: 0; /* Премахва ненужно разстояние */
+      }
+
+      .left img {
+        max-width: 100%; /* Лявото изображение е на 100% ширина */
+        max-height: 100%; /* Също така може да се използва за коригиране на височината */
+      }
 
       .center {
         width: 100%;
@@ -151,8 +165,8 @@
         Проектът „KnowSpace” има за цел да създаде виртуална среда, в която хората обменят и обогатяват знанията и уменията си. Използването на такава социална мрежа от ученици, учители и обикновени потребители реализира следните цели:
       </p>
       <p>
-        •	Стимулиране на успеха на учениците чрез интерактивен и познат начин на комуникация; <br>
-        •	Социална мрежа, която се отличава от останалите като цели потребителите си да се учат взаимно.
+        • Стимулиране на успеха на учениците чрез интерактивен и познат начин на комуникация; <br>
+        • Социална мрежа, която се отличава от останалите като цели потребителите си да се учат взаимно.
       </p>
       <div class="button-container">
         <a href="/register" class="register-button">Създай профил</a>
