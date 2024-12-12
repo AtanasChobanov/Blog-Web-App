@@ -64,7 +64,7 @@
                             </form>
                         <% } else {%>
                             <!-- Показваме бутон "Излез от канала", ако потребителят е член -->
-                            <form action="/leave-channel/<%= channel.channel_id %>" method="POST">
+                            <form action="/leave-channel/<%= channel.channel_id %>?_method=DELETE" method="POST">
                                 <div class="mt-2 btn-grop leave-channel">
                                    <button type="submit" class="exit-button">Излез от канала</button>
                                 </div>
