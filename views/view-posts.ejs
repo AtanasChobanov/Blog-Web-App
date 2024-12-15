@@ -52,28 +52,25 @@
                     <h2 class="pb-2 text-center"><%= post.title %></h2>
                     <p class="text-left"><%= post.content %></p>
                     <p class="text-center">Автор: <a href="/account/<%= post.author_id %>"><%= post.author %></a></p>
-
                     <% if (post.date_of_last_edit) { %>
                         <small class="text-center">Редактиран на: <%= post.date_of_last_edit %></small>
                     <% } else { %>
                         <small class="text-center">Създаден на: <%= post.date_of_creation %></small>
                     <% } %>
-                    
-                    <% if(user.user_id === post.author_id  || user.user_type === "Администратор") { %>
-                    <a href="/<%= channel.channel_id %>/edit/<%= post.post_id %>" class="button edit-button">Редактиране</a>
-                    <a href="/<%= channel.channel_id %>/delete-post/<%= post.post_id %>" class="button delete-button">Изтриване</a>
-                    <% } %>
                 </div>
             <% }); %>
         <% } else { %>
             <p>Няма постове в този канал.</p>
-        <% } %>%>
+            <% if (wikiData) { %>
+                <h3>Информация от Wikipedia:</h3>
+                <p><%= wikiData.extract %></p>
+                <a href="<%= wikiData.url %>" target="_blank">Прочети повече</a>
+            <% } %>
+        <% } %>
     <% } else { %>
         <p>Този канал не съществува.</p>
-    <% } %>%>
+    <% } %>
 </div>
 
 <%- include("partials/footer.ejs") %>
-
-
-
+<script src="/functions/home.js"></script> 
