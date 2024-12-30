@@ -2,15 +2,37 @@ import db from "./db.js";
 import bcrypt from "bcrypt";
 
 const saltRounds = 10;
+// Array for random profile picture selection
+const defaultAvatars = [
+  "default-avatar-1.jpg",
+  "default-avatar-2.jpg",
+  "default-avatar-3.jpg",
+  "default-avatar-4.jpg",
+];
 
-export async function createNewUser(email, username, password, userType, randomAvatar) {
+export async function createNewUser(
+  email,
+  username,
+  password,
+  userType,
+  avatar
+) {
   try {
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    if (!avatar) {
+      avatar =
+        "/uploads/profile-pictures/" +
+        defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
+    }
+
+    if(password !== "google") {
+      password = await bcrypt.hash(password, saltRounds);
+    }
+
     const result = await db.query(
       `INSERT INTO users (email, password, username, user_type, profile_picture) 
       VALUES ($1, $2, $3, $4, $5) 
       RETURNING *`,
-      [email, hashedPassword, username, userType, randomAvatar]
+      [email, password, username, userType, avatar]
     );
     return result.rows[0];
   } catch (err) {

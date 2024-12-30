@@ -4,12 +4,17 @@ import methodOverride from "method-override";
 import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
+import GoogleStrategy from "passport-google-oauth2";
 import flash from "connect-flash";
 import env from "dotenv";
 import channelRoutes from "./routes/channelRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
-import { getUserByEmail, verifyPassword } from "./models/userModel.js";
+import {
+  createNewUser,
+  getUserByEmail,
+  verifyPassword,
+} from "./models/userModel.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -62,8 +67,9 @@ app.use("/", authRoutes);
 
 app.use("/", postRoutes);
 
-// Passport стратегия за автентикация
+// Local passport authentication
 passport.use(
+  "local",
   new Strategy(async function verify(username, password, cb) {
     try {
       const user = await getUserByEmail(username);
@@ -85,7 +91,47 @@ passport.use(
   })
 );
 
-// Сериализация и десериализация на потребител
+// Google passport authentication
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/google",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+      scope: ["profile", "email"],
+    },
+    async function verify(accessToken, refreshToken, profile, cb) {
+      try {
+        const user = await getUserByEmail(profile.email);
+        
+        // Checks if user exists with normal password
+        if(user){
+          if(user.password !== "google") {
+            return cb(null, false, { message: "Имейлът е регистриран чрез парола." });
+          }
+        }
+        else {
+          const newUser = await createNewUser(
+            profile.email,
+            profile.displayName,
+            "google",
+            "Друг",
+            profile.picture
+          );
+
+          return cb(null, newUser);
+        }
+        return cb(null, user);
+      } catch (err) {
+        return cb(err);
+      }
+    }
+  )
+);
+
+// Process users to put in session
 passport.serializeUser((user, cb) => {
   return cb(null, user);
 });

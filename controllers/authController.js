@@ -8,14 +8,6 @@ import {
   getUserPosts,
 } from "../models/userModel.js";
 
-// Array for random profile picture selection
-const defaultAvatars = [
-  "default-avatar-1.jpg",
-  "default-avatar-2.jpg",
-  "default-avatar-3.jpg",
-  "default-avatar-4.jpg",
-];
-
 export function getRegisterPage(req, res) {
   res.render("register.ejs");
 }
@@ -29,8 +21,6 @@ export async function registerUser(req, res) {
   const email = req.body.email;
   const password = req.body.password;
   const userType = req.body.type;
-  const randomAvatar =
-    defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
 
   try {
     const existingUser = await getUserByEmail(email);
@@ -39,17 +29,23 @@ export async function registerUser(req, res) {
       res.render("register.ejs", {
         errorMessage: "Имейлът е вече регистриран. Пробвайте да влезете.",
       });
+    } else if (password === "google") {
+      res.render("register.ejs", {
+        errorMessage: "Невалидна парола.",
+      });
     } else {
       const user = await createNewUser(
         email,
         username,
         password,
         userType,
-        randomAvatar
+        null
       );
 
       req.login(user, (err) => {
-        console.log(err);
+        if (err) {
+          console.error("Error during login:", err);
+        }
         res.redirect("/");
       });
     }
@@ -144,10 +140,9 @@ export async function changePassword(req, res) {
 
     try {
       // Проверка дали новата парола и потвърждението съвпадат
-      if (newPassword !== confirmPassword) {
+      if (newPassword !== confirmPassword || newPassword === "google") {
         return res.render("edit-profile.ejs", {
-          errorMessage: "Новите пароли не съвпадат.",
-          hidden: false,
+          errorMessage: "Невалидна нова парола."
         });
       }
 
@@ -156,7 +151,6 @@ export async function changePassword(req, res) {
       if (!isMatch) {
         return res.render("edit-profile.ejs", {
           errorMessage: "Старата парола не е правилна.",
-          hidden: false,
         });
       }
 
