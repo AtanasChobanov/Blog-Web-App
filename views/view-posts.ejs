@@ -50,8 +50,8 @@
         <% if (posts && posts.length > 0) { %>
             <% posts.forEach((post) => { %>
                 <div class="channel-card mb-4 text-center" data-title="<%= post.title %>">
-                    <h2 class="pb-2 text-center"><%= post.title %></h2>
-                    <p class=".channel-card li p"><%= post.content %></p>
+                    <h2 class="pb-2 text-left"><%= post.title %></h2>
+                    <p class="text-center"><%= post.content %></p>
                     <p class=".channel-card li p">Автор: <a href="/account/<%= post.authorId %>"><%= post.author %></a></p>
                     <% if (post.dateOfLastEdit) { %>
                         <small class="text-center">Редактиран на: <%= post.dateOfLastEdit %></small>
