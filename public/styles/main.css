@@ -103,20 +103,41 @@ p.text-left {
     justify-content: center;
 }
 
-.channel-card {
-    background-color: #f9f9f9;
-    border: 2px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+.channel-card { 
+    margin-right: 80px;
+    margin-left: 50px;
+    margin-top: 20px;
+    flex-grow: 1;
 }
 
-.channel-card:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    border-color: #007bff;
+.channel-card h3 {
+    font-size: 1.8em;
+    text-align: center;
+    color: #333;
 }
+
+.channel-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.channel-card li {
+    background: #fff;
+    padding: 20px;
+    margin: 80px 0;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.channel-card li h4 {
+    margin: 0;
+    color: #007bff;
+}
+
+.channel-card li p {
+    color: #555;
+}
+
 
 .button {
     position: relative; 
