@@ -5,11 +5,8 @@
         <div class="channel-name">
             <h1><%= channel.name %></h1>
         </div>
-        <div class="button-container">
-            <!-- Link to create a new post -->
-            <a href="/<%= channel.channelId %>/new-post" class="button">Създай нов пост</a>
-
-            <form action="/search-post/<%= channel.channelId %>" method="POST">
+        <div class="action-container">
+            <form action="/search-post/<%= channel.channelId %>" method="POST" class="search-form">
                 <div class="searchBox">
                     <input class="searchInput" 
                            id="searchInput"
@@ -43,9 +40,12 @@
                             </defs>
                         </svg>
                     </button>
+                    <a href="/<%= channel.channelId %>/new-post" class="button">Създай нов пост</a>
                 </div>
             </form>
         </div>
+    <% } %>
+</div>
         <% if (posts && posts.length > 0) { %>
             <% posts.forEach((post) => { %>
                 <div class="channel-card mb-4 text-center" data-title="<%= post.title %>">
