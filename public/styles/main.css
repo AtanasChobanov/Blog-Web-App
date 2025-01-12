@@ -110,6 +110,10 @@ p.text-left {
     flex-grow: 1;
 }
 
+.channel-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    border-color: #007bff;
+}
 .channel-card h3 {
     font-size: 1.8em;
     text-align: center;
