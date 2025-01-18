@@ -63,6 +63,14 @@
                         <a href="/<%= channel.channelId %>/edit/<%= post.postId %>" class="button edit-button">Редактиране</a>
                         <a href="/<%= channel.channelId %>/delete-post/<%= post.postId %>" class="button delete-button">Изтриване</a>
                     <% } %>
+
+                    <% post.filesManager.uploadedFiles.forEach((file) => { %>
+                        <% if (file.type === "image") { %>
+                          <img src="<%= file.url %>" alt="Post Image"/>
+                        <% } else { %>
+                          <iframe src="<%= file.url %>" width="100%" height="400px" frameborder="0" allowfullscreen></iframe>
+                        <% } %>
+                      <% }); %>
                 </div>
             <% }); %>
         <% } else { %>

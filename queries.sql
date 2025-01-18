@@ -54,3 +54,16 @@ CREATE TABLE IF NOT EXISTS posts
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS post_files (
+    file_id SERIAL PRIMARY KEY,           
+    post_id INTEGER NOT NULL,             
+    url TEXT NOT NULL,               
+    type VARCHAR(50) NOT NULL,       
+    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_post_files_posts 
+        FOREIGN KEY (post_id)
+        REFERENCES posts (post_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);

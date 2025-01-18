@@ -1,6 +1,7 @@
 import Post from "../models/postModel.js";
 import Channel from "../models/channelModel.js";
 
+
 class PostController {
   static async getNewPostPage(req, res) {
     if (req.isAuthenticated()) {
@@ -32,15 +33,27 @@ class PostController {
   static async createController(req, res) {
     if (req.isAuthenticated()) {
       try {
+        if (req.files.images && req.files.images.length > 5) {
+          return res.status(400).render("new-post.ejs", {
+            errorMessage: "Не може да се качват повече от 5 снимки.",
+            title: req.body.title,
+            content: req.body.content,
+            channelId: req.params.channelId,
+          });
+        }
+        
+        const files = [...(req.files.images || []), ...(req.files.documents || [])];
         const post = await Post.create(
           req.body.title,
           req.body.content,
           req.user.userId,
-          req.params.channelId
+          req.params.channelId,
+          files
         );
-
+  
         res.redirect(`/view/${req.params.channelId}`);
       } catch (err) {
+        console.error(err);
         res.status(500).render("error-message.ejs", {
           errorMessage: "Грешка при създаване на пост.",
         });

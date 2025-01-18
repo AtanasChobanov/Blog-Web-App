@@ -2,7 +2,10 @@
 
 <div class="container">
     <h2>Създаване на нов пост</h2>
-    <form action="/<%= channelId %>/create-post" method="POST">
+    <form action="/<%= channelId %>/create-post" method="POST" enctype="multipart/form-data">
+        <% if (locals.errorMessage) { %>
+            <p style="color: red; font-size: 14px;"><%= errorMessage %></p>
+        <% } %>
         <div class="mb-3">
             <label for="title" class="form-label">Заглавие на поста</label>
             <input name="title" class="form-control mb-2" type="text" required>
@@ -11,7 +14,16 @@
             <label for="content" class="form-label">Съдържание на поста</label>
             <textarea name="content" class="form-control mb-2" rows="4" required></textarea>
         </div>
-        
+        <div class="mb-3">
+            <!-- Поле за изображения -->
+            <label for="images">Изображения:</label>
+            <input type="file" id="images" name="images" multiple accept=".jpeg,.jpg,.png">
+        </div>
+        <div class="mb-3">
+            <!-- Поле за документи -->
+            <label for="documents">Документи:</label>
+            <input type="file" id="documents" name="documents" accept=".pdf,.docx,.pptx,.xlsx,.txt">
+        </div>
         <button class="button" type="submit">Създаване на поста</button>
     </form>
 </div>

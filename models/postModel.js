@@ -1,4 +1,5 @@
 import db from "../config/db.js";
+import PostFilesManager from "./postFilesManagerModel.js";
 
 class Post {
   constructor(postId, title, content, authorId, channelId, dateOfCreation, dateOfLastEdit, author = null) {
@@ -7,11 +8,12 @@ class Post {
     this.content = content;
     this.authorId = authorId;
     this.channelId = channelId;
-    this.dateOfCreation = new Date(dateOfCreation).toLocaleString('bg-BG', { timeZone: 'Asia/Dubai' });
+    this.dateOfCreation = new Date(dateOfCreation).toLocaleString('bg-BG', { timeZone: 'Europe/Sofia' });
     this.dateOfLastEdit = dateOfLastEdit
-      ? new Date(dateOfLastEdit).toLocaleString('bg-BG', { timeZone: 'Asia/Dubai' })
+      ? new Date(dateOfLastEdit).toLocaleString('bg-BG', { timeZone: 'Europe/Sofia' })
       : null;
     this.author = author;
+    this.filesManager = new PostFilesManager(postId)
   }
 
   // UPDATE an existing post
@@ -32,6 +34,7 @@ class Post {
   // DELETE a post
   async delete() {
     try {
+      this.filesManager.deleteAll();
       await db.query(
         `DELETE FROM posts 
          WHERE post_id = $1;`,
@@ -60,7 +63,7 @@ class Post {
         [channelId]
       );
 
-      return result.rows.map(
+      const posts = result.rows.map(
         (post) =>
           new Post(
             post.post_id,
@@ -73,6 +76,13 @@ class Post {
             post.author
           )
       );
+
+      // Load files for each post
+      for (const post of posts) {
+        await post.filesManager.getFiles();
+      }
+
+      return posts;
     } catch (err) {
       console.error("Error fetching posts from channel:", err);
       throw err;
@@ -80,7 +90,7 @@ class Post {
   }
 
   // CREATE a new post
-  static async create(title, content, authorId, channelId) {
+  static async create(title, content, authorId, channelId, files) {
     try {
       const result = await db.query(
         `INSERT INTO posts (title, content, author_id, channel_id) 
@@ -89,8 +99,8 @@ class Post {
         [title, content, authorId, channelId]
       );
 
-      const post = result.rows[0];
-      return new Post(
+      let post = result.rows[0];
+      post = new Post(
         post.post_id,
         post.title,
         post.content,
@@ -99,6 +109,8 @@ class Post {
         post.date_of_creation,
         post.date_of_last_edit
       );
+      await post.filesManager.uploadFilesToCloudinary(files);
+      return post;
     } catch (err) {
       console.error("Error creating post:", err);
       throw err;
