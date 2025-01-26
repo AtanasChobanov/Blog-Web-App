@@ -3,6 +3,21 @@ import Channel from "../models/channelModel.js";
 
 
 class PostController {
+  static async getFeedController(req, res) {
+    if (req.isAuthenticated()) {
+      try {
+        const posts = await Post.getFromUserChannels(req.user.userId);
+        res.render("feed.ejs", { posts });
+      } catch (err) {
+        res.status(500).render("error-message.ejs", {
+          errorMessage: "Грешка при зареждане на публикациите.",
+        });
+      }
+    } else {
+      res.redirect("/login");
+    }
+  }
+
   static async getNewPostPage(req, res) {
     if (req.isAuthenticated()) {
       try {

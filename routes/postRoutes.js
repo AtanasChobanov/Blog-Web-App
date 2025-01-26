@@ -5,6 +5,8 @@ import multer from "multer";
 
 const router = express.Router();
 
+router.get("/", PostController.getFeedController);
+
 router.get("/:channelId/new-post", PostController.getNewPostPage);
 router.post("/:channelId/create-post", (req, res, next) => {
   uploadFiles(req, res, (err) => {

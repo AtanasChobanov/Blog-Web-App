@@ -64,7 +64,7 @@ h1 {
     text-align: center;
 }
 
-.channel-name > h1 {
+.channel-name>h1 {
     text-align: start;
     margin-left: 1rem;
 }
@@ -103,13 +103,13 @@ p.text-left {
     justify-content: center;
 }
 
-.channel-card { 
+.channel-card {
     background-color: #f9f9f9;
     border: 2px solid #ddd;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-     font-size: 1.3em;
+    font-size: 1.3em;
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
     text-align: left;
 }
@@ -120,7 +120,7 @@ p.text-left {
 }
 
 .button {
-    position: relative; 
+    position: relative;
     display: inline-block;
     margin: 15px;
     padding: 10px 20px;
@@ -259,7 +259,8 @@ p.text-left {
     display: flex;
     align-items: center;
 }
-    .searchIconButton {
+
+.searchIconButton {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -473,14 +474,14 @@ button:active {
 .main-container {
     display: flex;
     padding: 20px;
-  }
+}
 
-  .card-container {
+.card-container {
     margin-left: 80px;
     margin-top: 70px;
-  }
+}
 
-  .card {
+.card {
     --cardbg: 245, 245, 245;
     --cardBase: 0, 123, 255;
     --cardText: 100, 100, 100;
@@ -501,15 +502,15 @@ button:active {
     perspective: 1000px;
     z-index: 0;
     transition: all 1s ease-out;
-  }
+}
 
-  .card:hover {
+.card:hover {
     filter: grayscale(0%);
     scale: 1.05;
     box-shadow: 0 0 6em rgba(var(--cardBase), .5);
-  }
+}
 
-  .card .card-info {
+.card .card-info {
     min-width: 250px;
     display: flex;
     flex-flow: column nowrap;
@@ -519,10 +520,10 @@ button:active {
     color: rgba(var(--cardText), 1);
     max-height: auto;
     text-align: center;
-      
-  }
 
-  .card-info span {
+}
+
+.card-info span {
     color: rgba(var(--cardBase), 1);
     display: flex;
     place-items: center;
@@ -533,30 +534,30 @@ button:active {
     height: 120px;
     width: 120px;
     margin-bottom: 15px;
-  }
+}
 
-  .avatar {
+.avatar {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
+}
 
-  .card-info h3 {
+.card-info h3 {
     margin: 15px 0;
     font-size: 1.4em;
     color: rgba(var(--cardText), 1);
-  }
+}
 
-  .card-info p {
+.card-info p {
     font-size: 1.2em;
     color: rgba(var(--cardText), 0.75);
     text-align: center;
     margin-bottom: 20px;
     word-wrap: break-word;
     line-height: 1.5;
-  }
+}
 
-  .card-info .btn {
+.card-info .btn {
     display: inline-block;
     padding: 12px 25px;
     background-color: rgba(var(--cardBase), .85);
@@ -565,75 +566,76 @@ button:active {
     border-radius: 5px;
     font-size: 1em;
     transition: all 0.3s ease-in-out;
-  }
+}
 
-  .card-info .btn:hover {
+.card-info .btn:hover {
     cursor: pointer;
     background-color: rgba(var(--cardsquares), .85);
-  }
+}
 
-  .posts-container {
+.posts-container {
     margin-right: 80px;
     margin-left: 50px;
     margin-top: 20px;
     flex-grow: 1;
-    }
+}
 
 
-  .posts-container h3 {
+.posts-container h3 {
     font-size: 1.8em;
     text-align: center;
     color: #333;
-  }
+}
 
-  .posts-container ul {
+.posts-container ul {
     list-style: none;
     padding: 0;
-  }
+}
 
-  .posts-container li {
+.posts-container li {
     background: #fff;
     padding: 20px;
     margin: 80px 0;
     border-radius: 8px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  .posts-container li h4 {
+.posts-container li h4 {
     margin: 0;
     color: #007bff;
-  }
+}
 
-  .posts-container li p {
+.posts-container li p {
     color: #555;
-  }
+}
+
 .wikipedia-result {
-  margin: 15px 0;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+    margin: 15px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
 
 .wikipedia-result h3 {
-  margin: 0 0 10px;
-  font-size: 18px;
+    margin: 0 0 10px;
+    font-size: 18px;
 }
 
 .wikipedia-result p {
-  margin: 0 0 10px;
-  font-size: 14px;
-  color: #555;
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: #555;
 }
 
 .wikipedia-result a {
-  font-size: 14px;
-  color: #007bff;
-  text-decoration: none;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
 }
 
 .wikipedia-result a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .search-form {
@@ -641,6 +643,79 @@ button:active {
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
+}
+
+.channel-link {
+    font-size: 0.8em;
+    color: #6c757d;
+}
+
+.channel-link a {
+    text-decoration: none;
+}
+
+.channel-link a:hover {
+    text-decoration: underline;
+}
+
+.post-metadata {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.metadata-item {
+    position: relative;
+    padding-right: 1.5em;
+}
+
+.metadata-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 3px;
+    background-color: #6c757d;
+    border-radius: 50%;
+}
+
+.metadata-item a {
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.metadata-item a:hover {
+    text-decoration: underline;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.post-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.profile-picture-small {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.author-name {
+    margin: auto 0;
+    vertical-align: middle;
 }
 
 @media (max-width: 992px) {
@@ -704,7 +779,7 @@ button:active {
         margin: 0;
     }
 
-    .search-form > .button {
+    .search-form>.button {
         width: 100%;
     }
 }

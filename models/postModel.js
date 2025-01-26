@@ -2,7 +2,7 @@ import db from "../config/db.js";
 import PostFilesManager from "./postFilesManagerModel.js";
 
 class Post {
-  constructor(postId, title, content, authorId, channelId, dateOfCreation, dateOfLastEdit, author = null) {
+  constructor(postId, title, content, authorId, channelId, dateOfCreation, dateOfLastEdit, authorName = null, authorPicture = null, channelName = null) {
     this.postId = postId;
     this.title = title;
     this.content = content;
@@ -12,7 +12,9 @@ class Post {
     this.dateOfLastEdit = dateOfLastEdit
       ? new Date(dateOfLastEdit).toLocaleString('bg-BG', { timeZone: 'Europe/Sofia' })
       : null;
-    this.author = author;
+    this.authorName = authorName;
+    this.authorPicture = authorPicture;
+    this.channelName = channelName;
     this.filesManager = new PostFilesManager(postId)
   }
 
@@ -43,6 +45,49 @@ class Post {
       console.log(`Post with ID ${this.postId} deleted.`);
     } catch (err) {
       console.error("Error deleting post:", err);
+      throw err;
+    }
+  }
+
+  // READ all posts from the user's channels
+  static async getFromUserChannels(userId) {
+    try {
+      const result = await db.query(
+        `SELECT ch.name AS channel_name, p.post_id, p.title, p.content, p.author_id, p.channel_id,
+                u.username AS author, u.profile_picture, p.date_of_creation, p.date_of_last_edit 
+         FROM posts p 
+         JOIN channels ch ON ch.channel_id = p.channel_id 
+         JOIN users u ON p.author_id = u.user_id
+         JOIN members_of_channels mc ON ch.channel_id = mc.channel_id
+         WHERE mc.user_id = $1
+         ORDER BY p.date_of_creation DESC;`,
+        [userId]
+      );
+  
+      const posts = result.rows.map(
+        (post) =>
+          new Post(
+            post.post_id,
+            post.title,
+            post.content, 
+            post.author_id,
+            post.channel_id,
+            post.date_of_creation,
+            post.date_of_last_edit,
+            post.author,
+            post.profile_picture,
+            post.channel_name,
+          )
+      );
+  
+      // Load files for each post
+      for (const post of posts) {
+        await post.filesManager.getFiles();
+      }
+  
+      return posts;
+    } catch (err) {
+      console.error("Error fetching user's feed:", err);
       throw err;
     }
   }
