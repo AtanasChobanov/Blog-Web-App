@@ -7,6 +7,10 @@ class PostController {
     if (req.isAuthenticated()) {
       try {
         const posts = await Post.getFromUserChannels(req.user.userId);
+
+        if (posts.length === 0) {
+          return res.redirect("/channels");
+        }
         res.render("feed.ejs", { posts });
       } catch (err) {
         res.status(500).render("error-message.ejs", {
