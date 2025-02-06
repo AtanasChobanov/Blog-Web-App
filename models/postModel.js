@@ -2,20 +2,35 @@ import db from "../config/db.js";
 import PostFilesManager from "./postFilesManagerModel.js";
 
 class Post {
-  constructor(postId, title, content, authorId, channelId, dateOfCreation, dateOfLastEdit, authorName = null, authorPicture = null, channelName = null) {
+  constructor(
+    postId,
+    title,
+    content,
+    authorId,
+    channelId,
+    dateOfCreation,
+    dateOfLastEdit,
+    authorName = null,
+    authorPicture = null,
+    channelName = null,
+  ) {
     this.postId = postId;
     this.title = title;
     this.content = content;
     this.authorId = authorId;
     this.channelId = channelId;
-    this.dateOfCreation = new Date(dateOfCreation).toLocaleString('bg-BG', { timeZone: 'Europe/Sofia' });
+    this.dateOfCreation = new Date(dateOfCreation).toLocaleString("bg-BG", {
+      timeZone: "Europe/Sofia",
+    });
     this.dateOfLastEdit = dateOfLastEdit
-      ? new Date(dateOfLastEdit).toLocaleString('bg-BG', { timeZone: 'Europe/Sofia' })
+      ? new Date(dateOfLastEdit).toLocaleString("bg-BG", {
+          timeZone: "Europe/Sofia",
+        })
       : null;
     this.authorName = authorName;
     this.authorPicture = authorPicture;
     this.channelName = channelName;
-    this.filesManager = new PostFilesManager(postId)
+    this.filesManager = new PostFilesManager(postId);
   }
 
   // UPDATE an existing post
@@ -69,7 +84,7 @@ class Post {
           new Post(
             post.post_id,
             post.title,
-            post.content, 
+            post.content,
             post.author_id,
             post.channel_id,
             post.date_of_creation,
@@ -79,19 +94,19 @@ class Post {
             post.channel_name,
           )
       );
-  
+      
       // Load files for each post
       for (const post of posts) {
         await post.filesManager.getFiles();
       }
-  
+
       return posts;
     } catch (err) {
       console.error("Error fetching user's feed:", err);
       throw err;
     }
   }
-  
+
   // READ all posts from a specific channel by ID
   static async getFromChannel(channelId) {
     try {
@@ -152,10 +167,10 @@ class Post {
         post.author_id,
         post.channel_id,
         post.date_of_creation,
-        post.date_of_last_edit
+        post.date_of_last_edit, 
       );
       await post.filesManager.uploadFilesToCloudinary(files);
-      return post;
+      console.log(`New post created with ID: ${post.postId}`);
     } catch (err) {
       console.error("Error creating post:", err);
       throw err;

@@ -62,12 +62,12 @@ class PostController {
         }
         
         const files = [...(req.files.images || []), ...(req.files.documents || [])];
-        const post = await Post.create(
+        await Post.create(
           req.body.title,
           req.body.content,
           req.user.userId,
           req.params.channelId,
-          files
+          files, 
         );
   
         res.redirect(`/view/${req.params.channelId}`);

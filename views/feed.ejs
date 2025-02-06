@@ -71,7 +71,7 @@
                 </div>
 
                 <h2 class="pb-2 text-left"><%= post.title %></h2>
-                <p class="text-left"><%= post.content %></p>
+                <p class="text-left"><%- post.content %></p>
 
                 <% post.filesManager.uploadedFiles.forEach((file) => { %>
                     <% if (file.type === "image") { %>

@@ -1,31 +1,473 @@
-<%- include("partials/header.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="container">
-    <h2>Създаване на нов пост</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Text Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            /* Increased border radius */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        #toolbar {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .toolbar-button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .toolbar-button:active {
+            transform: scale(0.95);
+        }
+
+        .font-selector {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .font-selector:hover {
+            border-color: #007bff;
+        }
+
+        #title {
+            width: 97%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        #editor {
+            width: 97%;
+            padding: 10px;
+            min-height: 200px;
+            font-size: 16px;
+            line-height: 1.6;
+            outline: none;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            margin-bottom: 15px;
+            margin-top: 15px;
+        }
+
+        .upload-section {
+            display: flex;
+            gap: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            border-radius: 12px;
+        }
+
+        .file-container {
+            width: 48%;
+            height: 200px;
+            border: 2px dashed #007bff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background-size: contain !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .file-container.with-file {
+            border-style: solid;
+        }
+
+        .file-trigger {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .file-trigger svg {
+            stroke: #007bff;
+            transition: stroke 0.3s ease;
+        }
+
+        .file-trigger .text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+
+        .file-container:hover {
+            border-color: #0056b3;
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        .file-container:hover .file-trigger svg {
+            stroke: #0056b3;
+        }
+
+        .file-container:hover .file-trigger .text {
+            color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 18px;
+            /* Larger font size */
+            margin: 20px auto;
+            /* Centered with padding */
+            padding: 15px;
+            text-align: center;
+            display: none;
+            background-color: rgba(255, 0, 0, 0.1);
+            border-radius: 12px;
+            width: 80%;
+        }
+
+        .uploaded-files {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            border-radius: 12px;
+        }
+
+        .uploaded-files h2 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #007bff;
+        }
+
+        .uploaded-files .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .uploaded-files .file-item {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            /* Increased border radius */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .uploaded-files .file-item img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .uploaded-files .file-item .remove-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .button {
+            position: relative;
+            display: inline-block;
+            margin: 15px;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: #007bff;
+            background: transparent;
+            cursor: pointer;
+            transition: ease-out 0.5s;
+            border: 2px solid #007bff;
+            border-radius: 12px;
+            /* Increased border radius */
+            box-shadow: inset 0 0 0 0 #007bff;
+        }
+
+        .button:hover {
+            color: white;
+            box-shadow: inset 0 -100px 0 0 #007bff;
+        }
+
+        .button:active {
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Създай нов пост</h1>
     <form action="/<%= channelId %>/create-post" method="POST" enctype="multipart/form-data">
-        <% if (locals.errorMessage) { %>
-            <p style="color: red; font-size: 14px;"><%= errorMessage %></p>
-        <% } %>
-        <div class="mb-3">
-            <label for="title" class="form-label">Заглавие на поста</label>
-            <input name="title" class="form-control mb-2" type="text" required>
-        </div>
-        <div class="mb-3">
-            <label for="content" class="form-label">Съдържание на поста</label>
-            <textarea name="content" class="form-control mb-2" rows="4" required></textarea>
-        </div>
-        <div class="mb-3">
-            <!-- Поле за изображения -->
-            <label for="images">Изображения:</label>
-            <input type="file" id="images" name="images" multiple accept=".jpeg,.jpg,.png">
-        </div>
-        <div class="mb-3">
-            <!-- Поле за документи -->
-            <label for="documents">Документи:</label>
-            <input type="file" id="documents" name="documents" accept=".pdf,.docx,.pptx,.xlsx,.txt">
-        </div>
-        <button class="button" type="submit">Създаване на поста</button>
-    </form>
-</div>
+        <div class="container">
+            <input name="title" type="text" id="title" placeholder="Заглавие..." required>
 
-<%- include("partials/footer.ejs") %>
+            <div id="toolbar">
+                <button class="toolbar-button" onclick="execCmd('bold', null, event)">
+                    <i class="fas fa-bold"></i>
+                </button>
+                <button class="toolbar-button" onclick="execCmd('italic', null, event)">
+                    <i class="fas fa-italic"></i>
+                </button>
+                <button class="toolbar-button" onclick="execCmd('underline', null, event)">
+                    <i class="fas fa-underline"></i>
+                </button>
+                <button class="toolbar-button" onclick="execCmd('createLink', prompt('Тук въведи URL:'), event)">
+                    <i class="fas fa-link"></i>
+                </button>
+                <button class="toolbar-button" onclick="execCmd('unlink', null, event)">
+                    <i class="fas fa-unlink"></i>
+                </button>
+                <button class="toolbar-button" onclick="execCmd('undo', null, event)">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="toolbar-button" onclick="execCmd('redo', null, event)">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <select class="font-selector" onchange="changeFont(this.value)">
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Comic Sans MS">Comic Sans MS</option>
+                    <option value="Impact">Impact</option>
+                    <option value="Lucida Console">Lucida Console</option>
+                </select>
+            </div>
+
+            <div name="content" id="editor" contenteditable="true"></div>
+            <input type="hidden" name="content" id="hidden-content">
+
+            <div class="upload-section">
+
+                <div class="file-container" id="document-container">
+                    <label for="document-input" class="file-trigger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 24 24" fill="none"
+                            stroke="#007bff">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                        <span class="text">Избери документ</span>
+                    </label>
+                    <input type="file" name="documents" id="document-input" accept=".pdf,.docx" style="display: none;"
+                        onchange="handleDocumentUpload(event)">
+                </div>
+
+                <div class="file-container" id="image-container">
+                    <label for="image-input" class="file-trigger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 24 24" fill="none"
+                            stroke="#007bff">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <span class="text">Избери изображение</span>
+                    </label>
+                    <input type="file" name="images" id="image-input" accept=".png,.jpg,.jpeg" style="display: none;"
+                        onchange="handleImageUpload(event)" multiple>
+                </div>
+            </div>
+
+            <div class="uploaded-files">
+                <h2>Качени файлове</h2>
+                <div class="file-list" id="document-list"></div>
+                <div class="file-list" id="image-list"></div>
+            </div>
+
+            <button class="button" type="submit">Създаване на поста</button>
+            
+            <div id="error-message" class="error-message"></div>
+        </div>
+    </form>
+    <script>
+        document.querySelector("form").addEventListener("submit", function () {
+            document.getElementById("hidden-content").value = document.getElementById("editor").innerHTML;
+        });
+        const MAX_IMAGES = 5;
+        const MAX_DOCUMENTS = 1;
+        const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+        let uploadedDocuments = [];
+        let uploadedImages = [];
+
+        function execCmd(command, value = null, event) {
+            event.preventDefault(); // Предотвратява изпращането на формата
+            document.execCommand(command, false, value);
+        }
+
+        function changeFont(font) {
+            document.execCommand('fontName', false, font);
+        }
+
+        function handleDocumentUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (uploadedDocuments.length >= MAX_DOCUMENTS) {
+                showError(`Можеш да качваш ${MAX_DOCUMENTS} документ!`);
+                return;
+            }
+
+            uploadedDocuments.push(file);
+            updateDocumentList();
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('document-container').classList.add('with-file');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleImageUpload(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            if (uploadedImages.length + files.length > MAX_IMAGES) {
+                showError(`Можеш да качваш ${MAX_IMAGES} снимки!`);
+                event.target.value = ''; // Clear the input to prevent further uploads
+            }
+
+            for (let i = 0; i < files.length && uploadedImages.length < MAX_IMAGES; i++) {
+                const file = files[i];
+                if (file.size > MAX_FILE_SIZE) {
+                    showError(`File ${file.name} Надвишава лимитът на нясто!`);
+                    continue;
+                }
+
+                uploadedImages.push(file);
+            }
+
+            updateImageList();
+            document.getElementById('image-container').classList.add('with-file');
+        }
+
+        function updateDocumentList() {
+            const documentList = document.getElementById('document-list');
+            documentList.innerHTML = '';
+
+            uploadedDocuments.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.textContent = file.name;
+
+                const removeButton = document.createElement('button');
+                removeButton.className = 'remove-button';
+                removeButton.innerHTML = '×';
+                removeButton.onclick = () => removeDocument(index);
+
+                fileItem.appendChild(removeButton);
+                documentList.appendChild(fileItem);
+            });
+        }
+
+        function updateImageList() {
+            const imageList = document.getElementById('image-list');
+            imageList.innerHTML = '';
+
+            uploadedImages.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+
+                const removeButton = document.createElement('button');
+                removeButton.className = 'remove-button';
+                removeButton.innerHTML = '×';
+                removeButton.onclick = () => removeImage(index);
+
+                fileItem.appendChild(removeButton);
+                imageList.appendChild(fileItem);
+            });
+        }
+
+        function removeDocument(index) {
+            uploadedDocuments.splice(index, 1);
+            updateDocumentList();
+        }
+
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            updateImageList();
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>
