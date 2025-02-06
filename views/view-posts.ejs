@@ -49,30 +49,45 @@
         </form>
         <% if (posts && posts.length > 0) { %>
             <% posts.forEach((post) => { %>
-                <div class="channel-card mb-4" data-title="<%= post.title %>">
-                    <h2 class="pb-2 text-left"><%= post.title %></h2>
-                    <p class="text-left"><%= post.content %></p>
-                    <p class="text-left">Автор: <a href="/account/<%= post.authorId %>"><%= post.authorName %></a></p>
-                    <% if (post.dateOfLastEdit) { %>
-                        <small>Редактиран на: <%= post.dateOfLastEdit %></small>
-                    <% } else { %>
-                        <small>Създаден на: <%= post.dateOfCreation %></small>
+            <div class="channel-card mb-4" data-title="<%= post.title %>">
+                <div class="post-header">
+                    <div class="post-metadata">
+                        <span class="metadata-item">
+                            <img src="<%= post.authorPicture %>" 
+                                 alt="Profile" 
+                                 class="profile-picture-small">
+                            <a href="/account/<%= post.authorId %>" class="author-name"><%= post.authorName %></a>
+                        </span>
+                        <span class="metadata-item"><a href="/view/<%= post.channelId %>"><%= post.channelName %></a></span>
+                        <span class="metadata-item">
+                            <% if (post.dateOfLastEdit) { %>
+                                Редактиран на: <%= post.dateOfLastEdit %>
+                            <% } else { %>
+                                <%= post.dateOfCreation %>
+                            <% } %>
+                        </span>
+                    </div>
+                    
+                    <% if(user.userId === post.authorId || user.userType === "Администратор") { %>
+                        <div class="post-actions">
+                            <a href="/<%= post.channelId %>/edit/<%= post.postId %>" class="button post-button">Редактиране</a>
+                            <a href="/<%= post.channelId %>/delete-post/<%= post.postId %>" class="button delete-button post-button">Изтриване</a>
+                        </div>
                     <% } %>
-
-                    <% if(user.userId === post.authorId  || user.userType === "Администратор") { %>
-                        <a href="/<%= channel.channelId %>/edit/<%= post.postId %>" class="button edit-button">Редактиране</a>
-                        <a href="/<%= channel.channelId %>/delete-post/<%= post.postId %>" class="button delete-button">Изтриване</a>
-                    <% } %>
-
-                    <% post.filesManager.uploadedFiles.forEach((file) => { %>
-                        <% if (file.type === "image") { %>
-                          <img src="<%= file.url %>" alt="Post Image"/>
-                        <% } else { %>
-                          <iframe src="<%= file.url %>" width="100%" height="400px" frameborder="0" allowfullscreen></iframe>
-                        <% } %>
-                      <% }); %>
                 </div>
-            <% }); %>
+
+                <h2 class="pb-2 text-left"><%= post.title %></h2>
+                <p class="text-left"><%- post.content %></p>
+
+                <% post.filesManager.uploadedFiles.forEach((file) => { %>
+                    <% if (file.type === "image") { %>
+                        <img src="<%= file.url %>" alt="Post Image"/>
+                    <% } else { %>
+                        <iframe src="<%= file.url %>" width="100%" height="400px" frameborder="0" allowfullscreen></iframe>
+                    <% } %>
+                <% }); %>
+            </div>
+        <% }); %>
         <% } else { %>
             <p>Няма постове в този канал.</p>
         <% } %>
