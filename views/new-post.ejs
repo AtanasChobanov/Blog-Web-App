@@ -1,22 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
- <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Създай нов пост</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/styles/new-post.css">
-</head>
-
-<body> 
-    <%- include("partials/header.ejs") %>
+<%- include("partials/header.ejs") %>
 
     <h1>Създай нов пост</h1>
     <form action="/<%= channelId %>/create-post" method="POST" enctype="multipart/form-data">
-        <div class="container">
+        <div class="new-post-container">
             <input name="title" type="text" id="title" placeholder="Заглавие..." required>
-
+    
             <div id="toolbar">
                 <button class="toolbar-button" onclick="execCmd('bold', null, event)">
                     <i class="fas fa-bold"></i>
@@ -50,10 +38,10 @@
                     <option value="Lucida Console">Lucida Console</option>
                 </select>
             </div>
-
+    
             <div name="content" id="editor" contenteditable="true"></div>
             <input type="hidden" name="content" id="hidden-content">
-
+    
             <div class="upload-section">
                 <div class="file-container" id="document-container">
                     <label for="document-input" class="file-trigger">
@@ -66,10 +54,10 @@
                         </svg>
                         <span class="text">Избери документ</span>
                     </label>
-                    <input type="file" name="documents" id="document-input" accept=".pdf,.docx" style="display: none;"
+                    <input type="file" name="documents" id="document-input" accept=".pdf,.docx,.pptx,.xlsx,.txt" style="display: none;"
                         onchange="handleDocumentUpload(event)">
                 </div>
-
+    
                 <div class="file-container" id="image-container">
                     <label for="image-input" class="file-trigger">
                         <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 24 24" fill="none"
@@ -84,22 +72,20 @@
                         onchange="handleImageUpload(event)" multiple>
                 </div>
             </div>
-
+            
+            <div id="error-message" class="error-message"></div>
+    
             <div class="uploaded-files">
                 <h2>Качени файлове</h2>
                 <div class="file-list" id="document-list"></div>
                 <div class="file-list" id="image-list"></div>
             </div>
-
+    
             <button class="button" type="submit">Създаване на поста</button>
+    
             
-            <div id="error-message" class="error-message"></div>
         </div>
     </form>
-    
-    <%- include("partials/footer.ejs") %>
-
     <script src="/functions/new-post.js"></script>
-</body>
 
-</html>
+<%- include("partials/footer.ejs") %>

@@ -111,8 +111,8 @@ class Post {
   static async getFromChannel(channelId) {
     try {
       const result = await db.query(
-        `SELECT ch.name, post_id, title, content, author_id, 
-         u.username AS author, p.date_of_creation, date_of_last_edit 
+        `SELECT ch.name, post_id, title, content, author_id, p.channel_id, 
+         u.username AS author, u.profile_picture, p.date_of_creation, date_of_last_edit 
          FROM posts p 
          JOIN channels ch 
          ON ch.channel_id = p.channel_id 
@@ -133,7 +133,9 @@ class Post {
             post.channel_id,
             post.date_of_creation,
             post.date_of_last_edit,
-            post.author
+            post.author,
+            post.profile_picture,
+            post.name
           )
       );
 

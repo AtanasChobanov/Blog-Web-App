@@ -1,12 +1,4 @@
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f9;
-    color: #333;
-}
-
-.container {
+.new-post-container {
     max-width: 800px;
     margin: 0 auto;
     background: white;
