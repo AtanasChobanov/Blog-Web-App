@@ -81,8 +81,9 @@ function updateDocumentList() {
 
 function updateImageList() {
     const imageList = document.getElementById('image-list');
-    imageList.innerHTML = '';
+    imageList.innerHTML = ''; // Clear the current list
 
+    // Regenerate the list with the current uploadedImages array
     uploadedImages.forEach((file, index) => {
         const fileItem = document.createElement('div');
         fileItem.className = 'file-item';
