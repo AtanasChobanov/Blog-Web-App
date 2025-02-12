@@ -1,7 +1,7 @@
 <%- include("partials/header.ejs") %>
 
     <h1>Редактиране на пост</h1>
-    <form action="/<%= channelId %>/edit-post/<%= post.postId %>?_method=PATCH" method="POST">
+    <form action="/<%= channelId %>/edit-post/<%= post.postId %>?_method=PATCH" method="POST" enctype="multipart/form-data">
         <div class="new-post-container">
             <input name="title" type="text" id="title" placeholder="Заглавие..." value="<%= post.title %>" required>
 
@@ -78,35 +78,33 @@
             <div class="uploaded-files">
                 <h2>Качени файлове</h2>
                 <div class="file-list" id="document-list">
-                    <% if (post.documents && post.documents.length> 0) { %>
-                        <% post.documents.forEach(doc=> { %>
-                            <div class="file-item">
-                                <span>
-                                    <%= doc.originalName %>
-                                </span>
-                                <button type="button" onclick="removeFile('<%= doc.id %>', 'document')">×</button>
-                            </div>
-                            <% }) %>
-                                <% } %>
+                    <% if (post.uploadedFiles) {  %>
+                        <% post.uploadedFiles.forEach((file) => { %>
+                            <% if (file.type === "document") { %>
+                                <div class="file-item">
+                                    <img src="<%= file.url %>" alt="upload">
+                                    <button type="button" onclick="removeFile('<%= file.fileId %>', 'document')">×</button>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    <% } %>
                 </div>
                 <div class="file-list" id="image-list">
-                    <% if (post.images && post.images.length> 0) { %>
-                        <% post.images.forEach(img=> { %>
-                            <div class="file-item">
-                                <span>
-                                    <%= img.originalName %>
-                                </span>
-                                <button type="button" onclick="removeFile('<%= img.id %>', 'image')">×</button>
-                            </div>
-                            <% }) %>
-                                <% } %>
+                    <% if (post.uploadedFiles) {  %>
+                        <% post.uploadedFiles.forEach((file) => { %>
+                            <% if (file.type === "image") { %>
+                                <div class="file-item">
+                                    <img src="<%= file.url %>" alt="upload">
+                                    <button type="button" onclick="removeFile('<%= file.fileId %>', 'image')">×</button>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    <% } %>
                 </div>
             </div>
 
             <button class="button" type="submit">Обновяване на поста</button>
-
         </div>
-        
     </form>
 
     <script src="/functions/new-post.js"></script>

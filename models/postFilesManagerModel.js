@@ -30,11 +30,36 @@ class PostFilesManager {
             await File.addFile(this.postId, result.secure_url, "document")
           );
         }
-
-        await fs.unlink(file.path); // Изтриване на локалния файл
+        await fs.unlink(file.path); // Delete local files after upload
       }
     } catch (err) {
       console.error("Error uploading files to Cloudinary:", err);
+      throw err;
+    }
+  }
+
+  async deleteFiles(fileIds) {
+    try {
+      await this.getFiles();
+
+      if (!Array.isArray(fileIds)) {
+        fileIds = [fileIds];
+      }
+      // Convert all elements to numbers
+      fileIds = fileIds.map((id) => parseInt(id, 10));
+      const filesToDelete = this.uploadedFiles.filter(file => 
+        fileIds.includes(file.fileId)
+      );
+
+      for (const file of filesToDelete) {
+        await file.deleteFromCloudinary();
+      }
+
+      await db.query(`DELETE FROM post_files WHERE file_id = ANY($1::int[])`, [
+        fileIds,
+      ]);
+    } catch (err) {
+      console.error("Error deleting selected files:", err);
       throw err;
     }
   }
@@ -60,7 +85,14 @@ class PostFilesManager {
         [this.postId]
       );
       this.uploadedFiles = result.rows.map(
-        (file) => new File(file.file_id, file.post_id, file.url, file.type, file.upload_date)
+        (file) =>
+          new File(
+            file.file_id,
+            file.post_id,
+            file.url,
+            file.type,
+            file.upload_date
+          )
       );
     } catch (err) {
       console.error("Error fetching files for post:", err);

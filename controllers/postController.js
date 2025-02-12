@@ -99,6 +99,7 @@ class PostController {
     if (req.isAuthenticated()) {
       try {
         const post = await Post.getById(req.params.postId);
+        await post.getFiles();
 
         if (
           req.user.userId === post.authorId ||
@@ -130,7 +131,8 @@ class PostController {
           req.user.userId === post.authorId ||
           req.user.userType === "Администратор"
         ) {
-          await post.update(req.body.title, req.body.content);
+          const newFiles = [...(req.files.images || []), ...(req.files.documents || [])];
+          await post.update(req.body.title, req.body.content, req.body.deletedFiles, newFiles);
           res.redirect(`/view/${req.params.channelId}`);
         } else {
           return res.redirect("/");

@@ -244,7 +244,6 @@ class Post extends PostFilesManager{
         data.date_of_last_edit, 
       );
       await post.getFiles();
-
       return post;
     } catch (err) {
       console.error("Error finding post:", err);

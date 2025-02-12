@@ -34,6 +34,28 @@ router.post("/:channelId/create-post", (req, res, next) => {
 router.get("/:channelId/edit/:postId", PostController.getEditPostPage);
 router.patch(
   "/:channelId/edit-post/:postId",
+  (req, res, next) => {
+    uploadFiles(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+          return res.status(400).render("new-post.ejs", {
+            errorMessage: "Файлът е твърде голям. Максимум 5MB.",
+            title: req.body.title,
+            content: req.body.content,
+            channelId: req.params.channelId,
+          });
+        } else if (err.code === "LIMIT_UNEXPECTED_FILE") {
+          return res.status(400).render("new-post.ejs", {
+            errorMessage: "Не може да се качват повече от 5 снимки.",
+            title: req.body.title,
+            content: req.body.content,
+            channelId: req.params.channelId,
+          });
+        }
+      }
+      next();
+    });
+  },
   PostController.updateController
 );
 
