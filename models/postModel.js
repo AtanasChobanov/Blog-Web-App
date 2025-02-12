@@ -1,7 +1,7 @@
 import db from "../config/db.js";
 import PostFilesManager from "./postFilesManagerModel.js";
 
-class Post {
+class Post extends PostFilesManager{
   constructor(
     postId,
     title,
@@ -14,6 +14,8 @@ class Post {
     authorPicture = null,
     channelName = null,
   ) {
+    super(postId);
+    
     this.postId = postId;
     this.title = title;
     this.content = content;
@@ -30,11 +32,10 @@ class Post {
     this.authorName = authorName;
     this.authorPicture = authorPicture;
     this.channelName = channelName;
-    this.filesManager = new PostFilesManager(postId);
   }
 
   // UPDATE an existing post
-  async update(title, content) {
+  async update(title, content, deletedFiles, newFiles) {
     try {
       await db.query(
         `UPDATE posts 
@@ -42,6 +43,16 @@ class Post {
          WHERE post_id = $3;`,
         [title, content, this.postId]
       );
+
+      // Изтриване на избраните файлове
+      if (deletedFiles && deletedFiles.length > 0) {
+        await this.deleteFiles(deletedFiles);
+      }
+
+      // Качване на нови файлове
+      if (newFiles && newFiles.length > 0) {
+        await this.uploadFilesToCloudinary(newFiles);
+      }
     } catch (err) {
       console.error("Error updating post:", err);
       throw err;
@@ -51,7 +62,7 @@ class Post {
   // DELETE a post
   async delete() {
     try {
-      this.filesManager.deleteAll();
+      this.deleteAllFiles();
       await db.query(
         `DELETE FROM posts 
          WHERE post_id = $1;`,
@@ -97,7 +108,7 @@ class Post {
       
       // Load files for each post
       for (const post of posts) {
-        await post.filesManager.getFiles();
+        await post.getFiles();
       }
 
       return posts;
@@ -141,7 +152,7 @@ class Post {
 
       // Load files for each post
       for (const post of posts) {
-        await post.filesManager.getFiles();
+        await post.getFiles();
       }
 
       return posts;
@@ -171,7 +182,7 @@ class Post {
         post.date_of_creation,
         post.date_of_last_edit, 
       );
-      await post.filesManager.uploadFilesToCloudinary(files);
+      await post.uploadFilesToCloudinary(files);
       console.log(`New post created with ID: ${post.postId}`);
     } catch (err) {
       console.error("Error creating post:", err);
@@ -222,16 +233,19 @@ class Post {
 
       if (result.rows.length === 0) return null;
 
-      const post = result.rows[0];
-      return new Post(
-        post.post_id,
-        post.title,
-        post.content,
-        post.author_id,
-        post.channel_id,
-        post.date_of_creation,
-        post.date_of_last_edit
+      const data = result.rows[0];
+      const post = new Post(
+        data.post_id,
+        data.title,
+        data.content,
+        data.author_id,
+        data.channel_id,
+        data.date_of_creation,
+        data.date_of_last_edit, 
       );
+      await post.getFiles();
+
+      return post;
     } catch (err) {
       console.error("Error finding post:", err);
       throw err;

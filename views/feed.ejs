@@ -73,7 +73,7 @@
                 <h2 class="pb-2 text-left"><%= post.title %></h2>
                 <p class="text-left"><%- post.content %></p>
 
-                <% post.filesManager.uploadedFiles.forEach((file) => { %>
+                <% post.uploadedFiles.forEach((file) => { %>
                     <% if (file.type === "image") { %>
                         <img src="<%= file.url %>" alt="Post Image"/>
                     <% } else { %>

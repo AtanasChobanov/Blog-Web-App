@@ -40,7 +40,7 @@ class PostFilesManager {
   }
 
   // DELETE all files for a specific post from Cloudinary
-  async deleteAll() {
+  async deleteAllFiles() {
     try {
       await this.getFiles();
       for (const file of this.uploadedFiles) {

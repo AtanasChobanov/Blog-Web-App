@@ -130,7 +130,6 @@ class PostController {
           req.user.userId === post.authorId ||
           req.user.userType === "Администратор"
         ) {
-          console.log("Заглавие: " + req.body.title);
           await post.update(req.body.title, req.body.content);
           res.redirect(`/view/${req.params.channelId}`);
         } else {
