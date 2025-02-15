@@ -81,9 +81,9 @@
                     <% if (post.uploadedFiles) {  %>
                         <% post.uploadedFiles.forEach((file) => { %>
                             <% if (file.type === "document") { %>
-                                <div class="file-item">
+                                <div class="file-item" class="ba">
                                     <img src="<%= file.url %>" alt="upload">
-                                    <button type="button" onclick="removeFile('<%= file.fileId %>', 'document')">×</button>
+                                    <button class="remove-button" onclick="removeFile('<%= file.fileId %>', 'document')">×</button>
                                 </div>
                             <% } %>
                         <% }) %>
@@ -95,7 +95,7 @@
                             <% if (file.type === "image") { %>
                                 <div class="file-item">
                                     <img src="<%= file.url %>" alt="upload">
-                                    <button type="button" onclick="removeFile('<%= file.fileId %>', 'image')">×</button>
+                                    <button type="button" class="remove-button" onclick="removeFile('<%= file.fileId %>', 'image')">×</button>
                                 </div>
                             <% } %>
                         <% }) %>

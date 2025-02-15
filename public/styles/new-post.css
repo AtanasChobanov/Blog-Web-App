@@ -178,8 +178,6 @@ h1 {
 .uploaded-files .file-item {
     width: 100px;
     height: 100px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
     overflow: hidden;
     display: flex;
     align-items: center;
