@@ -38,11 +38,9 @@ class PostController {
           channelId: channel.channelId,
         });
       } catch (err) {
-        res
-          .status(404)
-          .render("error-message.ejs", {
-            errorMessage: "Каналът не съществува",
-          });
+        res.status(404).render("error-message.ejs", {
+          errorMessage: "Каналът не съществува",
+        });
       }
     } else {
       res.redirect("/login");
@@ -60,16 +58,19 @@ class PostController {
             channelId: req.params.channelId,
           });
         }
-        
-        const files = [...(req.files.images || []), ...(req.files.documents || [])];
+
+        const files = [
+          ...(req.files.images || []),
+          ...(req.files.documents || []),
+        ];
         await Post.create(
           req.body.title,
           req.body.content,
           req.user.userId,
           req.params.channelId,
-          files, 
+          files
         );
-  
+
         res.redirect(`/view/${req.params.channelId}`);
       } catch (err) {
         console.error(err);
@@ -85,8 +86,14 @@ class PostController {
   static async showSearchedPostsController(req, res) {
     if (req.isAuthenticated()) {
       try {
-        const posts = await Post.search(req.body.searchedItem, req.params.channelId);
-        res.render("search-post-result.ejs", { posts, channelId: req.params.channelId });
+        const posts = await Post.search(
+          req.body.searchedItem,
+          req.params.channelId
+        );
+        res.render("search-post-result.ejs", {
+          posts,
+          channelId: req.params.channelId,
+        });
       } catch (err) {
         res.status(500).render("error-message.ejs", { errorMessage: err });
       }
@@ -126,13 +133,20 @@ class PostController {
     if (req.isAuthenticated()) {
       try {
         const post = await Post.getById(req.params.postId);
-
         if (
           req.user.userId === post.authorId ||
           req.user.userType === "Администратор"
         ) {
-          const newFiles = [...(req.files.images || []), ...(req.files.documents || [])];
-          await post.update(req.body.title, req.body.content, req.body.deletedFiles, newFiles);
+          const newFiles = [
+            ...(req.files.images || []),
+            ...(req.files.documents || []),
+          ];
+          await post.update(
+            req.body.title,
+            req.body.content,
+            req.body.deletedFiles,
+            newFiles
+          );
           res.redirect(`/view/${req.params.channelId}`);
         } else {
           return res.redirect("/");

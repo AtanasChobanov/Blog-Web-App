@@ -1,5 +1,6 @@
 import db from "../config/db.js";
 import PostFilesManager from "./postFilesManagerModel.js";
+import { sanitizeHTML } from "../config/sanitize.js";
 
 class Post extends PostFilesManager{
   constructor(
@@ -37,11 +38,13 @@ class Post extends PostFilesManager{
   // UPDATE an existing post
   async update(title, content, deletedFiles, newFiles) {
     try {
+      const sanitizedTitle = title.trim();
+      const sanitizedContent = sanitizeHTML(content);
       await db.query(
         `UPDATE posts 
          SET title = $1, content = $2, date_of_last_edit = CURRENT_TIMESTAMP 
          WHERE post_id = $3;`,
-        [title, content, this.postId]
+        [sanitizedTitle, sanitizedContent, this.postId]
       );
 
       // Изтриване на избраните файлове
@@ -165,11 +168,13 @@ class Post extends PostFilesManager{
   // CREATE a new post
   static async create(title, content, authorId, channelId, files) {
     try {
+      const sanitizedTitle = title.trim();
+      const sanitizedContent = sanitizeHTML(content);
       const result = await db.query(
         `INSERT INTO posts (title, content, author_id, channel_id) 
          VALUES ($1, $2, $3, $4) 
          RETURNING *;`,
-        [title, content, authorId, channelId]
+        [sanitizedTitle, sanitizedContent, authorId, channelId]
       );
 
       let post = result.rows[0];

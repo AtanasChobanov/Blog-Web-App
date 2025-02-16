@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS posts
 (
     post_id SERIAL PRIMARY KEY,
     title character varying(100) NOT NULL,
-    content character varying(2000) NOT NULL,
+    content character varying(5000) NOT NULL,
     author_id integer NOT NULL,
     date_of_creation timestamp DEFAULT CURRENT_TIMESTAMP,
     date_of_last_edit timestamp ,
