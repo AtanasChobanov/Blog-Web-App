@@ -1,46 +1,47 @@
 <div class="container">
     <% if (channel) { %>
         <div class="channel-name">
-            <h1>
-                <%= channel.name %>
-            </h1>
+            <h1><%= channel.name %></h1>
         </div>
+
         <form action="/search-post/<%= channel.channelId %>" method="POST" class="search-form">
             <div class="searchBox">
-                <input class="searchInput" id="searchInput" type="text" name="searchedItem"
-                    placeholder="Търсене на публикация..." required autocomplete="off">
+                <input 
+                    class="searchInput" 
+                    id="searchInput" 
+                    type="text" 
+                    name="searchedItem"
+                    placeholder="Търсене на публикация..." 
+                    required 
+                    autocomplete="off"
+                >
                 <button class="searchIconButton" id="searchButton" type="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
-                        xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
                         <g clip-path="url(#clip0_2_17)">
                             <g filter="url(#filter0_d_2_17)">
                                 <path
                                     d="M23.7953 23.9182L19.0585 19.1814M19.0585 19.1814C19.8188 18.4211 20.4219 17.5185 20.8333 16.5251C21.2448 15.5318 21.4566 14.4671 21.4566 13.3919C21.4566 12.3167 21.2448 11.252 20.8333 10.2587C20.4219 9.2653 19.8188 8.36271 19.0585 7.60242C18.2982 6.84214 17.3956 6.23905 16.4022 5.82759C15.4089 5.41612 14.3442 5.20435 13.269 5.20435C12.1938 5.20435 11.1291 5.41612 10.1358 5.82759C9.1424 6.23905 8.23981 6.84214 7.47953 7.60242C5.94407 9.13789 5.08145 11.2204 5.08145 13.3919C5.08145 15.5634 5.94407 17.6459 7.47953 19.1814C9.01499 20.7168 11.0975 21.5794 13.269 21.5794C15.4405 21.5794 17.523 20.7168 19.0585 19.1814Z"
-                                    stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                                    shape-rendering="crispEdges">
-                                </path>
+                                    stroke="white" 
+                                    stroke-width="3" 
+                                    stroke-linecap="round" 
+                                    stroke-linejoin="round"
+                                    shape-rendering="crispEdges"
+                                />
                             </g>
                         </g>
                         <defs>
-                            <filter id="filter0_d_2_17" x="-0.418549" y="3.70435" width="29.7139" height="29.7139"
-                                filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                                <feColorMatrix in="SourceAlpha" type="matrix"
-                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha">
-                                </feColorMatrix>
-                                <feOffset dy="4"></feOffset>
-                                <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                                <feComposite in2="hardAlpha" operator="out"></feComposite>
-                                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0">
-                                </feColorMatrix>
-                                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_17">
-                                </feBlend>
-                                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_17" result="shape">
-                                </feBlend>
+                            <filter id="filter0_d_2_17" x="-0.418549" y="3.70435" width="29.7139" height="29.7139" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                <feOffset dy="4" />
+                                <feGaussianBlur stdDeviation="2" />
+                                <feComposite in2="hardAlpha" operator="out" />
+                                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_17" />
+                                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_17" result="shape" />
                             </filter>
                             <clipPath id="clip0_2_17">
-                                <rect width="28.0702" height="28.0702" fill="white"
-                                    transform="translate(0.403503 0.526367)"></rect>
+                                <rect width="28.0702" height="28.0702" fill="white" transform="translate(0.403503 0.526367)" />
                             </clipPath>
                         </defs>
                     </svg>
@@ -48,9 +49,10 @@
             </div>
             <a href="/<%= channel.channelId %>/new-post" class="button">Създай нов пост</a>
         </form>
-        <% if (posts && posts.length> 0) { %>
+
+        <% if (posts && posts.length > 0) { %>
             <div class="posts-container">
-                <% posts.forEach((post)=> { %>
+                <% posts.forEach((post) => { %>
                     <div class="channel-card mb-4" data-title="<%= post.title %>">
                         <div class="post-header">
                             <div class="profile-info">
@@ -68,52 +70,61 @@
                                         <span class="metadata-item">
                                             <% if (post.dateOfLastEdit) { %>
                                                 Редактиран на: <%= post.dateOfLastEdit %>
-                                                    <% } else { %>
-                                                        <%= post.dateOfCreation %>
-                                                            <% } %>
+                                            <% } else { %>
+                                                <%= post.dateOfCreation %>
+                                            <% } %>
                                         </span>
                                     </div>
                                 </div>
                             </div>
 
-                            <% if(user.userId===post.authorId || user.userType==="Администратор" ) { %>
+                            <% if (user.userId === post.authorId || user.userType === "Администратор") { %>
                                 <div class="post-actions">
-                                    <a href="/<%= post.channelId %>/edit/<%= post.postId %>"
-                                        class="button post-button">Редактиране</a>
-                                    <a href="/<%= post.channelId %>/delete-post/<%= post.postId %>"
-                                        class="button delete-button post-button">Изтриване</a>
+                                    <a href="/<%= post.channelId %>/edit/<%= post.postId %>" class="button post-button">Редактиране</a>
+                                    <a href="/<%= post.channelId %>/delete-post/<%= post.postId %>" class="button delete-button post-button">Изтриване</a>
                                 </div>
-                                <% } %>
+                            <% } %>
                         </div>
 
-                        <h2 class="post-title">
-                            <%= post.title %>
-                        </h2>
+                        <h2 class="post-title"><%= post.title %></h2>
                         <div class="post-content">
                             <p><%- post.content %></p>
                         </div>
 
-                        <% if (post.uploadedFiles && post.uploadedFiles.length> 0) { %>
+                        <div class="vote-container" data-post-id="<%= post.postId %>">
+                            <button class="vote-button upvote volt-button" data-post-id="<%= post.postId %>">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                    <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z" />
+                                </svg>
+                            </button>
+                            <span class="vote-count" id="vote-count-<%= post.postId %>">0</span>
+                            <button class="vote-button downvote volt-button" data-post-id="<%= post.postId %>">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-down-fill" viewBox="0 0 16 16">
+                                    <path d="M6.956 14.534c.065.936.952 1.659 1.908 1.42l.261-.065a1.38 1.38 0 0 0 1.012-.965c.22-.816.533-2.512.062-4.51q.205.03.443.051c.713.065 1.669.071 2.516-.211.518-.173.994-.68 1.2-1.272a1.9 1.9 0 0 0-.234-1.734c.058-.118.103-.242.138-.362.077-.27.113-.568.113-.856 0-.29-.036-.586-.113-.857a2 2 0 0 0-.16-.403c.169-.387.107-.82-.003-1.149a3.2 3.2 0 0 0-.488-.9c.054-.153.076-.313.076-.465a1.86 1.86 0 0 0-.253-.912C13.1.757 12.437.28 11.5.28H8c-.605 0-1.07.08-1.466.217a4.8 4.8 0 0 0-.97.485l-.048.029c-.504.308-.999.61-2.068.723C2.682 1.815 2 2.434 2 3.279v4c0 .851.685 1.433 1.357 1.616.849.232 1.574.787 2.132 1.41.56.626.914 1.28 1.039 1.638.199.575.356 1.54.428 2.591" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <% if (post.uploadedFiles && post.uploadedFiles.length > 0) { %>
                             <div class="post-images">
-                                <% post.uploadedFiles.forEach((file)=> { %>
-                                    <% if (file.type==="image" ) { %>
+                                <% post.uploadedFiles.forEach((file) => { %>
+                                    <% if (file.type === "image") { %>
                                         <img src="<%= file.url %>" alt="Post Image" class="post-image" />
-                                        <% } else { %>
-                                            <iframe src="<%= file.url %>" width="100%" height="400px" frameborder="0"
-                                                allowfullscreen></iframe>
-                                            <% } %>
-                                                <% }); %>
+                                    <% } else { %>
+                                        <iframe src="<%= file.url %>" width="100%" height="400px" frameborder="0" allowfullscreen></iframe>
+                                    <% } %>
+                                <% }) %>
                             </div>
-                            <% } %>
-                    </div>
-                    <% }); %>
-            </div>
-            <% } else { %>
-                <p>Няма постове в този канал.</p>
-                <% } %>
-                    <% } else { %>
-                        <p>Този канал не съществува.</p>
                         <% } %>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>Няма постове в този канал.</p>
+        <% } %>
+    <% } else { %>
+        <p>Този канал не съществува.</p>
+    <% } %>
 </div>
 
 <%- include("partials/footer.ejs") %>

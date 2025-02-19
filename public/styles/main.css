@@ -669,6 +669,8 @@ button:active {
 .post-images.single img {
     max-width: 100%;
     max-height: 500px;
+    width: auto; /* Ensure the image scales proportionally */
+    height: auto; /* Ensure the image scales proportionally */
     object-fit: contain;
     border-radius: 8px;
 }
@@ -704,6 +706,7 @@ button:active {
 .post-images.multiple .secondary-images .image-container {
     height: 198px;
     position: relative;
+    overflow: hidden; /* Ensure images don't overflow */
 }
 
 .post-images.multiple .secondary-images img {
@@ -779,15 +782,48 @@ button:active {
     background-color: #f0f2f5;
 }
 
+.volt-button {
+    padding: 10px;
+    border-radius: 100%;
+    box-shadow: 0px 0px 5px 7px #007bff73;
+    background-color: #007bff;
+    color: white;
+    font-size: 17px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.volt-button:active {
+    box-shadow: inset 0px 0px 10px 0px rgba(240, 237, 237, 0.75);
+}
+
+.like-button svg, .dislike-button svg {
+    fill: white;
+    width: 24px;
+    height: 24px;
+}
+
+.vote-button.active {
+    background-color: blue;
+}
+
+.vote-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .search-form {
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
-}
-
-.vote-button.active {
-    background-color: blue;
 }
 
 @media (max-width: 992px) {
