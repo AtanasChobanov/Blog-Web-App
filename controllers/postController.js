@@ -1,6 +1,6 @@
 import Post from "../models/postModel.js";
 import Channel from "../models/channelModel.js";
-
+import Vote from "../models/voteModel.js";
 
 class PostController {
   static async getFeedController(req, res) {
@@ -80,6 +80,30 @@ class PostController {
       }
     } else {
       res.redirect("/login");
+    }
+  }
+
+  static async voteController(req, res) {
+    try {
+      const voteType = req.body.voteType;
+      if (!Vote.VALID_VOTE_TYPES.includes(voteType)) {
+        return res.status(400).json({ error: "Invalid vote type" });
+      }
+      const post = await Post.getById(req.params.postId);
+      const result = await post.vote(req.user.userId, voteType);
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ error: "Error processing vote" });
+    }
+  }
+
+  static async getPostVotesController(req, res) {
+    try {
+      const post = await Post.getById(req.params.postId);
+      const votes = await post.getVotes(req.user.userId);
+      res.json(votes);
+    } catch (err) {
+      res.status(500).json({ error: "Error fetching votes" });
     }
   }
 
