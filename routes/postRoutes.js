@@ -70,4 +70,7 @@ router.delete(
 
 router.post("/search-post/:channelId", PostController.showSearchedPostsController);
 
+router.post("/posts/:postId/vote", PostController.voteController);
+router.get("/posts/:postId/votes", PostController.getPostVotesController);
+
 export default router;

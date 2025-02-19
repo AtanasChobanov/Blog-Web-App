@@ -67,3 +67,20 @@ CREATE TABLE IF NOT EXISTS post_files (
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS post_votes (
+    user_id INTEGER NOT NULL,
+    post_id INTEGER NOT NULL,
+    vote_type SMALLINT CHECK (vote_type IN (-1, 1)), -- -1 за downvote, 1 за upvote
+    PRIMARY KEY (user_id, post_id),
+    CONSTRAINT fk_votes_users 
+        FOREIGN KEY (user_id) 
+        REFERENCES users (user_id) 
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_votes_posts 
+        FOREIGN KEY (post_id) 
+        REFERENCES posts (post_id) 
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);

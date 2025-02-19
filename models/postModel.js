@@ -1,8 +1,9 @@
 import db from "../config/db.js";
 import PostFilesManager from "./postFilesManagerModel.js";
 import { sanitizeHTML } from "../config/sanitize.js";
+import Vote from "./voteModel.js";
 
-class Post extends PostFilesManager{
+class Post extends PostFilesManager {
   constructor(
     postId,
     title,
@@ -13,10 +14,10 @@ class Post extends PostFilesManager{
     dateOfLastEdit,
     authorName = null,
     authorPicture = null,
-    channelName = null,
+    channelName = null
   ) {
     super(postId);
-    
+
     this.postId = postId;
     this.title = title;
     this.content = content;
@@ -78,6 +79,44 @@ class Post extends PostFilesManager{
     }
   }
 
+  // Manage voting on a post
+  async vote(userId, voteType) {
+    try {
+      const existingVote = await Vote.findVote(userId, this.postId);
+
+      if (existingVote) {
+        if (existingVote.voteType === voteType) {
+          await existingVote.remove();
+        } else {
+          await existingVote.change(voteType);
+        }
+      } else {
+        await Vote.add(userId, this.postId, voteType);
+      }
+    } catch (err) {
+      console.error("Error voting on post:", err);
+      throw err;
+    }
+  }
+
+  // READ all votes for a post
+  async getVotes(userId) {
+    try {
+      const result = await db.query(
+        `SELECT 
+              SUM(CASE WHEN vote_type = 1 THEN 1 ELSE 0 END) AS upvotes,
+              SUM(CASE WHEN vote_type = -1 THEN 1 ELSE 0 END) AS downvotes,
+              (SELECT vote_type FROM post_votes WHERE post_id = $1 AND user_id = $2) AS user_vote 
+          FROM post_votes WHERE post_id = $1`,
+        [this.postId, userId]
+      );
+      return result.rows[0];
+    } catch (err) {
+      console.error("Error fetching votes:", err);
+      throw err;
+    }
+  }
+
   // READ all posts from the user's channels
   static async getFromUserChannels(userId) {
     try {
@@ -92,7 +131,7 @@ class Post extends PostFilesManager{
          ORDER BY p.date_of_creation DESC;`,
         [userId]
       );
-  
+
       const posts = result.rows.map(
         (post) =>
           new Post(
@@ -105,10 +144,10 @@ class Post extends PostFilesManager{
             post.date_of_last_edit,
             post.author,
             post.profile_picture,
-            post.channel_name,
+            post.channel_name
           )
       );
-      
+
       // Load files for each post
       for (const post of posts) {
         await post.getFiles();
@@ -185,7 +224,7 @@ class Post extends PostFilesManager{
         post.author_id,
         post.channel_id,
         post.date_of_creation,
-        post.date_of_last_edit, 
+        post.date_of_last_edit
       );
       await post.uploadFilesToCloudinary(files);
       console.log(`New post created with ID: ${post.postId}`);
@@ -230,10 +269,12 @@ class Post extends PostFilesManager{
   // READ a specific post by ID
   static async getById(postId) {
     try {
+      const parsedPostId = parseInt(postId, 10);
+
       const result = await db.query(
         `SELECT * FROM posts 
          WHERE post_id = $1;`,
-        [postId]
+        [parsedPostId]
       );
 
       if (result.rows.length === 0) return null;
@@ -251,7 +292,7 @@ class Post extends PostFilesManager{
       await post.getFiles();
       return post;
     } catch (err) {
-      console.error("Error finding post:", err);
+      // console.error("Error finding post:", err);
       throw err;
     }
   }
