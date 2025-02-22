@@ -4,6 +4,7 @@ import ChannelController from "../controllers/channelController.js";
 const router = express.Router();
 
 router.get("/channels", ChannelController.viewChannels);
+router.get("/explore", ChannelController.exploreChannelsController);
 
 router.get("/view/:channelId", ChannelController.viewChannelPosts);
 

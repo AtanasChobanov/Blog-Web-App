@@ -18,7 +18,7 @@ class PostController {
         });
       }
     } else {
-      res.redirect("/login");
+      res.render("home.ejs");
     }
   }
 

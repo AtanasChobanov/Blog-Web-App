@@ -1,4 +1,4 @@
-document.querySelector("form").addEventListener("submit", function () {
+document.getElementById("post-form").addEventListener("submit", function () {
     document.getElementById("hidden-content").value = document.getElementById("editor").innerHTML;
 });
 

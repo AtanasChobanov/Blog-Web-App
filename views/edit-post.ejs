@@ -1,7 +1,7 @@
 <%- include("partials/header.ejs") %>
 
     <h1>Редактиране на пост</h1>
-    <form action="/<%= channelId %>/edit-post/<%= post.postId %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+    <form action="/<%= channelId %>/edit-post/<%= post.postId %>?_method=PATCH" method="POST" id="post-form" enctype="multipart/form-data">
         <div class="new-post-container">
             <input name="title" type="text" id="title" placeholder="Заглавие..." value="<%= post.title %>" required>
 

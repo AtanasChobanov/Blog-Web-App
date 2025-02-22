@@ -1,7 +1,7 @@
 <%- include("partials/header.ejs") %>
 
     <h1>Създай нов пост</h1>
-    <form action="/<%= channelId %>/create-post" method="POST" enctype="multipart/form-data">
+    <form action="/<%= channelId %>/create-post" method="POST" id="post-form" enctype="multipart/form-data">
         <div class="new-post-container">
             <input name="title" type="text" id="title" placeholder="Заглавие..." required>
     
@@ -82,8 +82,6 @@
             </div>
     
             <button class="button" type="submit">Създаване на поста</button>
-    
-            
         </div>
     </form>
     <script src="/scripts/new-post.js"></script>
