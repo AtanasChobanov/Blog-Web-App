@@ -1,6 +1,5 @@
 .min-vh-100 {
     min-height: 100vh;
-    /* 100% от височината на прозореца */
 }
 
 #delete-form {
@@ -12,8 +11,7 @@
     overflow: hidden;
 }
 
-html,
-body {
+html, body {
     height: 100%;
     margin: 0;
     display: flex;
@@ -26,9 +24,10 @@ main {
     background-color: #f4f4f4;
     height: calc(100vh - 100px);
     overflow-y: auto;
+    flex: 1;
 }
 
-.header {
+header {
     position: fixed;
     top: 0;
     left: 0;
@@ -58,6 +57,15 @@ footer {
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
+    position: fixed;
+    bottom: -100px;
+    left: 0;
+    right: 0;
+    transition: bottom 0.3s ease-in-out;
+}
+
+footer.visible {
+    bottom: 0;
 }
 
 footer p {
@@ -109,13 +117,12 @@ p.text-left {
 
 .channel-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: 1fr;
     gap: 20px;
     margin-top: 20px;
-    justify-content: center;
 }
 
-.channel-card {
+.posts-card {
     background-color: #f9f9f9;
     border: 2px solid #ddd;
     padding: 20px;
@@ -124,9 +131,12 @@ p.text-left {
     font-size: 1.3em;
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
     text-align: left;
+    width: 650px;
+    height: 650px;
+    margin: 0 auto;
 }
 
-.channel-card:hover {
+.posts-card:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     border-color: #007bff;
 }
@@ -136,7 +146,8 @@ img {
     height: auto;
 }
 
-.button {
+.button,
+.exit-button {
     position: relative;
     display: inline-block;
     margin: 15px;
@@ -154,38 +165,13 @@ img {
     box-shadow: inset 0 0 0 0 #007bff;
 }
 
-.button:hover {
-    color: white;
-    box-shadow: inset 0 -100px 0 0 #007bff;
-}
-
-.button:active {
-    transform: scale(0.9);
-}
-
-.exit-button {
-    position: relative;
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    text-align: center;
-    font-size: 16px;
-    letter-spacing: 1px;
-    text-decoration: none;
-    color: #007bff;
-    background: transparent;
-    cursor: pointer;
-    transition: ease-out 0.5s;
-    border: 2px solid #007bff;
-    border-radius: 10px;
-    box-shadow: inset 0 0 0 0 #007bff;
-}
-
+.button:hover,
 .exit-button:hover {
     color: white;
     box-shadow: inset 0 -100px 0 0 #007bff;
 }
 
+.button:active,
 .exit-button:active {
     transform: scale(0.9);
 }
@@ -358,14 +344,12 @@ img {
 
 .searchInput {
     flex-grow: 1;
-    /* Позволява на полето за търсене да заема повече място */
     border: none;
     background: none;
     outline: none;
     color: black;
     font-size: 15px;
     padding: 12px 16px;
-    /* Регулиране на вътрешния отстъп */
 }
 
 .header-image {
@@ -448,7 +432,6 @@ button:active {
     text-align: center;
 }
 
-/* Родителски контейнер */
 .main-container {
     display: flex;
     padding: 20px;
@@ -550,7 +533,6 @@ button:active {
     background-color: rgba(var(--cardsquares), .85);
 }
 
-/* ===== REDESIGNED POSTS ===== */
 .posts-container {
     margin: 20px auto;
     max-width: 680px;
@@ -571,27 +553,57 @@ button:active {
 
 .posts-container li {
     background: #fff;
-    padding: 20px;
-    margin: 30px 0;
+    padding: 15px;
+    margin: 20px 0;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Post header with profile info */
+.post-content {
+    margin: 15px 0;
+    line-height: 1.6;
+    color: #333;
+    font-size: 1rem;
+    text-align: left;
+    flex-grow: 1;
+    /* Allows the content to expand */
+}
+
+.post-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+}
+
 .post-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
 .post-header .profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vote-button.active {
+    background-color: blue;
+}
+
+.vote-container {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -638,12 +650,7 @@ button:active {
 }
 
 .channel-link a {
-    color: #007bff;
     text-decoration: none;
-}
-
-.channel-link a:hover {
-    text-decoration: underline;
 }
 
 .post-content {
@@ -669,8 +676,8 @@ button:active {
 .post-images.single img {
     max-width: 100%;
     max-height: 500px;
-    width: auto; /* Ensure the image scales proportionally */
-    height: auto; /* Ensure the image scales proportionally */
+    width: auto;
+    height: auto;
     object-fit: contain;
     border-radius: 8px;
 }
@@ -706,7 +713,7 @@ button:active {
 .post-images.multiple .secondary-images .image-container {
     height: 198px;
     position: relative;
-    overflow: hidden; /* Ensure images don't overflow */
+    overflow: hidden;
 }
 
 .post-images.multiple .secondary-images img {
@@ -761,10 +768,97 @@ button:active {
 
 .post-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    align-items: center;
     margin-top: 15px;
     border-top: 1px solid #eee;
     padding-top: 12px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-spase {
+    background: white;
+    border: 2px solid #007bff;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.dropdown-spase:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+.dropdown-spase svg {
+    width: 32px;
+    height: 32px;
+    fill: #007bff;
+    transition: transform 0.2s;
+}
+
+.dropdown-spase:hover svg {
+    transform: scale(1.1);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #007bff;
+    box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.25);
+    min-width: 160px;
+    z-index: 1000;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-menu .dropdown-item {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f0f2f5;
+    color: #007bff;
+}
+
+.dropdown-menu .edit-item {
+    color: #007bff;
+}
+
+.dropdown-menu .delete-item {
+    color: #dc3545;
+}
+
+.dropdown-menu .delete-item:hover {
+    background-color: #fdecea;
+    color: #dc3545;
 }
 
 .action-button {
@@ -803,20 +897,11 @@ button:active {
     box-shadow: inset 0px 0px 10px 0px rgba(240, 237, 237, 0.75);
 }
 
-.like-button svg, .dislike-button svg {
+.like-button svg,
+.dislike-button svg {
     fill: white;
     width: 24px;
     height: 24px;
-}
-
-.vote-button.active {
-    background-color: blue;
-}
-
-.vote-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
 .search-form {
@@ -838,7 +923,7 @@ button:active {
         flex-direction: column;
         padding: 10px;
     }
-   
+
     .nav {
         display: flex;
         flex-wrap: wrap;
@@ -879,6 +964,19 @@ button:active {
     .post-images.multiple {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .posts-container li {
+        padding: 12px;
+        margin: 15px 0;
+    }
+
+    .post-header {
+        flex-wrap: wrap;
+    }
+
+    .vote-container {
+        margin-top: 10px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -904,58 +1002,30 @@ button:active {
         max-width: 100%;
         margin: 20px 15px;
     }
-    
+
     .posts-container li {
-        padding: 15px;
-        max-width: 100%;
+        padding: 10px;
+        margin: 10px 0;
     }
-    
+
     .post-header {
+        flex-direction: column;
         align-items: flex-start;
     }
-    
-    /* Modified image layout for smaller screens */
-    .post-images.multiple {
-        grid-template-columns: 1fr;
-        max-height: none;
-    }
-    
-    .post-images.multiple .main-image {
-        grid-row: 1;
-        height: 250px;
-    }
-    
-    .post-images.multiple .main-image img {
-        border-radius: 8px 8px 0 0;
-    }
-    
-    .post-images.multiple .secondary-images {
-        grid-column: 1;
-        grid-row: 2;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .post-images.multiple .secondary-images .image-container {
-        height: 125px;
-    }
-    
-    .post-images.multiple .secondary-images .image-container:first-child img {
-        border-radius: 0 0 0 8px;
-    }
-    
-    .post-images.multiple .secondary-images .image-container:last-child img {
-        border-radius: 0 0 8px 0;
+
+    .vote-container {
+        width: 100%;
+        justify-content: flex-end;
     }
 
-    footer {
-        flex-direction: column;
-        text-align: center;
-        padding: 15px;
+    .post-actions {
+        justify-content: flex-end;
     }
 
-    footer img {
-        margin: 10px 0;
+    .dropdown {
+        right: 10px;
+        top: 10px;
+        padding-left: 250px;
     }
 }
 
@@ -971,15 +1041,16 @@ button:active {
         align-items: center;
         padding: 10px;
     }
-    
-    .header-image, .profile {
+
+    .header-image,
+    .profile {
         margin: 0;
     }
-    
+
     .profile-link {
         order: 2;
     }
-    
+
     .searchBox {
         width: 100%;
         order: 3;
@@ -1002,7 +1073,7 @@ button:active {
         margin: 10px 0;
     }
 
-    .search-button, 
+    .search-button,
     .button {
         width: 100%;
         margin: 10px 0;
@@ -1010,7 +1081,7 @@ button:active {
 
     .posts-container li {
         margin: 20px 0;
-        padding: 15px;
+        padding: 8px;
     }
 
     .post-header {
@@ -1021,15 +1092,15 @@ button:active {
         flex-wrap: wrap;
         gap: 5px;
     }
-    
+
     .post-images.single img {
         max-height: 300px;
     }
-    
+
     .post-images.multiple .main-image {
         height: 200px;
     }
-    
+
     .post-images.multiple .secondary-images .image-container {
         height: 100px;
     }
@@ -1060,24 +1131,36 @@ button:active {
     .header-image {
         width: 100px;
     }
-    
+
     .post-images.multiple .secondary-images {
         grid-template-columns: 1fr;
     }
-    
+
     .post-images.multiple .secondary-images .image-container {
         height: 150px;
     }
-    
+
     .post-images.multiple .secondary-images .image-container:first-child img {
         border-radius: 0;
     }
-    
+
     .post-images.multiple .secondary-images .image-container:last-child img {
         border-radius: 0 0 8px 8px;
     }
-    
+
     .post-content {
         font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .post-actions {
+        justify-content: flex-end;
+    }
+
+    .dropdown {
+        right: 10px;
+        top: 10px;
+        padding-left: 250px;
     }
 }

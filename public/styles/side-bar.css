@@ -3,15 +3,16 @@
     flex-direction: column;
     background-color: #007bff;
     width: 250px;
-    height: 100vh;
+    height: calc(100vh - 100px);
     padding: 20px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px,
         rgba(0, 123, 255, 0.5) 5px 10px 15px;
     transition: transform 0.3s ease-in-out;
     position: fixed;
     left: 0;
-    top: 0;
+    top: 100px;
     z-index: 1000;
+    overflow-y: auto;
 }
 
 .side-bar-button {
@@ -53,7 +54,6 @@
 .side-bar-button span {
     margin-left: 5px;
 }
-
 
 .settings-button {
     margin-top: auto;
@@ -138,8 +138,8 @@
     display: none;
     position: fixed;
     top: 50%;
-    left: 10%;
-    transform: translate(-50%, -50%);
+    left: 20px;
+    transform: translateY(-50%);
     z-index: 1001;
     background: #007bff;
     border: 2px solid white;
@@ -155,6 +155,10 @@
 }
 
 @media (max-width: 768px) {
+    .mobile-toggle {
+        display: block;
+    }
+
     .sidebar {
         transform: translateX(-100%);
     }
@@ -163,11 +167,7 @@
         transform: translateX(0);
     }
 
-    .mobile-toggle {
-        display: block;
-    }
-
-    .popup[style*="display: flex"]~.mobile-toggle {
+    .popup[style*="display: flex"] ~ .mobile-toggle {
         display: none;
     }
 }

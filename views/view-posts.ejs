@@ -58,7 +58,9 @@
                     <div class="channel-card mb-4" data-title="<%= post.title %>">
                         <div class="post-header">
                             <div class="profile-info">
-                                <img src="<%= post.authorPicture %>" alt="Profile" class="profile-picture-small">
+                                <a href="/account/<%= post.authorId %>">
+                                    <img src="<%= post.authorPicture %>" alt="Profile" class="profile-picture-small">
+                                </a>
                                 <div class="author-info">
                                     <a href="/account/<%= post.authorId %>" class="author-name">
                                         <%= post.authorName %>
@@ -79,13 +81,26 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <% if (user.userId === post.authorId || user.userType === "Администратор") { %>
+                            <% if (user.userId===post.authorId || user.userType==="Администратор" ) { %>
                                 <div class="post-actions">
-                                    <a href="/<%= post.channelId %>/edit/<%= post.postId %>" class="button post-button">Редактиране</a>
-                                    <a href="/<%= post.channelId %>/delete-post/<%= post.postId %>" class="button delete-button post-button">Изтриване</a>
+                                    <div class="dropdown">
+                                        <button class="dropdown-spase">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-three-dots-vertical"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                                            </svg>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a href="/<%= post.channelId %>/edit/<%= post.postId %>"
+                                                class="dropdown-item edit-item">Редактиране</a>
+                                            <a href="/<%= post.channelId %>/delete-post/<%= post.postId %>"
+                                                class="dropdown-item delete-item">Изтриване</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            <% } %>
+                                <% } %>
                         </div>
 
                         <h2 class="post-title"><%= post.title %></h2>
