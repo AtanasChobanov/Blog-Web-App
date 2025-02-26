@@ -10,7 +10,7 @@
     transition: transform 0.3s ease-in-out;
     position: fixed;
     left: 0;
-    top: 100px;
+    top: 99px;
     z-index: 1000;
     overflow-y: auto;
 }

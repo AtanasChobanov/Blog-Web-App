@@ -6,34 +6,76 @@
   <link rel="icon" href="/images/icon.png" type="image/png">
   <title>KnowSpace</title>
   <link rel="stylesheet" href="/styles/home.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <div class="left">
-      <img src="/images/KnowSpaceHeader.png" alt="Image Left">
-    </div>
-
-    <div class="center">
-      <h1>KnowSpace</h1>
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1>Добре дошли в KnowSpace</h1>
       <p>
-        Проектът „KnowSpace” има за цел да създаде виртуална среда, в която хората обменят и обогатяват знанията и уменията си. Използването на такава социална мрежа от ученици, учители и обикновени потребители реализира следните цели:
+        Проектът „KnowSpace” има за цел да създаде виртуална среда, в която хората обменят и обогатяват знанията и
+        уменията си. Използването на такава социална мрежа от ученици, учители и обикновени потребители реализира
+        следните цели:
       </p>
-      <p>
-        • Стимулиране на успеха на учениците чрез интерактивен и познат начин на комуникация; <br>
-        • Социална мрежа, която се отличава от останалите като цели потребителите си да се учат взаимно.
-      </p>
+      <ul>
+        <li>Стимулиране на успеха на учениците чрез интерактивен и познат начин на комуникация;</li>
+        <li>Социална мрежа, която се отличава от останалите като цели потребителите си да се учат взаимно.</li>
+      </ul>
       <div class="button-container">
         <a href="/register" class="register-button">Създай профил</a>
         <a href="/login" class="login-button">Влез в профил</a>
       </div>
+      <div class="user-counter">
+        <div class="container">
+          <div class="box">
+            <span class="title">Активни потребители</span>
+            <div>
+              <p class="counter-number">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="right">
-      <img src="/images/IvanGeorgiev.png" alt="Image Right 1">
-      <img src="/images/AtanasChubanov.png" alt="Image Right 2">
+    <div class="hero-image">
+      <img src="/images/KnowSpaceHeader.png" alt="KnowSpace Header">
     </div>
   </div>
 
-  <script src="/scripts/home.js"></script> 
+  <div class="features-section">
+    <div class="feature-card">
+      <h3>Интерактивно обучение</h3>
+      <p>Учениците и учителите взаимодействат в динамична и интерактивна среда.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Споделяне на знания</h3>
+      <p>Споделяйте своите умения и научете нови неща от другите.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Общност</h3>
+      <p>Присъединете се към общност, която цени знанието и развитието.</p>
+    </div>
+  </div>
+
+  <div class="creators-section">
+    <h2>Създатели</h2>
+    <div class="creators-images">
+      <div class="creator-item">
+        <img src="/images/IvanGeorgiev.png" alt="Иван Георгиев">
+        <div class="creator-info">
+          <h3>Иван Георгиев</h3>
+          <p>Основател и образователен експерт с над 5 години опит в дигиталното образование. Специалист в създаването на интерактивни учебни материали и виртуални учебни среди.</p>
+        </div>
+      </div>
+      <div class="creator-item">
+        <img src="/images/AtanasChubanov.png" alt="Атанас Чобанов">
+        <div class="creator-info">
+          <h3>Атанас Чобанов</h3>
+          <p>Full-stack разработчик със силни интереси в образователните технологии. Отговорен за техническата реализация на платформата и интеграцията на иновативни инструменти.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/scripts/home.js"></script>
 </body>
 </html>
