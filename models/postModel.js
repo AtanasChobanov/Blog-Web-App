@@ -117,20 +117,10 @@ class Post extends PostFilesManager {
     }
   }
 
-  // READ all posts from the user's channels
-  static async getFromUserChannels(userId) {
+  // Helper function to fetch posts
+  static async #fetchPosts(query, params) {
     try {
-      const result = await db.query(
-        `SELECT ch.name AS channel_name, p.post_id, p.title, p.content, p.author_id, p.channel_id,
-                u.username AS author, u.profile_picture, p.date_of_creation, p.date_of_last_edit 
-         FROM posts p 
-         JOIN channels ch ON ch.channel_id = p.channel_id 
-         JOIN users u ON p.author_id = u.user_id
-         JOIN members_of_channels mc ON ch.channel_id = mc.channel_id
-         WHERE mc.user_id = $1
-         ORDER BY p.date_of_creation DESC;`,
-        [userId]
-      );
+      const result = await db.query(query, params);
 
       const posts = result.rows.map(
         (post) =>
@@ -155,16 +145,27 @@ class Post extends PostFilesManager {
 
       return posts;
     } catch (err) {
-      console.error("Error fetching user's feed:", err);
+      console.error("Error fetching posts:", err);
       throw err;
     }
   }
 
+  // READ all posts from the user's channels
+  static async getFromUserChannels(userId) {
+    const query = `SELECT ch.name AS channel_name, p.post_id, p.title, p.content, p.author_id, p.channel_id,
+         u.username AS author, u.profile_picture, p.date_of_creation, p.date_of_last_edit 
+         FROM posts p 
+         JOIN channels ch ON ch.channel_id = p.channel_id 
+         JOIN users u ON p.author_id = u.user_id
+         JOIN members_of_channels mc ON ch.channel_id = mc.channel_id
+         WHERE mc.user_id = $1
+         ORDER BY p.date_of_creation DESC;`;
+    return Post.#fetchPosts(query, [userId]);
+  }
+
   // READ all posts from a specific channel by ID
   static async getFromChannel(channelId) {
-    try {
-      const result = await db.query(
-        `SELECT ch.name, post_id, title, content, author_id, p.channel_id, 
+    const query = `SELECT ch.name AS channel_name, post_id, title, content, author_id, p.channel_id, 
          u.username AS author, u.profile_picture, p.date_of_creation, date_of_last_edit 
          FROM posts p 
          JOIN channels ch 
@@ -172,36 +173,8 @@ class Post extends PostFilesManager {
          JOIN users u 
          ON p.author_id = u.user_id 
          WHERE ch.channel_id = $1 
-         ORDER BY date_of_creation DESC;`,
-        [channelId]
-      );
-
-      const posts = result.rows.map(
-        (post) =>
-          new Post(
-            post.post_id,
-            post.title,
-            post.content,
-            post.author_id,
-            post.channel_id,
-            post.date_of_creation,
-            post.date_of_last_edit,
-            post.author,
-            post.profile_picture,
-            post.name
-          )
-      );
-
-      // Load files for each post
-      for (const post of posts) {
-        await post.getFiles();
-      }
-
-      return posts;
-    } catch (err) {
-      console.error("Error fetching posts from channel:", err);
-      throw err;
-    }
+         ORDER BY date_of_creation DESC;`;
+    return Post.#fetchPosts(query, [channelId]);
   }
 
   // CREATE a new post
@@ -236,34 +209,14 @@ class Post extends PostFilesManager {
 
   // Search posts by title
   static async search(searchedItem, channelId) {
-    try {
-      const result = await db.query(
-        `SELECT post_id, p.title, content, date_of_creation, date_of_last_edit, author_id, channel_id, 
-         u.username AS author 
+    const query = 
+      `SELECT post_id, p.title, content, author_id, channel_id, date_of_creation, date_of_last_edit, 
+         u.username AS author, u.profile_picture 
          FROM posts p 
          JOIN users u 
          ON p.author_id = u.user_id 
-         WHERE p.title ILIKE '%' || $1 || '%' AND channel_id = $2;`,
-        [searchedItem, channelId]
-      );
-
-      return result.rows.map(
-        (post) =>
-          new Post(
-            post.post_id,
-            post.title,
-            post.content,
-            post.author_id,
-            post.channel_id,
-            post.date_of_creation,
-            post.date_of_last_edit,
-            post.author
-          )
-      );
-    } catch (err) {
-      console.error("Error searching posts:", err);
-      throw err;
-    }
+         WHERE p.title ILIKE '%' || $1 || '%' AND channel_id = $2;`;
+    return Post.#fetchPosts(query, [searchedItem, channelId]);
   }
 
   // READ a specific post by ID
@@ -287,7 +240,7 @@ class Post extends PostFilesManager {
         data.author_id,
         data.channel_id,
         data.date_of_creation,
-        data.date_of_last_edit, 
+        data.date_of_last_edit
       );
       await post.getFiles();
       return post;
