@@ -22,13 +22,14 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-center">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-          <img src="/images/KnowSpace 1-1.png" alt="KnowSpace logo" class="header-image" />
+            <img src="/images/KnowSpace 1-1.png" alt="KnowSpace logo" class="header-image" />
         </a>
-
-        <a href="/account/<%= user.userId %>" class="profile-link">
-          <img src="<%= user.profilePicture %>" alt="Profile" class="profile" />
+    
+        <a href="/account/<%= user.userId %>" class="profile-link d-flex align-items-center">
+            <span class="header-text"><%= user.username %></span>
+            <img src="<%= user.profilePicture %>" alt="Profile" class="profile" />
         </a>
-      </div>
+    </div>
     </div>
   </header>
 
