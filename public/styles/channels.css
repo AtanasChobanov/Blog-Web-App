@@ -52,32 +52,32 @@
   border-radius: 50%;
   border: 2px solid #007bff;
   margin-bottom: 20px;
-  order: 1; /* Default order for larger screens */
+  order: 1;
 }
 
 .channel-card .channel-name {
   font-size: 24px;
   color: #333;
   margin-bottom: 10px;
-  order: 2; /* Default order for larger screens */
+  order: 2;
 }
 
 .channel-card p {
   font-size: 16px;
   color: #555;
   margin: 5px 0;
-  order: 3; /* Default order for larger screens */
+  order: 3;
 }
 
 .channel-card small {
   font-size: 14px;
   color: #777;
-  order: 4; /* Default order for larger screens */
+  order: 4;
 }
 
 .channel-card .btn-grop {
   margin-top: 20px;
-  order: 5; /* Default order for larger screens */
+  order: 5;
 }
 
 .channel-grid {
@@ -105,19 +105,26 @@
   .channel-card .profile {
     width: 80px;
     height: 80px;
-    order: 0; /* Move profile to the top on smaller screens */
+    order: 1;
   }
   
   .channel-card .channel-name {
     font-size: 20px;
+    order: 2;
   }
   
   .channel-card p {
     font-size: 14px;
+    order: 3;
   }
   
   .channel-card small {
     font-size: 12px;
+    order: 4;
+  }
+  
+  .channel-card .btn-grop {
+    order: 5;
   }
 }
 
@@ -138,18 +145,25 @@
   .channel-card .profile {
     width: 60px;
     height: 60px;
-    order: 0;
+    order: 1;
   }
   
   .channel-card .channel-name {
     font-size: 18px;
+    order: 2;
   }
   
   .channel-card p {
     font-size: 12px;
+    order: 3;
   }
   
   .channel-card small {
     font-size: 10px;
+    order: 4;
+  }
+  
+  .channel-card .btn-grop {
+    order: 5;
   }
 }
