@@ -73,15 +73,56 @@ body {
   margin-top: 30px;
   font-size: 1.2rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   gap: 10px;
 }
 
-.user-counter span {
+.title {
   font-weight: 700;
   color: #ffd700;
+}
+
+.counter-container {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.digit-container {
+  width: 40px;
+  height: 64px;
+  overflow: hidden;
+  position: relative;
+}
+
+.digit-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.digit {
+  height: 64px;
+  width: 40px;
+  line-height: 64px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.counter-number {
+  display: flex;
 }
 
 .register-button:hover, .login-button:hover {

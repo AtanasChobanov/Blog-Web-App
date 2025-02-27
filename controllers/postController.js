@@ -1,6 +1,7 @@
 import Post from "../models/postModel.js";
 import Channel from "../models/channelModel.js";
 import Vote from "../models/voteModel.js";
+import User from "../models/userModel.js";
 
 class PostController {
   static async getFeedController(req, res) {
@@ -18,7 +19,8 @@ class PostController {
         });
       }
     } else {
-      res.render("home.ejs");
+      const userCount = await User.getTotalUsers();
+      res.render("home.ejs", { userCount });
     }
   }
 
