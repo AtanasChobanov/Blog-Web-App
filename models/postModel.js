@@ -210,12 +210,12 @@ class Post extends PostFilesManager {
   // Search posts by title
   static async search(searchedItem, channelId) {
     const query = 
-      `SELECT post_id, p.title, content, author_id, channel_id, date_of_creation, date_of_last_edit, 
-         u.username AS author, u.profile_picture 
-         FROM posts p 
-         JOIN users u 
-         ON p.author_id = u.user_id 
-         WHERE p.title ILIKE '%' || $1 || '%' AND channel_id = $2;`;
+      `SELECT p.post_id, p.title, p.content, p.author_id, p.channel_id, p.date_of_creation, p.date_of_last_edit, 
+       u.username AS author, u.profile_picture, ch.name AS channel_name
+       FROM posts p 
+       JOIN users u ON p.author_id = u.user_id 
+       JOIN channels ch ON p.channel_id = ch.channel_id
+       WHERE p.title ILIKE '%' || $1 || '%' AND p.channel_id = $2;`;
     return Post.#fetchPosts(query, [searchedItem, channelId]);
   }
 

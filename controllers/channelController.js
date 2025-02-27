@@ -27,7 +27,7 @@ class ChannelController {
     if (req.isAuthenticated()) {
       try {
         const recentChannels = await Channel.getRecentChannels(req.user.userId);
-        return res.render("view-channels.ejs", {
+        return res.render("explore.ejs", {
           channels: recentChannels,
         });
       } catch (err) {

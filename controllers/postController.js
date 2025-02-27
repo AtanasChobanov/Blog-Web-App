@@ -116,9 +116,10 @@ class PostController {
           req.body.searchedItem,
           req.params.channelId
         );
+        const channel = await Channel.getById(req.params.channelId);
         res.render("search-post-result.ejs", {
           posts,
-          channelId: req.params.channelId,
+          channel,
         });
       } catch (err) {
         res.status(500).render("error-message.ejs", { errorMessage: err });
