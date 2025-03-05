@@ -16,7 +16,7 @@ footer {
   right: 0;
   height: 70px;
   transition: bottom 0.3s ease-in-out;
-  z-index: 1000;
+  z-index: 999;
 }
 
 footer.visible {
@@ -24,7 +24,7 @@ footer.visible {
 }
 
 .footer p {
-  margin: 0;
+  margin-left: 230px;
   font-size: 14px;
   text-align: left;
 }
