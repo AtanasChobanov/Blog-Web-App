@@ -464,13 +464,15 @@ h1 {
 .search-container {
     display: flex;
     justify-content: center;
+    width: 100%;
+    margin: 0 auto;
     padding: 20px;
     background-color: transparent;
 }
 
 .search-form {
-    width: 100%;
-    max-width: 600px;
+    width: 650px;
+    margin: 0 auto;
 }
 
 .searchBox {
@@ -484,6 +486,7 @@ h1 {
     position: relative;
     width: 100%;
     padding-right: 90px;
+    height: 60px;
 }
 
 .searchInput {
@@ -492,8 +495,8 @@ h1 {
     background: none;
     outline: none;
     color: black;
-    font-size: 15px;
-    padding: 12px 20px;
+    font-size: 18px;
+    padding: 16px 24px;
     padding-right: 40px;
 }
 
@@ -503,8 +506,8 @@ h1 {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    width: 35px;
-    height: 35px;
+    width: 45px;
+    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -515,8 +518,8 @@ h1 {
 }
 
 .searchIconButton svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 .searchIconButton:hover {
@@ -804,7 +807,7 @@ button:active {
 
 .posts-container {
     margin: 20px auto;
-    max-width: 680px;
+    max-width: 650px;
     padding: 0 15px;
     width: 100%;
 }
@@ -1066,26 +1069,27 @@ button:active {
     height: 700px;
     overflow: auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: 1fr;
     gap: 10px;
     align-items: center;
+    position: relative;
 }
 
 .modal-image {
-    max-width: 100%;
-    max-height: 200px;
+    width: 700px;
+    height: 700px;
     object-fit: contain;
     border-radius: 8px;
 }
 
 .close-modal {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
     background: none;
     border: none;
-    color: white;
-    font-size: 24px;
+    color: red;
+    font-size: 30px;
     cursor: pointer;
 }
 
@@ -1245,6 +1249,7 @@ button:active {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-top: 10px;
 }
 
 .volt-button {
@@ -1283,14 +1288,6 @@ button:active {
     fill: white;
     width: 24px;
     height: 24px;
-}
-
-.search-form {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    width: 650px;
 }
 
 @media (max-width: 992px) {
@@ -1621,6 +1618,32 @@ button:active {
 
     .post-images.multiple .secondary-images .image-container:last-child img {
         border-radius: 0 0 8px 8px;
+    }
+
+    .post-content {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 412px) {
+    .posts-container {
+        max-width: 350px;
+    }
+
+    .post-card {
+        max-width: 350px;
+    }
+
+    .post-images.single img {
+        max-height: 180px;
+    }
+
+    .post-images.multiple .main-image {
+        height: 100px;
+    }
+
+    .post-images.multiple .secondary-images .image-container {
+        height: 50px;
     }
 
     .post-content {
