@@ -2,6 +2,7 @@ import db from "../config/db.js";
 import PostFilesManager from "./postFilesManagerModel.js";
 import { sanitizeHTML } from "../config/sanitize.js";
 import Vote from "./voteModel.js";
+import { fetchWikipediaArticles } from "../config/wikipedia.js";
 
 class Post extends PostFilesManager {
   constructor(
@@ -217,6 +218,34 @@ class Post extends PostFilesManager {
        JOIN channels ch ON p.channel_id = ch.channel_id
        WHERE p.title ILIKE '%' || $1 || '%' AND p.channel_id = $2;`;
     return Post.#fetchPosts(query, [searchedItem, channelId]);
+  }
+
+  // Search in Wikipedia when no channels are found
+  static async searchWikipedia(searchedItem) {
+    try {
+      const response = await fetchWikipediaArticles(searchedItem);
+      // Използваме Promise.all(), за да изчакаме всички асинхронни заявки
+      const posts = await Promise.all(response.map(async (item) => {
+          const post = new Post(
+            item.postId,
+            item.title,
+            item.content,
+            item.authorId,
+            null,
+            new Date(),
+            null,
+            item.authorName,
+            item.authorPicture
+          );
+          await post.getWikipediaImages(item.title);
+          return post;
+        })
+      );
+      return posts;
+    } catch (err) {
+      console.error("Error searching Wikipedia:", err);
+      throw err;
+    }
   }
 
   // READ a specific post by ID
