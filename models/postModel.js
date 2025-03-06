@@ -122,7 +122,6 @@ class Post extends PostFilesManager {
   static async #fetchPosts(query, params) {
     try {
       const result = await db.query(query, params);
-
       const posts = result.rows.map(
         (post) =>
           new Post(
@@ -138,12 +137,8 @@ class Post extends PostFilesManager {
             post.channel_name
           )
       );
-
-      // Load files for each post
-      for (const post of posts) {
-        await post.getFiles();
-      }
-
+      
+      await Promise.all(posts.map((post) => post.getFiles()));
       return posts;
     } catch (err) {
       console.error("Error fetching posts:", err);
@@ -160,7 +155,7 @@ class Post extends PostFilesManager {
          JOIN users u ON p.author_id = u.user_id
          JOIN members_of_channels mc ON ch.channel_id = mc.channel_id
          WHERE mc.user_id = $1
-         ORDER BY p.date_of_creation DESC;`;
+         ORDER BY GREATEST(p.date_of_creation, COALESCE(p.date_of_last_edit, p.date_of_creation)) DESC;`;
     return Post.#fetchPosts(query, [userId]);
   }
 
@@ -174,7 +169,7 @@ class Post extends PostFilesManager {
          JOIN users u 
          ON p.author_id = u.user_id 
          WHERE ch.channel_id = $1 
-         ORDER BY date_of_creation DESC;`;
+         ORDER BY GREATEST(p.date_of_creation, COALESCE(p.date_of_last_edit, p.date_of_creation)) DESC;`;
     return Post.#fetchPosts(query, [channelId]);
   }
 
