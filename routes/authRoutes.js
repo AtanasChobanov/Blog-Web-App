@@ -1,6 +1,8 @@
 import express from "express";
 import UserController from "../controllers/authController.js";
 import passport from "passport";
+import { uploadFiles } from "../config/multer.js";
+import multer from "multer";
 
 const router = express.Router();
 
@@ -32,6 +34,19 @@ router.get("/account/:userId", UserController.getAccountPage);
 router.get("/edit-profile", UserController.getEditProfilePage);
 router.post("/edit-profile", UserController.updateController);
 router.post("/change-password", UserController.changePasswordController);
+router.get("/change-profile-picture", UserController.getChangeProfilePicturePage);
+router.post("/change-profile-picture", (req, res, next) => {
+    uploadFiles(req, res, (err) => {
+      if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).render("change-profile-picture", {
+          errorMessage: "Файлът е твърде голям. Максимум 5MB.",
+        });
+      }
+      next();
+    });
+  },
+  UserController.changeProfilePictureController
+);
 
 router.get("/logout", UserController.logoutController);
 

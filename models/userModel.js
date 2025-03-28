@@ -1,6 +1,8 @@
 import db from "../config/db.js";
 import bcrypt from "bcrypt";
 import Post from "./postModel.js";
+import cloudinary  from "../config/cloudinary.js";
+import fs from "fs/promises";
 
 const saltRounds = 10;
 const defaultAvatars = [
@@ -111,6 +113,23 @@ class User {
 
   async loginVerification(inputPassword) {
     return await this.#verifyPassword(inputPassword);
+  }
+
+  async updateProfilePicture(avatar) {
+    try {
+      const result = await cloudinary.uploader.upload(avatar[0].path, {
+        folder: "uploads/profile-pictures",
+      });
+      
+      await db.query(
+        "UPDATE users SET profile_picture = $1 WHERE user_id = $2",
+        [result.secure_url, this.userId]
+      );
+      await fs.unlink(avatar[0].path);
+    } catch (err) {
+      console.error("Error updating profile picture:", err);
+      throw err;
+    }
   }
 
   static async #getById(userId) {

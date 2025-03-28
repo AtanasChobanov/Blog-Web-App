@@ -12,14 +12,14 @@ router.post("/:channelId/create-post", (req, res, next) => {
   uploadFiles(req, res, (err) => {
     if (err instanceof multer.MulterError) {
       if (err.code === "LIMIT_FILE_SIZE") {
-        return res.status(400).render("new-post.ejs", {
+        return res.status(400).render("new-post", {
           errorMessage: "Файлът е твърде голям. Максимум 5MB.",
           title: req.body.title,
           content: req.body.content,
           channelId: req.params.channelId,
         });
       } else if (err.code === "LIMIT_UNEXPECTED_FILE") {
-        return res.status(400).render("new-post.ejs", {
+        return res.status(400).render("new-post", {
           errorMessage: "Не може да се качват повече от 5 снимки.",
           title: req.body.title,
           content: req.body.content,
@@ -38,14 +38,14 @@ router.patch(
     uploadFiles(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         if (err.code === "LIMIT_FILE_SIZE") {
-          return res.status(400).render("new-post.ejs", {
+          return res.status(400).render("new-post", {
             errorMessage: "Файлът е твърде голям. Максимум 5MB.",
             title: req.body.title,
             content: req.body.content,
             channelId: req.params.channelId,
           });
         } else if (err.code === "LIMIT_UNEXPECTED_FILE") {
-          return res.status(400).render("new-post.ejs", {
+          return res.status(400).render("new-post", {
             errorMessage: "Не може да се качват повече от 5 снимки.",
             title: req.body.title,
             content: req.body.content,
@@ -59,14 +59,8 @@ router.patch(
   PostController.updateController
 );
 
-router.get(
-  "/:channelId/delete-post/:postId",
-  PostController.getDeletePostPage
-);
-router.delete(
-  "/:channelId/delete-post/:postId",
-  PostController.deleteController
-);
+router.get("/:channelId/delete-post/:postId", PostController.getDeletePostPage);
+router.delete("/:channelId/delete-post/:postId", PostController.deleteController);
 
 router.post("/search-post/:channelId", PostController.showSearchedPostsController);
 

@@ -8,6 +8,8 @@ const storage = multer.diskStorage({
           cb(null, "public/uploads/images/");
         } else if (file.fieldname === "documents") {
           cb(null, "public/uploads/documents/");
+        } else if (file.fieldname === "avatar") {
+          cb(null, "public/uploads/profile-pictures/");
         }
     }, 
     filename: (req, file, cb) => {
@@ -23,17 +25,15 @@ const fileFilter = (req, file, cb) => {
     const extname = path.extname(file.originalname).toLowerCase();
 
     // When uploading an image
-    if (file.fieldname === "images"  && allowedImageTypes.test(extname)) {
+    if ((file.fieldname === "images" || file.fieldname === "avatar") && allowedImageTypes.test(extname)) {
         return cb(null, true);
     }
-
     // When uploading a document
-    if (file.fieldname === "documents"  && allowedDocTypes.test(extname)) {
+    if (file.fieldname === "documents" && allowedDocTypes.test(extname)) {
         return cb(null, true);
     }
-
     // If the file type is not supported
-    cb(new Error("Невалиден тип файл."));
+    cb(new Error("Invalid file type!"));
 };
 
 // Multer configuration
@@ -48,4 +48,5 @@ const upload = multer({
 export const uploadFiles = upload.fields([
     { name: "images", maxCount: 5 }, // Maximum 5 images
     { name: "documents", maxCount: 1 }, // Maximum 1 document
+    { name: "avatar", maxCount: 1 }, // Maximum 1 avatar
 ]);
