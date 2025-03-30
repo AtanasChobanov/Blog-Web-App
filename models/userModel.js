@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import Post from "./postModel.js";
 import cloudinary  from "../config/cloudinary.js";
 import fs from "fs/promises";
+import File from "./fileModel.js";
 
 const saltRounds = 10;
 const defaultAvatars = [
@@ -13,16 +14,6 @@ const defaultAvatars = [
 ];
 
 class User {
-  static async getTotalUsers() {
-    try {
-      const result = await db.query('SELECT COUNT(*) as count FROM users');
-      return parseInt(result.rows[0].count);
-    } catch (err) {
-      console.error('Error counting users:', err);
-      throw err;
-    }
-  }
-
   constructor(
     userId,
     email,
@@ -117,17 +108,57 @@ class User {
 
   async updateProfilePicture(avatar) {
     try {
-      const result = await cloudinary.uploader.upload(avatar[0].path, {
+      if (this.#isCustomAvatar()) {
+        const avatarFile = new File(null, null, this.profilePicture, "image", null);
+        await avatarFile.deleteFromCloudinary();
+      }
+      const result = await cloudinary.uploader.upload(avatar.path, {
         folder: "uploads/profile-pictures",
       });
-      
+      await fs.unlink(avatar.path);
+
       await db.query(
         "UPDATE users SET profile_picture = $1 WHERE user_id = $2",
         [result.secure_url, this.userId]
       );
-      await fs.unlink(avatar[0].path);
     } catch (err) {
       console.error("Error updating profile picture:", err);
+      throw err;
+    }
+  }
+
+  async deleteProfilePicture() {
+    try {
+      if (this.#isCustomAvatar()) {
+        const avatarFile = new File(null, null, this.profilePicture, "image", null);
+        await avatarFile.deleteFromCloudinary();
+
+        const newAvatar = User.#randomDefaultAvatar();
+        await db.query(
+          "UPDATE users SET profile_picture = $1 WHERE user_id = $2",
+          [newAvatar, this.userId]
+        );
+      }
+    } catch (err) {
+      console.error("Error deleting profile picture:", err);
+      throw err;
+    }
+  }
+
+  #isCustomAvatar() {
+    return this.profilePicture.includes("res.cloudinary.com"); // Returns true if there is cloudinary in the URL
+  }
+
+  static #randomDefaultAvatar() {
+    return "/uploads/profile-pictures/" + defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
+  }
+
+  static async getTotalUsers() {
+    try {
+      const result = await db.query('SELECT COUNT(*) as count FROM users');
+      return parseInt(result.rows[0].count);
+    } catch (err) {
+      console.error('Error counting users:', err);
       throw err;
     }
   }
@@ -153,11 +184,7 @@ class User {
 
   static async create(email, username, password, userType, avatar) {
     try {
-      if (!avatar) {
-        avatar =
-          "/uploads/profile-pictures/" +
-          defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
-      }
+      avatar = !avatar ? User.#randomDefaultAvatar() : avatar;
 
       if (password !== "google") {
         password = await bcrypt.hash(password, saltRounds);

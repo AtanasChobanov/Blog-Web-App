@@ -47,6 +47,7 @@ router.post("/change-profile-picture", (req, res, next) => {
   },
   UserController.changeProfilePictureController
 );
+router.delete("/delete-profile-picture", UserController.deleteProfilePictureController);
 
 router.get("/logout", UserController.logoutController);
 
