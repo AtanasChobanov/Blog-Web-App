@@ -52,25 +52,12 @@ class PostController {
   static async createController(req, res) {
     if (req.isAuthenticated()) {
       try {
-        if (req.files.images && req.files.images.length > 5) {
-          return res.status(400).render("new-post", {
-            errorMessage: "Не може да се качват повече от 5 снимки.",
-            title: req.body.title,
-            content: req.body.content,
-            channelId: req.params.channelId,
-          });
-        }
-
-        const files = [
-          ...(req.files.images || []),
-          ...(req.files.documents || []),
-        ];
         await Post.create(
           req.body.title,
           req.body.content,
           req.user.userId,
           req.params.channelId,
-          files
+          req.uploadedFiles,
         );
 
         res.redirect(`/view/${req.params.channelId}`);
@@ -168,15 +155,11 @@ class PostController {
           req.user.userId === post.authorId ||
           req.user.userType === "Администратор"
         ) {
-          const newFiles = [
-            ...(req.files.images || []),
-            ...(req.files.documents || []),
-          ];
           await post.update(
             req.body.title,
             req.body.content,
             req.body.deletedFiles,
-            newFiles
+            req.uploadedFiles,
           );
           res.redirect(`/view/${req.params.channelId}`);
         } else {

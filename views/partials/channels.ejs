@@ -2,9 +2,14 @@
     <div class="channel-grid">
       <% channels.forEach(function(channel) { %>
         <div class="channel-card">
-          <a href="/account/<%= channel.adminId %>" class="profile-link">
-            <img src="<%= channel.adminPicture %>" alt="Profile" class="profile" />
-          </a>
+          <!-- if there is a bannerUrl --> 
+          <% if(channel.bannerUrl) { %>
+            <img src="<%= channel.bannerUrl %>" alt="Banner" class="banner" />
+          <% } else { %>
+            <a href="/account/<%= channel.adminId %>" class="profile-link">
+              <img src="<%= channel.adminPicture %>" alt="Profile" class="profile" />
+            </a>
+          <% } %>
           <h3 class="channel-name">
             <% if (channel.isUserMember) { %>
               <a href="/view/<%= channel.channelId %>"><%= channel.name %></a>

@@ -169,7 +169,9 @@ class UserController {
     if (req.isAuthenticated()) {
       try {
         const user = await User.getForeignUserById(req.user.userId);
-        await user.updateProfilePicture(req.files.avatar[0]);
+        if (req.uploadedFiles) {
+          await user.updateProfilePicture(req.uploadedFiles[0]);
+        }
 
         req.logout((err) => {
           if (err) {

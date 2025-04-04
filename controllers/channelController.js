@@ -51,9 +51,11 @@ class ChannelController {
   static async createController(req, res) {
     if (req.isAuthenticated()) {
       try {
-        await Channel.create(req.body.name, req.user.userId);
-        res.redirect("/");
+        const banner = req.uploadedFiles ? req.uploadedFiles[0] : { url: '' };
+        await Channel.create(req.body.name, banner, req.user.userId);
+        res.redirect("/channels");
       } catch (err) {
+        console.error("Error creating channel:", err);
         res.render("new-channel", {
           name: req.body.name,
           errorMessage: "Това име на канал вече съществува!",
@@ -174,10 +176,12 @@ class ChannelController {
           req.user.userId === channel.adminId ||
           req.user.userType === "Администратор"
         ) {
-          await channel.update(req.body.name);
+          const banner = req.uploadedFiles ? req.uploadedFiles[0] : { url: '' };
+          await channel.update(req.body.name, banner);
         }
         res.redirect("/");
       } catch (err) {
+        console.error("Error updating channel:", err);
         res.status(500).render("error-message", {
           errorMessage: "Неуспешно актуализиране на канала.",
         });

@@ -23,7 +23,7 @@ class File {
   // Функция за изтриване на файл
   async deleteFromCloudinary() {
     try {
-      const result = await cloudinary.uploader.destroy(this.#extractPublicId(), { resource_type: this.type });
+      const result = await cloudinary.uploader.destroy(this.#extractPublicId(), { resource_type: this.type === "document" ? "raw" : "image" });
       console.log("File deleted from Cloudinary:", result);
       return result;
     } catch (err) {

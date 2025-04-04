@@ -108,18 +108,10 @@ class User {
 
   async updateProfilePicture(avatar) {
     try {
-      if (this.#isCustomAvatar()) {
-        const avatarFile = new File(null, null, this.profilePicture, "image", null);
-        await avatarFile.deleteFromCloudinary();
-      }
-      const result = await cloudinary.uploader.upload(avatar.path, {
-        folder: "uploads/profile-pictures",
-      });
-      await fs.unlink(avatar.path);
-
+      await this.deleteProfilePicture();
       await db.query(
         "UPDATE users SET profile_picture = $1 WHERE user_id = $2",
-        [result.secure_url, this.userId]
+        [avatar.url, this.userId]
       );
     } catch (err) {
       console.error("Error updating profile picture:", err);
