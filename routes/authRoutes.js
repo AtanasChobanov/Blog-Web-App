@@ -26,19 +26,19 @@ router.get(
 );
 
 router.get("/register", UserController.getRegisterPage);
-router.post("/register", UserController.registerController);
+router.post("/register", UserController.register);
 
 router.get("/account/:userId", UserController.getAccountPage);
 
 router.get("/edit-profile", UserController.getEditProfilePage);
-router.post("/edit-profile", UserController.updateController);
+router.post("/edit-profile", UserController.update);
 
-router.post("/change-password", UserController.changePasswordController);
+router.post("/change-password", UserController.changePassword);
 router.get("/change-profile-picture", UserController.getChangeProfilePicturePage);
 
-router.patch("/change-profile-picture", uploadFiles, UserController.changeProfilePictureController);
-router.delete("/delete-profile-picture", UserController.deleteProfilePictureController);
+router.patch("/change-profile-picture", uploadFiles, UserController.changeProfilePicture);
+router.delete("/delete-profile-picture", UserController.deleteProfilePicture);
 
-router.get("/logout", UserController.logoutController);
+router.get("/logout", UserController.logout);
 
 export default router;

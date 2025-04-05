@@ -34,7 +34,7 @@ const fileFilter = (req, file, cb) => {
     if (file.fieldname === "documents" && allowedDocTypes.test(extname)) {
         return cb(null, true);
     }
-    cb(new Error("Invalid file type!"));
+    cb(new Error("Unsupported file type!"));
 };
 
 const upload = multer({
@@ -43,6 +43,23 @@ const upload = multer({
     fileFilter,
 });
 
+function errorHandler(err, res) {
+    if (err instanceof multer.MulterError) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).render("error-message", { errorMessage: "Файлът е твърде голям. Максимум 5MB." });
+      } else if (err.code === "LIMIT_UNEXPECTED_FILE") {
+        return res.status(400).render("error-message", { errorMessage: "Не може да се качват повече от 5 снимки." });
+      } else {
+        return res.status(400).render("error-message", { errorMessage: "Грешка при качването на файла." });
+      }
+    } else if (err.message === "Unsupported file type!") {
+      return res.status(400).render("error-message", { errorMessage: "Неподдържан тип файл." });
+    } else {
+      console.error(err);
+      return res.status(500).render("error-message", { errorMessage: "Неочаквана грешка." });
+    }
+}
+
 export const uploadFiles = async (req, res, next) => {
     upload.fields([
         { name: "images", maxCount: 5 },
@@ -50,9 +67,13 @@ export const uploadFiles = async (req, res, next) => {
         { name: "profile-pictures", maxCount: 1 },
         { name: "channel-banners", maxCount: 1 },
     ])(req, res, async (err) => {
-        if (err) return res.status(400).render("error-message", { errorMessage: err.message });
+        if (err) {
+            errorHandler(err, res);
+        }
 
-        if (!req.files || Object.keys(req.files).length === 0) return next();
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return next();
+        }
 
         req.uploadedFiles = [];
         for (const fieldname in req.files) {

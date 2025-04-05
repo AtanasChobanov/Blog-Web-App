@@ -23,7 +23,7 @@ class ChannelController {
     }
   }
 
-  static async exploreChannelsController(req, res) {
+  static async exploreChannels(req, res) {
     if (req.isAuthenticated()) {
       try {
         const recentChannels = await Channel.getRecentChannels(req.user.userId);
@@ -48,7 +48,7 @@ class ChannelController {
     }
   }
 
-  static async createController(req, res) {
+  static async create(req, res) {
     if (req.isAuthenticated()) {
       try {
         const banner = req.uploadedFiles ? req.uploadedFiles[0] : { url: '' };
@@ -94,7 +94,7 @@ class ChannelController {
     }
   }
 
-  static async showSearchedChannelsController(req, res) {
+  static async showSearchedChannels(req, res) {
     if (req.isAuthenticated()) {
       try {
         const channels = await Channel.searchChannels(
@@ -167,7 +167,7 @@ class ChannelController {
     }
   }
 
-  static async updateController(req, res) {
+  static async update(req, res) {
     if (req.isAuthenticated()) {
       try {
         const channel = await Channel.getById(req.params.channelId);
@@ -214,7 +214,7 @@ class ChannelController {
     }
   }
 
-  static async deleteController(req, res) {
+  static async delete(req, res) {
     if (req.isAuthenticated()) {
       try {
         const channel = await Channel.getById(req.params.channelId);

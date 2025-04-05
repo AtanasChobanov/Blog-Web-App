@@ -4,7 +4,7 @@ import Vote from "../models/voteModel.js";
 import User from "../models/userModel.js";
 
 class PostController {
-  static async getFeedController(req, res) {
+  static async getFeed(req, res) {
     if (req.isAuthenticated()) {
       try {
         const posts = await Post.getFromUserChannels(req.user.userId);
@@ -49,7 +49,7 @@ class PostController {
     }
   }
 
-  static async createController(req, res) {
+  static async create(req, res) {
     if (req.isAuthenticated()) {
       try {
         await Post.create(
@@ -72,7 +72,7 @@ class PostController {
     }
   }
 
-  static async voteController(req, res) {
+  static async vote(req, res) {
     try {
       const voteType = req.body.voteType;
       if (!Vote.VALID_VOTE_TYPES.includes(voteType)) {
@@ -86,7 +86,7 @@ class PostController {
     }
   }
 
-  static async getPostVotesController(req, res) {
+  static async getPostVotes(req, res) {
     try {
       const post = await Post.getById(req.params.postId);
       const votes = await post.getVotes(req.user.userId);
@@ -96,7 +96,7 @@ class PostController {
     }
   }
 
-  static async showSearchedPostsController(req, res) {
+  static async showSearchedPosts(req, res) {
     if (req.isAuthenticated()) {
       try {
         let posts = await Post.search(
@@ -147,7 +147,7 @@ class PostController {
     }
   }
 
-  static async updateController(req, res) {
+  static async update(req, res) {
     if (req.isAuthenticated()) {
       try {
         const post = await Post.getById(req.params.postId);
@@ -201,7 +201,7 @@ class PostController {
     }
   }
 
-  static async deleteController(req, res) {
+  static async delete(req, res) {
     if (req.isAuthenticated()) {
       try {
         const post = await Post.getById(req.params.postId);

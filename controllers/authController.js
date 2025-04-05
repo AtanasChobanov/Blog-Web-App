@@ -9,7 +9,7 @@ class UserController {
     res.render("login");
   }
 
-  static async registerController(req, res) {
+  static async register(req, res) {
     const { username, email, password, type } = req.body;
 
     try {
@@ -72,7 +72,7 @@ class UserController {
     }
   }
 
-  static async updateController(req, res) {
+  static async update(req, res) {
     if (req.isAuthenticated()) {
       try {
         const user = await User.getForeignUserById(req.user.userId);
@@ -108,7 +108,7 @@ class UserController {
     }
   }
 
-  static async changePasswordController(req, res) {
+  static async changePassword(req, res) {
     if (req.isAuthenticated()) {
       const { oldPassword, newPassword, confirmPassword } = req.body;
       try {
@@ -165,7 +165,7 @@ class UserController {
     }
   }
 
-  static async changeProfilePictureController(req, res) {
+  static async changeProfilePicture(req, res) {
     if (req.isAuthenticated()) {
       try {
         const user = await User.getForeignUserById(req.user.userId);
@@ -203,7 +203,7 @@ class UserController {
     }
   }
 
-  static async deleteProfilePictureController(req, res) {
+  static async deleteProfilePicture(req, res) {
     if (req.isAuthenticated()) {
       try {
         const user = await User.getForeignUserById(req.user.userId);
@@ -239,7 +239,7 @@ class UserController {
     }
   }
 
-  static logoutController(req, res) {
+  static logout(req, res) {
     req.logout(function (err) {
       if (err) {
         return next(err);
