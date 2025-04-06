@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Existing image modal functions
     function openImageModal(postId) {
         const postElement = document.querySelector(`[data-post-id="${postId}"]`);
         if (!postElement) {
@@ -36,6 +37,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.body.appendChild(modal);
     }
+
+    // Delete popup functions
+    window.showDeletePopup = function (postId, channelId, postTitle) {
+        const overlay = document.getElementById('deleteOverlay');
+        const popup = document.getElementById('deletePopup');
+        const deleteMessage = document.getElementById('deleteMessage');
+        const deleteForm = document.getElementById('deleteForm');
+
+        deleteMessage.textContent = `Сигурни ли сте, че искате да изтриете този пост: "${postTitle}"?`;
+        deleteForm.action = `/${channelId}/delete-post/${postId}`;
+
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeDeletePopup = function () {
+        document.getElementById('deleteOverlay').style.display = 'none';
+        document.getElementById('deletePopup').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    };
+
+
+    document.getElementById('deleteOverlay').addEventListener('click', closeDeletePopup);
 
     document.querySelectorAll('.view-all-images').forEach(button => {
         button.addEventListener('click', () => {
