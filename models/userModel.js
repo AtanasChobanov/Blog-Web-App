@@ -1,6 +1,9 @@
 import db from "../config/db.js";
 import bcrypt from "bcrypt";
 import Post from "./postModel.js";
+import cloudinary  from "../config/cloudinary.js";
+import fs from "fs/promises";
+import File from "./fileModel.js";
 
 const saltRounds = 10;
 const defaultAvatars = [
@@ -11,16 +14,6 @@ const defaultAvatars = [
 ];
 
 class User {
-  static async getTotalUsers() {
-    try {
-      const result = await db.query('SELECT COUNT(*) as count FROM users');
-      return parseInt(result.rows[0].count);
-    } catch (err) {
-      console.error('Error counting users:', err);
-      throw err;
-    }
-  }
-
   constructor(
     userId,
     email,
@@ -45,25 +38,27 @@ class User {
        FROM posts p 
        JOIN channels ch ON p.channel_id = ch.channel_id 
        WHERE p.author_id = $1 
-       ORDER BY p.date_of_creation DESC;`,
+       ORDER BY GREATEST(p.date_of_creation, COALESCE(p.date_of_last_edit, p.date_of_creation)) DESC;`,
       [this.userId]
     );
 
-    return result.rows.map(
-        (post) =>
-          new Post(
-            post.post_id,
-            post.title,
-            post.content,
-            this.userId,
-            post.channel_id,
-            post.date_of_creation,
-            post.date_of_last_edit,
-            this.username,
-            null,
-            post.channel_name
-          )
-      );
+    const posts = result.rows.map(
+      (post) =>
+        new Post(
+          post.post_id,
+          post.title,
+          post.content,
+          this.userId,
+          post.channel_id,
+          post.date_of_creation,
+          post.date_of_last_edit,
+          this.username,
+          null,
+          post.channel_name
+        )
+    );
+    await Promise.all(posts.map((post) => post.getFiles()));
+    return posts;
   }
 
   async update(username, bio) {
@@ -111,6 +106,55 @@ class User {
     return await this.#verifyPassword(inputPassword);
   }
 
+  async updateProfilePicture(avatar) {
+    try {
+      await this.deleteProfilePicture();
+      await db.query(
+        "UPDATE users SET profile_picture = $1 WHERE user_id = $2",
+        [avatar.url, this.userId]
+      );
+    } catch (err) {
+      console.error("Error updating profile picture:", err);
+      throw err;
+    }
+  }
+
+  async deleteProfilePicture() {
+    try {
+      if (this.#isCustomAvatar()) {
+        const avatarFile = new File(null, null, this.profilePicture, "image", null);
+        await avatarFile.deleteFromCloudinary();
+
+        const newAvatar = User.#randomDefaultAvatar();
+        await db.query(
+          "UPDATE users SET profile_picture = $1 WHERE user_id = $2",
+          [newAvatar, this.userId]
+        );
+      }
+    } catch (err) {
+      console.error("Error deleting profile picture:", err);
+      throw err;
+    }
+  }
+
+  #isCustomAvatar() {
+    return this.profilePicture.includes("res.cloudinary.com"); // Returns true if there is cloudinary in the URL
+  }
+
+  static #randomDefaultAvatar() {
+    return "/uploads/profile-pictures/" + defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
+  }
+
+  static async getTotalUsers() {
+    try {
+      const result = await db.query('SELECT COUNT(*) as count FROM users');
+      return parseInt(result.rows[0].count);
+    } catch (err) {
+      console.error('Error counting users:', err);
+      throw err;
+    }
+  }
+
   static async #getById(userId) {
     const result = await db.query("SELECT * FROM users WHERE user_id = $1;", [
       userId,
@@ -132,11 +176,7 @@ class User {
 
   static async create(email, username, password, userType, avatar) {
     try {
-      if (!avatar) {
-        avatar =
-          "/uploads/profile-pictures/" +
-          defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
-      }
+      avatar = !avatar ? User.#randomDefaultAvatar() : avatar;
 
       if (password !== "google") {
         password = await bcrypt.hash(password, saltRounds);

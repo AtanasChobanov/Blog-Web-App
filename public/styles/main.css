@@ -65,13 +65,9 @@ header {
 }
 
 h1 {
-    margin-bottom: 20px;
+    margin: 20px;
     text-align: center;
-}
-
-.channel-name>h1 {
-    text-align: start;
-    margin-left: 1rem;
+    color: #007bff;
 }
 
 .nav-link {
@@ -182,6 +178,10 @@ img {
     transform: scale(0.9);
 }
 
+.new-post-btn {
+    width: 100%;
+}
+
 .btn-grop {
     display: flex;
     flex-direction: column;
@@ -241,12 +241,6 @@ img {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     padding: 10px;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #007bff;
 }
 
 #toolbar {

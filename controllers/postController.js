@@ -4,7 +4,7 @@ import Vote from "../models/voteModel.js";
 import User from "../models/userModel.js";
 
 class PostController {
-  static async getFeedController(req, res) {
+  static async getFeed(req, res) {
     if (req.isAuthenticated()) {
       try {
         const posts = await Post.getFromUserChannels(req.user.userId);
@@ -12,15 +12,15 @@ class PostController {
         if (posts.length === 0) {
           return res.redirect("/channels");
         }
-        res.render("feed.ejs", { posts });
+        res.render("feed", { posts });
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при зареждане на публикациите.",
         });
       }
     } else {
       const userCount = await User.getTotalUsers();
-      res.render("home.ejs", { userCount });
+      res.render("home", { userCount });
     }
   }
 
@@ -31,16 +31,16 @@ class PostController {
         const isMember = await channel.isUserMember(req.user.userId);
 
         if (!(isMember || req.user.userType === "Администратор")) {
-          return res.status(403).render("error-message.ejs", {
+          return res.status(403).render("error-message", {
             errorMessage: "Не си член на този канал.",
           });
         }
 
-        res.render("new-post.ejs", {
+        res.render("new-post", {
           channelId: channel.channelId,
         });
       } catch (err) {
-        res.status(404).render("error-message.ejs", {
+        res.status(404).render("error-message", {
           errorMessage: "Каналът не съществува",
         });
       }
@@ -49,34 +49,21 @@ class PostController {
     }
   }
 
-  static async createController(req, res) {
+  static async create(req, res) {
     if (req.isAuthenticated()) {
       try {
-        if (req.files.images && req.files.images.length > 5) {
-          return res.status(400).render("new-post.ejs", {
-            errorMessage: "Не може да се качват повече от 5 снимки.",
-            title: req.body.title,
-            content: req.body.content,
-            channelId: req.params.channelId,
-          });
-        }
-
-        const files = [
-          ...(req.files.images || []),
-          ...(req.files.documents || []),
-        ];
         await Post.create(
           req.body.title,
           req.body.content,
           req.user.userId,
           req.params.channelId,
-          files
+          req.uploadedFiles,
         );
 
         res.redirect(`/view/${req.params.channelId}`);
       } catch (err) {
         console.error(err);
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при създаване на пост.",
         });
       }
@@ -85,7 +72,7 @@ class PostController {
     }
   }
 
-  static async voteController(req, res) {
+  static async vote(req, res) {
     try {
       const voteType = req.body.voteType;
       if (!Vote.VALID_VOTE_TYPES.includes(voteType)) {
@@ -99,7 +86,7 @@ class PostController {
     }
   }
 
-  static async getPostVotesController(req, res) {
+  static async getPostVotes(req, res) {
     try {
       const post = await Post.getById(req.params.postId);
       const votes = await post.getVotes(req.user.userId);
@@ -109,7 +96,7 @@ class PostController {
     }
   }
 
-  static async showSearchedPostsController(req, res) {
+  static async showSearchedPosts(req, res) {
     if (req.isAuthenticated()) {
       try {
         let posts = await Post.search(
@@ -121,12 +108,12 @@ class PostController {
           posts = await Post.searchWikipedia(req.body.searchedItem);
         }
         const channel = await Channel.getById(req.params.channelId);
-        res.render("search-post-result.ejs", {
+        res.render("search-post-result", {
           posts,
           channel,
         });
       } catch (err) {
-        res.status(500).render("error-message.ejs", { errorMessage: err });
+        res.status(500).render("error-message", { errorMessage: err });
       }
     } else {
       res.redirect("/login");
@@ -143,7 +130,7 @@ class PostController {
           req.user.userId === post.authorId ||
           req.user.userType === "Администратор"
         ) {
-          return res.render("edit-post.ejs", {
+          return res.render("edit-post", {
             post,
             channelId: req.params.channelId,
           });
@@ -151,7 +138,7 @@ class PostController {
           return res.redirect("/");
         }
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при зареждане на формата за редактиране.",
         });
       }
@@ -160,7 +147,7 @@ class PostController {
     }
   }
 
-  static async updateController(req, res) {
+  static async update(req, res) {
     if (req.isAuthenticated()) {
       try {
         const post = await Post.getById(req.params.postId);
@@ -168,22 +155,18 @@ class PostController {
           req.user.userId === post.authorId ||
           req.user.userType === "Администратор"
         ) {
-          const newFiles = [
-            ...(req.files.images || []),
-            ...(req.files.documents || []),
-          ];
           await post.update(
             req.body.title,
             req.body.content,
             req.body.deletedFiles,
-            newFiles
+            req.uploadedFiles,
           );
           res.redirect(`/view/${req.params.channelId}`);
         } else {
           return res.redirect("/");
         }
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при обновяване на пост.",
         });
       }
@@ -201,7 +184,7 @@ class PostController {
           req.user.userId === post.authorId ||
           req.user.userType === "Администратор"
         ) {
-          return res.render("delete-post.ejs", {
+          return res.render("delete-post", {
             post,
             channelId: req.params.channelId,
           });
@@ -209,7 +192,7 @@ class PostController {
           return res.redirect("/");
         }
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при зареждане на формата за изтриване.",
         });
       }
@@ -218,7 +201,7 @@ class PostController {
     }
   }
 
-  static async deleteController(req, res) {
+  static async delete(req, res) {
     if (req.isAuthenticated()) {
       try {
         const post = await Post.getById(req.params.postId);
@@ -233,7 +216,7 @@ class PostController {
           return res.redirect("/");
         }
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при изтриване на пост.",
         });
       }

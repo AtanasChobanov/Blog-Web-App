@@ -10,11 +10,11 @@ class ChannelController {
         if (userChannels.length === 0) {
           return res.redirect("/explore");
         }
-        res.render("view-channels.ejs", {
+        res.render("view-channels", {
           channels: userChannels,
         });
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при зареждане на каналите.",
         });
       }
@@ -23,15 +23,15 @@ class ChannelController {
     }
   }
 
-  static async exploreChannelsController(req, res) {
+  static async exploreChannels(req, res) {
     if (req.isAuthenticated()) {
       try {
         const recentChannels = await Channel.getRecentChannels(req.user.userId);
-        return res.render("explore.ejs", {
+        return res.render("explore", {
           channels: recentChannels,
         });
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при зареждане на каналите.",
         });
       }
@@ -42,19 +42,21 @@ class ChannelController {
 
   static getNewChannelPage(req, res) {
     if (req.isAuthenticated()) {
-      res.render("new-channel.ejs");
+      res.render("new-channel");
     } else {
       res.redirect("/login");
     }
   }
 
-  static async createController(req, res) {
+  static async create(req, res) {
     if (req.isAuthenticated()) {
       try {
-        await Channel.create(req.body.name, req.user.userId);
-        res.redirect("/");
+        const banner = req.uploadedFiles ? req.uploadedFiles[0] : { url: '' };
+        await Channel.create(req.body.name, banner, req.user.userId);
+        res.redirect("/channels");
       } catch (err) {
-        res.render("new-channel.ejs", {
+        console.error("Error creating channel:", err);
+        res.render("new-channel", {
           name: req.body.name,
           errorMessage: "Това име на канал вече съществува!",
         });
@@ -71,19 +73,19 @@ class ChannelController {
         const isMember = await channel.isUserMember(req.user.userId);
 
         if (!(isMember || req.user.userType === "Администратор")) {
-          return res.status(403).render("error-message.ejs", {
+          return res.status(403).render("error-message", {
             errorMessage: "Не си член на този канал.",
           });
         }
 
         const posts = await Post.getFromChannel(channel.channelId);
 
-        res.render("view-posts.ejs", {
+        res.render("view-posts", {
           posts,
           channel,
         });
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при зареждане на постовете.",
         });
       }
@@ -92,16 +94,16 @@ class ChannelController {
     }
   }
 
-  static async showSearchedChannelsController(req, res) {
+  static async showSearchedChannels(req, res) {
     if (req.isAuthenticated()) {
       try {
         const channels = await Channel.searchChannels(
           req.body.searchedItem,
           req.user.userId
         );
-        res.render("search-channel-result.ejs", { channels });
+        res.render("search-channel-result", { channels });
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при търсене на канал.",
         });
       }
@@ -117,7 +119,7 @@ class ChannelController {
         await channel.addMember(req.user.userId);
         res.redirect(`/view/${channel.channelId}`);
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Не може да се присъединиш към канала.",
         });
       }
@@ -133,7 +135,7 @@ class ChannelController {
         await channel.removeMember(req.user.userId);
         res.redirect("/");
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Не можеш да излезеш от канала.",
         });
       }
@@ -151,12 +153,12 @@ class ChannelController {
           req.user.userId === channel.adminId ||
           req.user.userType === "Администратор"
         ) {
-          res.render("edit-channel.ejs", { channel });
+          res.render("edit-channel", { channel });
         } else {
           res.redirect("/");
         }
       } catch (err) {
-        res.status(404).render("error-message.ejs", {
+        res.status(404).render("error-message", {
           errorMessage: "Каналът не е намерен.",
         });
       }
@@ -165,7 +167,7 @@ class ChannelController {
     }
   }
 
-  static async updateController(req, res) {
+  static async update(req, res) {
     if (req.isAuthenticated()) {
       try {
         const channel = await Channel.getById(req.params.channelId);
@@ -174,11 +176,13 @@ class ChannelController {
           req.user.userId === channel.adminId ||
           req.user.userType === "Администратор"
         ) {
-          await channel.update(req.body.name);
+          const banner = req.uploadedFiles ? req.uploadedFiles[0] : { url: '' };
+          await channel.update(req.body.name, banner);
         }
         res.redirect("/");
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        console.error("Error updating channel:", err);
+        res.status(500).render("error-message", {
           errorMessage: "Неуспешно актуализиране на канала.",
         });
       }
@@ -196,12 +200,12 @@ class ChannelController {
           req.user.userId === channel.adminId ||
           req.user.userType === "Администратор"
         ) {
-          res.render("delete-channel.ejs", { channel });
+          res.render("delete-channel", { channel });
         } else {
           res.redirect("/");
         }
       } catch (err) {
-        res.status(404).render("error-message.ejs", {
+        res.status(404).render("error-message", {
           errorMessage: "Каналът не съществува.",
         });
       }
@@ -210,7 +214,7 @@ class ChannelController {
     }
   }
 
-  static async deleteController(req, res) {
+  static async delete(req, res) {
     if (req.isAuthenticated()) {
       try {
         const channel = await Channel.getById(req.params.channelId);
@@ -223,7 +227,7 @@ class ChannelController {
         }
         res.redirect("/");
       } catch (err) {
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Неуспешно изтриване на канала.",
         });
       }

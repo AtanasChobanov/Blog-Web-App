@@ -49,14 +49,13 @@ class Post extends PostFilesManager {
         [sanitizedTitle, sanitizedContent, this.postId]
       );
 
-      // Изтриване на избраните файлове
+      // Delete selected files
       if (deletedFiles && deletedFiles.length > 0) {
         await this.deleteFiles(deletedFiles);
       }
-
-      // Качване на нови файлове
+      // Add new files
       if (newFiles && newFiles.length > 0) {
-        await this.uploadFilesToCloudinary(newFiles);
+        await this.addFiles(newFiles);
       }
     } catch (err) {
       console.error("Error updating post:", err);
@@ -67,7 +66,7 @@ class Post extends PostFilesManager {
   // DELETE a post
   async delete() {
     try {
-      this.deleteAllFiles();
+      await this.deleteAllFiles();
       await db.query(
         `DELETE FROM posts 
          WHERE post_id = $1;`,
@@ -122,7 +121,6 @@ class Post extends PostFilesManager {
   static async #fetchPosts(query, params) {
     try {
       const result = await db.query(query, params);
-
       const posts = result.rows.map(
         (post) =>
           new Post(
@@ -138,12 +136,8 @@ class Post extends PostFilesManager {
             post.channel_name
           )
       );
-
-      // Load files for each post
-      for (const post of posts) {
-        await post.getFiles();
-      }
-
+      
+      await Promise.all(posts.map((post) => post.getFiles()));
       return posts;
     } catch (err) {
       console.error("Error fetching posts:", err);
@@ -160,7 +154,7 @@ class Post extends PostFilesManager {
          JOIN users u ON p.author_id = u.user_id
          JOIN members_of_channels mc ON ch.channel_id = mc.channel_id
          WHERE mc.user_id = $1
-         ORDER BY p.date_of_creation DESC;`;
+         ORDER BY GREATEST(p.date_of_creation, COALESCE(p.date_of_last_edit, p.date_of_creation)) DESC;`;
     return Post.#fetchPosts(query, [userId]);
   }
 
@@ -174,7 +168,7 @@ class Post extends PostFilesManager {
          JOIN users u 
          ON p.author_id = u.user_id 
          WHERE ch.channel_id = $1 
-         ORDER BY date_of_creation DESC;`;
+         ORDER BY GREATEST(p.date_of_creation, COALESCE(p.date_of_last_edit, p.date_of_creation)) DESC;`;
     return Post.#fetchPosts(query, [channelId]);
   }
 
@@ -200,7 +194,7 @@ class Post extends PostFilesManager {
         post.date_of_creation,
         post.date_of_last_edit
       );
-      await post.uploadFilesToCloudinary(files);
+      await post.addFiles(files);
       console.log(`New post created with ID: ${post.postId}`);
     } catch (err) {
       console.error("Error creating post:", err);
@@ -224,7 +218,6 @@ class Post extends PostFilesManager {
   static async searchWikipedia(searchedItem) {
     try {
       const response = await fetchWikipediaArticles(searchedItem);
-      // Използваме Promise.all(), за да изчакаме всички асинхронни заявки
       const posts = await Promise.all(response.map(async (item) => {
           const post = new Post(
             item.postId,

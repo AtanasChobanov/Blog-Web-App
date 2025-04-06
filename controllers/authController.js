@@ -2,25 +2,25 @@ import User from "../models/userModel.js";
 
 class UserController {
   static getRegisterPage(req, res) {
-    res.render("register.ejs");
+    res.render("register");
   }
 
   static getLoginPage(req, res) {
-    res.render("login.ejs");
+    res.render("login");
   }
 
-  static async registerController(req, res) {
+  static async register(req, res) {
     const { username, email, password, type } = req.body;
 
     try {
       const existingUser = await User.getForeignUserByEmail(email);
 
       if (existingUser) {
-        res.render("register.ejs", {
+        res.render("register", {
           errorMessage: "Имейлът е вече регистриран. Пробвайте да влезете.",
         });
       } else if (password === "google") {
-        res.render("register.ejs", {
+        res.render("register", {
           errorMessage: "Невалидна парола.",
         });
       } else {
@@ -34,7 +34,7 @@ class UserController {
         });
       }
     } catch (err) {
-      res.render("error-message.ejs", { errorMessage: err });
+      res.render("error-message", { errorMessage: err });
     }
   }
 
@@ -46,16 +46,16 @@ class UserController {
         const account = await User.getForeignUserById(userId);
 
         if (!account) {
-          return res.status(404).render("error-message.ejs", {
+          return res.status(404).render("error-message", {
             errorMessage: "Потребителят не е намерен",
           });
         }
 
         const posts = await account.getPosts();
-        res.render("profile.ejs", { account, posts });
+        res.render("profile", { account, posts });
       } catch (err) {
         console.error("Error fetching profile:", err.stack);
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Error fetching profile",
         });
       }
@@ -66,13 +66,13 @@ class UserController {
 
   static getEditProfilePage(req, res) {
     if (req.isAuthenticated()) {
-      res.render("edit-profile.ejs");
+      res.render("edit-profile");
     } else {
       res.redirect("/login");
     }
   }
 
-  static async updateController(req, res) {
+  static async update(req, res) {
     if (req.isAuthenticated()) {
       try {
         const user = await User.getForeignUserById(req.user.userId);
@@ -81,7 +81,7 @@ class UserController {
         req.logout((err) => {
           if (err) {
             console.error("Error during logout:", err);
-            return res.status(500).render("error-message.ejs", {
+            return res.status(500).render("error-message", {
               errorMessage:
                 "Грешка при обновяване на сесията. Моля, опитайте отново.",
             });
@@ -90,7 +90,7 @@ class UserController {
           req.login(user, (err) => {
             if (err) {
               console.error("Error during re-login:", err);
-              return res.status(500).render("error-message.ejs", {
+              return res.status(500).render("error-message", {
                 errorMessage: "Грешка при влизане след редактиране на профила.",
               });
             }
@@ -99,7 +99,7 @@ class UserController {
         });
       } catch (err) {
         console.log("Error updating profile:", err);
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Неуспешно актуализиран на профила.",
         });
       }
@@ -108,12 +108,12 @@ class UserController {
     }
   }
 
-  static async changePasswordController(req, res) {
+  static async changePassword(req, res) {
     if (req.isAuthenticated()) {
       const { oldPassword, newPassword, confirmPassword } = req.body;
       try {
         if (newPassword !== confirmPassword || newPassword === "google") {
-          return res.render("edit-profile.ejs", {
+          return res.render("edit-profile", {
             errorMessage: "Невалидна нова парола.",
           });
         }
@@ -122,7 +122,7 @@ class UserController {
         const updatedUser = await user.updatePassword(oldPassword, newPassword);
 
         if (updatedUser.errorMessage) {
-          return res.render("edit-profile.ejs", {
+          return res.render("edit-profile", {
             errorMessage: updatedUser.errorMessage,
           });
         }
@@ -130,7 +130,7 @@ class UserController {
         req.logout((err) => {
           if (err) {
             console.error("Error during logout:", err);
-            return res.status(500).render("error-message.ejs", {
+            return res.status(500).render("error-message", {
               errorMessage:
                 "Грешка при обновяване на сесията. Моля, опитайте отново.",
             });
@@ -139,7 +139,7 @@ class UserController {
           req.login(updatedUser, (err) => {
             if (err) {
               console.error("Error during re-login:", err);
-              return res.status(500).render("error-message.ejs", {
+              return res.status(500).render("error-message", {
                 errorMessage: "Грешка при влизане след смяна на паролата.",
               });
             }
@@ -148,7 +148,7 @@ class UserController {
         });
       } catch (err) {
         console.error("Error changing password:", err);
-        res.status(500).render("error-message.ejs", {
+        res.status(500).render("error-message", {
           errorMessage: "Грешка при смяната на паролата. Опитайте отново.",
         });
       }
@@ -157,7 +157,89 @@ class UserController {
     }
   }
 
-  static logoutController(req, res) {
+  static getChangeProfilePicturePage(req, res) {
+    if (req.isAuthenticated()) {
+      res.render("change-profile-picture");
+    } else {
+      res.redirect("/login");
+    }
+  }
+
+  static async changeProfilePicture(req, res) {
+    if (req.isAuthenticated()) {
+      try {
+        const user = await User.getForeignUserById(req.user.userId);
+        if (req.uploadedFiles) {
+          await user.updateProfilePicture(req.uploadedFiles[0]);
+        }
+
+        req.logout((err) => {
+          if (err) {
+            console.error("Error during logout:", err);
+            return res.status(500).render("error-message", {
+              errorMessage:
+                "Грешка при обновяване на сесията. Моля, опитайте отново.",
+            });
+          }
+
+          req.login(user, (err) => {
+            if (err) {
+              console.error("Error during re-login:", err);
+              return res.status(500).render("error-message", {
+                errorMessage: "Грешка при влизане след смяна на профилната снимка.",
+              });
+            }
+            res.redirect("/account/" + req.user.userId);
+          });
+        });
+      } catch (err) {
+        console.error("Error changing profile picture:", err);
+        res.status(500).render("error-message", {
+          errorMessage: "Грешка при смяна на профилната снимка. Опитайте отново.",
+        });
+      }
+    } else {
+      res.redirect("/login");
+    }
+  }
+
+  static async deleteProfilePicture(req, res) {
+    if (req.isAuthenticated()) {
+      try {
+        const user = await User.getForeignUserById(req.user.userId);
+        await user.deleteProfilePicture();
+
+        req.logout((err) => {
+          if (err) {
+            console.error("Error during logout:", err);
+            return res.status(500).render("error-message", {
+              errorMessage:
+                "Грешка при обновяване на сесията. Моля, опитайте отново.",
+            });
+          }
+
+          req.login(user, (err) => {
+            if (err) {
+              console.error("Error during re-login:", err);
+              return res.status(500).render("error-message", {
+                errorMessage: "Грешка при влизане след смяна на профилната снимка.",
+              });
+            }
+            res.redirect("/account/" + req.user.userId);
+          });
+        });
+      } catch (err) {
+        console.error("Error deleting profile picture:", err);
+        res.status(500).render("error-message", {
+          errorMessage: "Грешка при изтриване на профилната снимка. Опитайте отново.",
+        });
+      }
+    } else {
+      res.redirect("/login");
+    }
+  }
+
+  static logout(req, res) {
     req.logout(function (err) {
       if (err) {
         return next(err);
