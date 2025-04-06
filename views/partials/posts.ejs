@@ -130,3 +130,18 @@
     <% } else { %>
         <p class="text-center">Много е тихо...</p>
         <% } %>
+
+            <div class="delete-popup-overlay" id="deleteOverlay" style="display: none;"></div>
+            <div class="delete-popup" id="deletePopup" style="display: none;">
+                <div class="delete-popup-content">
+                    <h3>Потвърждение за изтриване</h3>
+                    <p id="deleteMessage">Сигурни ли сте, че искате да изтриете този пост?</p>
+                    <form id="deleteForm" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <div class="popup-buttons">
+                            <button type="submit" class="delete-button">Изтрий</button>
+                            <button type="button" class="button" onclick="closeDeletePopup()">Отказ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>

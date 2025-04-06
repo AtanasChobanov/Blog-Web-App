@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Existing image modal functions
     function openImageModal(postId) {
         const postElement = document.querySelector(`[data-post-id="${postId}"]`);
         if (!postElement) {
@@ -38,8 +37,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(modal);
     }
 
-    // Delete popup functions
-    window.showDeletePopup = function (postId, channelId, postTitle) {
+    window.showDeletePopup = function (postId) {
+        const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+        if (!postElement) return;
+
+        const postTitle = postElement.querySelector('.post-title').textContent;
+        const channelLink = postElement.querySelector('.metadata-item a');
+        const channelId = channelLink ? channelLink.getAttribute('href').split('/')[2] : '';
+
         const overlay = document.getElementById('deleteOverlay');
         const popup = document.getElementById('deletePopup');
         const deleteMessage = document.getElementById('deleteMessage');
@@ -59,9 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = 'auto';
     };
 
-
+    // Close popup when clicking outside
     document.getElementById('deleteOverlay').addEventListener('click', closeDeletePopup);
 
+    // Existing event listeners for images
     document.querySelectorAll('.view-all-images').forEach(button => {
         button.addEventListener('click', () => {
             const postId = button.getAttribute('data-post-id');
