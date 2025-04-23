@@ -19,62 +19,49 @@ function closePicturePopup() {
     document.body.classList.remove('popup-open');
 }
 
-document.getElementById('fileInput').addEventListener('change', function (e) {
+document.getElementById('profile-pictures').addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function (event) {
-            document.getElementById('fileContainer').style.background = `url(${event.target.result})`;
-            document.querySelector('#fileContainer .file-label').style.display = 'none';
+            const fileContainer = document.getElementById('fileContainer');
+            fileContainer.style.backgroundImage = `url(${event.target.result})`;
+            fileContainer.style.backgroundSize = 'cover';
+            fileContainer.style.backgroundPosition = 'center';
+
+            document.getElementById('fileLabel').style.display = 'none';
         }
         reader.readAsDataURL(file);
     }
 });
 
-function savePicture() {
-    const fileInput = document.getElementById('fileInput');
-    if (fileInput.files.length > 0) {
-        const formData = new FormData();
-        formData.append('profilePicture', fileInput.files[0]);
-
-        fetch('/change-profile-picture?_method=PATCH', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    alert('Грешка при качване на снимката');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Грешка при качване на снимката');
-            });
-    } else {
+document.getElementById('uploadForm').addEventListener('submit', function (e) {
+    const fileInput = document.getElementById('profile-pictures');
+    if (fileInput.files.length === 0) {
+        e.preventDefault();
         alert('Моля, изберете снимка');
+        return false;
     }
-}
 
-function deletePicture() {
-    if (confirm('Сигурни ли сте, че искате да изтриете профилната си снимка?')) {
-        fetch('/delete-profile-picture?_method=DELETE', {
-            method: 'POST'
-        })
-            .then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    alert('Грешка при изтриване на снимката');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Грешка при изтриване на снимката');
-            });
+    const submitButton = this.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Качване...';
+
+    return true;
+});
+
+document.getElementById('deleteForm')?.addEventListener('submit', function (e) {
+    if (!confirm('Сигурни ли сте, че искате да изтриете профилната си снимка?')) {
+        e.preventDefault();
+        return false;
     }
-}
+
+    const submitButton = this.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Изтриване...';
+
+    return true;
+});
 
 document.getElementById('passwordPopup').addEventListener('click', function (e) {
     if (e.target === this) {
@@ -86,4 +73,16 @@ document.getElementById('picturePopup').addEventListener('click', function (e) {
     if (e.target === this) {
         closePicturePopup();
     }
+});
+
+document.getElementById('picturePopup').addEventListener('hidden', function () {
+    const fileInput = document.getElementById('profile-pictures');
+    fileInput.value = '';
+
+    const fileContainer = document.getElementById('fileContainer');
+    fileContainer.style.backgroundImage = '';
+    fileContainer.style.backgroundSize = '';
+    fileContainer.style.backgroundPosition = '';
+
+    document.getElementById('fileLabel').style.display = 'block';
 });

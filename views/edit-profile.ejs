@@ -65,18 +65,27 @@
                     <img src="<%= user.profilePicture || '/images/default-profile.png' %>"
                         alt="Current Profile Picture">
                 </div>
-                <div class="file-container" id="fileContainer" onclick="document.getElementById('fileInput').click()">
-                    <input type="file" id="fileInput" class="file-input" accept="image/*">
-                    <div class="file-label">
-                        <p>Кликнете или плъзнете снимка тук</p>
-                        <p>(Поддържани формати: JPG, PNG)</p>
+
+                <form id="uploadForm" action="/change-profile-picture?_method=PATCH" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="file-container" id="fileContainer"
+                        onclick="document.getElementById('profile-pictures').click()">
+                        <input type="file" id="profile-pictures" class="file-input" name="profile-pictures"
+                            accept=".png,.jpg,.jpeg" style="display: none;">
+                        <div class="file-label" id="fileLabel">
+                            <p>Кликнете или плъзнете снимка тук</p>
+                            <p>(Поддържани формати: JPG, PNG)</p>
+                        </div>
                     </div>
-                </div>
+                    <button type="submit" class="save-btn">Качи снимка</button>
+                </form>
             </div>
+
             <div class="picture-actions">
-                <button type="button" class="save-btn" onclick="savePicture()">Запази</button>
                 <% if (user.profilePicture) { %>
-                    <button type="button" class="delete-btn" onclick="deletePicture()">Изтрий</button>
+                    <form id="deleteForm" action="/delete-profile-picture?_method=DELETE" method="POST">
+                        <button type="submit" class="delete-btn">Изтрий текуща снимка</button>
+                    </form>
                     <% } %>
                         <button type="button" class="close-btn" onclick="closePicturePopup()">Затвори</button>
             </div>
@@ -84,3 +93,6 @@
     </div>
 
     <script src="/scripts/edit-profile.js"></script>
+</body>
+
+</html>
