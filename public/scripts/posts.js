@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const deleteForm = document.getElementById('deleteForm');
 
         deleteMessage.textContent = `Сигурни ли сте, че искате да изтриете този пост: "${postTitle}"?`;
-        deleteForm.action = `/${channelId}/delete-post/${postId}`;
+        deleteForm.action = `/${channelId}/delete-post/${postId}?_method=DELETE`;
 
         overlay.style.display = 'block';
         popup.style.display = 'block';

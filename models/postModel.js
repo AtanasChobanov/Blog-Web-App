@@ -194,7 +194,9 @@ class Post extends PostFilesManager {
         post.date_of_creation,
         post.date_of_last_edit
       );
-      await post.addFiles(files);
+      if (files && files.length > 0) {
+        await post.addFiles(files);
+      }
       console.log(`New post created with ID: ${post.postId}`);
     } catch (err) {
       console.error("Error creating post:", err);

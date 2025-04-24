@@ -34,7 +34,6 @@ router.get("/edit-profile", UserController.getEditProfilePage);
 router.post("/edit-profile", UserController.update);
 
 router.post("/change-password", UserController.changePassword);
-router.get("/change-profile-picture", UserController.getChangeProfilePicturePage);
 
 router.patch("/change-profile-picture", uploadFiles, UserController.changeProfilePicture);
 router.delete("/delete-profile-picture", UserController.deleteProfilePicture);

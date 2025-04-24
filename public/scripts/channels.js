@@ -5,7 +5,7 @@ function showChannelDeletePopup(channelId, channelName) {
     const form = document.getElementById('channelDeleteForm');
 
     message.textContent = `Сигурни ли сте, че искате да изтриете канала: "${channelName}"?`;
-    form.action = `/${channelId}/delete`;
+    form.action = `/${channelId}/delete?_method=DELETE`;
 
     overlay.style.display = 'block';
     popup.style.display = 'block';

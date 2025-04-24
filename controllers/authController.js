@@ -157,14 +157,6 @@ class UserController {
     }
   }
 
-  static getChangeProfilePicturePage(req, res) {
-    if (req.isAuthenticated()) {
-      res.render("change-profile-picture");
-    } else {
-      res.redirect("/login");
-    }
-  }
-
   static async changeProfilePicture(req, res) {
     if (req.isAuthenticated()) {
       try {
